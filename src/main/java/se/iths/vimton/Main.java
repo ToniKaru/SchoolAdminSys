@@ -13,7 +13,7 @@ public class Main {
     private static final Dotenv dotenv = Dotenv.configure().ignoreIfMalformed().ignoreIfMissing().load();
 
     private static final Map<String, Object> configOverrides = Map.of(
-            "javax.persistence.jdbc.user", dotenv.get("USERNAME"),
+            "javax.persistence.jdbc.user", dotenv.get("USER_NAME"),
             "javax.persistence.jdbc.password", dotenv.get("PASSWORD")
     );
 
