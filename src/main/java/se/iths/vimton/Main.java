@@ -10,16 +10,17 @@ import java.util.Map;
 
 public class Main {
 
+    private static final Dotenv dotenv = Dotenv.configure().ignoreIfMalformed().ignoreIfMissing().load();
 
-    private static EntityManagerFactory emf =
-            Persistence.createEntityManagerFactory("Lab5");
+    private static final Map<String, Object> configOverrides = Map.of(
+            "javax.persistence.jdbc.user", dotenv.get("USERNAME"),
+            "javax.persistence.jdbc.password", dotenv.get("PASSWORD")
+    );
 
-    public static void main( String[] args ) {
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("Lab5", configOverrides);
+
+    public static void main(String[] args) {
         EntityManager em = emf.createEntityManager();
-
-
-
-
 
 
     }
