@@ -15,7 +15,7 @@ public class Course {
     private String name;
     private String description;
     private int credits;
-    private String language;
+    private Language language;
 
     @ManyToOne
     private Program program;
@@ -26,11 +26,11 @@ public class Course {
 
     public Course(){}
 
-    public Course(String name, int credits, String language, Program program) {
+    public Course(String name, int credits, Language language, Program program) {
         this(name,"",credits,language,program);
     }
 
-    public Course(String name, String description, int credits, String language, Program program) {
+    public Course(String name, String description, int credits, Language language, Program program) {
         this.name = name;
         this.description = description;
         this.credits = credits;
@@ -68,11 +68,11 @@ public class Course {
         this.credits = credits;
     }
 
-    public String getLanguage() {
+    public Language getLanguage() {
         return language;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage(Language language) {
         this.language = language;
     }
 

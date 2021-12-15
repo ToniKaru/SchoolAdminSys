@@ -24,6 +24,21 @@ public class Main {
         EntityManager em = emf.createEntityManager();
 
 
+        ProgramType type1 = new ProgramType(400, true, DIPLOMA);
+        ProgramType type2 = new ProgramType(300, true, CERTIFICATE);
+
+        Program program1 = new Program("Javautvecklare", 20, type1);
+        Program program2 = new Program("Mjuvaratestare", 16, type2);
+
+        Student student1 = new Student("Toni", "Karunaratne", "1979-05-05","toni.is.amazoids@hot.com", "2021-08-21", program1);
+        Student student2 = new Student("Vimbayi", "Mandaza", "1987-04-15", "vimbayi@chips.com", "2020-05-19", program2);
+
+
+        Teacher teacher1 = new Teacher("Eddie", "Neumann", "19990201-5118", "0777-777777","eddie.the.teach@iths.se");
+        Teacher teacher2 = new Teacher("Martin", "Svensson", "19820301-4319","0732-222222", "martin.svensson@iths.se");
+
+        Course course1 = new Course("Databases", "MySQL, JDBC & JPA", 30, SWEDISH, program1);
+        Course course2 = new Course("Java Programming", "Introduction to Java programming", 60, SWEDISH, program1);
 
 
     }
