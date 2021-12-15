@@ -15,11 +15,11 @@ public class Program {
     private String description;
     private int length;
 
-    @OneToMany
-    private List<Student> studentList;
-
     @ManyToOne
     private ProgramType programType;
+
+    @OneToMany
+    private List<Student> studentList;
 
     //@ManyToMany - course
 
@@ -94,12 +94,12 @@ public class Program {
     @Override
     public String toString() {
         return "Program{" +
-               "id=" + id +
-               ", name='" + name + '\'' +
-               ", description='" + description + '\'' +
-               ", length=" + length +
-               ", studentList=" + studentList +
-               ", programType=" + programType +
-               '}';
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", length=" + length +
+                ", programType=" + programType +
+                ", studentList=" + studentList +
+                '}';
     }
 }
