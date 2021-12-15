@@ -15,6 +15,8 @@ public class Course {
     private String name;
     private String description;
     private int credits;
+
+    @ManyToOne
     private Language language;
 
     @ManyToOne

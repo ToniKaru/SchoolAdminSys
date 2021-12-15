@@ -37,8 +37,10 @@ public class Main {
         Teacher teacher1 = new Teacher("Eddie", "Neumann", "19990201-5118", "0777-777777","eddie.the.teach@iths.se");
         Teacher teacher2 = new Teacher("Martin", "Svensson", "19820301-4319","0732-222222", "martin.svensson@iths.se");
 
-        Course course1 = new Course("Databases", "MySQL, JDBC & JPA", 30, SWEDISH, program1);
-        Course course2 = new Course("Java Programming", "Introduction to Java programming", 60, SWEDISH, program1);
+        Language swedish = new Language("Swedish");
+
+        Course course1 = new Course("Databases", "MySQL, JDBC & JPA", 30, swedish, program1);
+        Course course2 = new Course("Java Programming", "Introduction to Java programming", 60, swedish, program1);
 
 
     }
