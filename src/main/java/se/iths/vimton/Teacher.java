@@ -2,6 +2,7 @@ package se.iths.vimton;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -83,9 +84,7 @@ public class Teacher {
         return courses;
     }
 
-    public void setCourses(Set<Course> courses) {
-        this.courses = courses;
-    }
+
 
     @Override
     public String toString() {

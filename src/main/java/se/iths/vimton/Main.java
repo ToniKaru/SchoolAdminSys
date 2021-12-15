@@ -17,7 +17,8 @@ public class Main {
             "javax.persistence.jdbc.password", dotenv.get("PASSWORD")
     );
 
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("Lab5", configOverrides);
+    private static final EntityManagerFactory emf =
+            Persistence.createEntityManagerFactory("Lab5", configOverrides);
 
     public static void main(String[] args) {
         EntityManager em = emf.createEntityManager();
