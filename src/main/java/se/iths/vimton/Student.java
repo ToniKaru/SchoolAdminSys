@@ -17,7 +17,6 @@ public class Student {
     private String enrollmentDate;
 
     @ManyToOne
-    //private int program_id;
     private Program program;
 
     public Student() {

@@ -28,8 +28,8 @@ public class Course {
 
     public Course(){}
 
-    public Course(String name, int credits, Language language, Program program) {
-        this(name,"",credits,language,program);
+    public Course(String name, int credits, Language language) {
+        this(name,"",credits,language);
     }
 
     public Course(String name, String description, int credits, Language language) {
@@ -38,6 +38,7 @@ public class Course {
         this.credits = credits;
         this.language = language;
         this.teachers = new HashSet<>();
+        this.programs = new HashSet<>();
     }
 
     public int getId() {
@@ -77,20 +78,13 @@ public class Course {
         this.language = language;
     }
 
-    public Program getProgram() {
-        return program;
-    }
-
-    public void setProgram(Program program) {
-        this.program = program;
-    }
-
     public Set<Teacher> getTeachers() {
         return teachers;
     }
 
     public void setTeachers(Set<Teacher> teachers) {
         this.teachers = teachers;
+        teachers.forEach(teacher -> teacher.getCourses().add(this));
     }
 
     public void addTeacher(Teacher teacher) {
@@ -108,6 +102,10 @@ public class Course {
         teacher.getCourses().remove(teacher);
     }
 
+    public Set<Program> getPrograms() {
+        return this.programs;
+    }
+
 
     @Override
     public String toString() {
@@ -117,7 +115,6 @@ public class Course {
                 ", description='" + description + '\'' +
                 ", credits=" + credits +
                 ", language='" + language + '\'' +
-                ", program=" + program +
                 '}';
     }
 }

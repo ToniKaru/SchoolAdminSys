@@ -17,7 +17,7 @@ public class ProgramType {
     StudyLevel studyLevel;
 
     @OneToMany
-    List<Program> programList;
+    List<Program> programs;
 
     public ProgramType() {
     }
@@ -57,15 +57,15 @@ public class ProgramType {
     }
 
     public List<Program> getProgramList() {
-        return programList;
+        return programs;
     }
 
     public void addProgram(List<Program> programList) {
-        this.programList.addAll(programList);
+        this.programs.addAll(programList);
     }
 
     public void addProgram(Program program) {
-        this.programList.add(program);
+        this.programs.add(program);
     }
 
     @Override
@@ -75,7 +75,6 @@ public class ProgramType {
                ", creditsRequired=" + creditsRequired +
                ", accredited=" + accredited +
                ", studyLevel=" + studyLevel +
-               ", programList=" + programList +
                '}';
     }
 }
