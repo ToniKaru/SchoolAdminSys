@@ -18,7 +18,8 @@ public class Program {
     @OneToMany
     private List<Student> studentList;
 
-    //@ManyToOne - program_type
+    @ManyToOne
+    private ProgramType programType;
 
     //@ManyToMany - course
 
@@ -26,17 +27,15 @@ public class Program {
     public Program() {
     }
 
-    public Program(String name, int length) {
-        this.name = name;
-        this.length = length;
-        this.description = "";
-        this.studentList = new ArrayList<>();
+    public Program(String name, int length, ProgramType programType) {
+        this(name, "", length, programType);
     }
 
-    public Program(String name, String description, int length) {
+    public Program(String name, String description, int length, ProgramType programType) {
         this.name = name;
         this.description = description;
         this.length = length;
+        this.programType = programType;
         this.studentList= new ArrayList<>();
     }
 
@@ -82,5 +81,25 @@ public class Program {
 
     public void addStudent(Student student) {
         this.studentList.add(student);
+    }
+
+    public ProgramType getProgramType() {
+        return programType;
+    }
+
+    public void setProgramType(ProgramType programType) {
+        this.programType = programType;
+    }
+
+    @Override
+    public String toString() {
+        return "Program{" +
+               "id=" + id +
+               ", name='" + name + '\'' +
+               ", description='" + description + '\'' +
+               ", length=" + length +
+               ", studentList=" + studentList +
+               ", programType=" + programType +
+               '}';
     }
 }
