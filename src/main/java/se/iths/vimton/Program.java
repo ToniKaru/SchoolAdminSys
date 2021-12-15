@@ -3,6 +3,7 @@ package se.iths.vimton;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Program {
@@ -19,10 +20,10 @@ public class Program {
     private ProgramType programType;
 
     @OneToMany
-    private List<Student> studentList;
+    private List<Student> students;
 
-    //@ManyToMany - course
-
+    @ManyToMany
+    private Set<Course> courses;
 
     public Program() {
     }
@@ -36,7 +37,7 @@ public class Program {
         this.description = description;
         this.length = length;
         this.programType = programType;
-        this.studentList= new ArrayList<>();
+        this.students= new ArrayList<>();
     }
 
     public int getId() {
@@ -71,16 +72,16 @@ public class Program {
         this.length = length;
     }
 
-    public List<Student> getStudentList() {
-        return studentList;
+    public List<Student> getStudents() {
+        return students;
     }
 
     public void addStudents(List<Student> studentList) {
-        this.studentList.addAll(studentList);
+        this.students.addAll(studentList);
     }
 
     public void addStudent(Student student) {
-        this.studentList.add(student);
+        this.students.add(student);
     }
 
     public ProgramType getProgramType() {
@@ -91,6 +92,32 @@ public class Program {
         this.programType = programType;
     }
 
+
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
+        courses.forEach(course -> course.getPrograms().add(this));
+    }
+
+    public void addCourse(Course course) {
+        this.courses.add(course);
+        course.getPrograms().add(this);
+    }
+
+    public void addAllCourses(List<Course> courses){
+        this.courses.addAll(courses);
+        courses.forEach(course -> course.getPrograms().add(this));
+    }
+
+    public void removeCourse(Course course) {
+        this.courses.remove(course);
+        course.getPrograms().remove(this);
+    }
+
+
     @Override
     public String toString() {
         return "Program{" +
@@ -99,7 +126,6 @@ public class Program {
                 ", description='" + description + '\'' +
                 ", length=" + length +
                 ", programType=" + programType +
-                ", studentList=" + studentList +
                 '}';
     }
 }

@@ -19,12 +19,12 @@ public class Course {
     @ManyToOne
     private Language language;
 
-    @ManyToOne
-    private Program program;
 
     @ManyToMany(mappedBy = "courses")
     private Set<Teacher> teachers;
 
+    @ManyToMany(mappedBy = "courses")
+    private Set<Program> programs;
 
     public Course(){}
 
@@ -32,12 +32,11 @@ public class Course {
         this(name,"",credits,language,program);
     }
 
-    public Course(String name, String description, int credits, Language language, Program program) {
+    public Course(String name, String description, int credits, Language language) {
         this.name = name;
         this.description = description;
         this.credits = credits;
         this.language = language;
-        this.program = program;
         this.teachers = new HashSet<>();
     }
 

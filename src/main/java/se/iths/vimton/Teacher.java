@@ -95,7 +95,6 @@ public class Teacher {
                 ", ssn=" + ssn +
                 ", phoneNumber=" + phoneNumber +
                 ", email='" + email + '\'' +
-                ", courses=" + courses +
                 '}';
     }
 }

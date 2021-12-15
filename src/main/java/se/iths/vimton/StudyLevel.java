@@ -55,7 +55,6 @@ public class StudyLevel {
         return "StudyLevel{" +
                "id=" + id +
                ", name='" + name + '\'' +
-               ", programTypes=" + programTypes +
                '}';
     }
 
