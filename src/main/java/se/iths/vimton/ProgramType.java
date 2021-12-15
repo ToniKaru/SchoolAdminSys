@@ -12,7 +12,9 @@ public class ProgramType {
 
     private int creditsRequired;
     private boolean accredited;
-    private StudyLevel studyLevel;
+
+    @ManyToOne
+    StudyLevel studyLevel;
 
     @OneToMany
     List<Program> programList;

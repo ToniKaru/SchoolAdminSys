@@ -8,6 +8,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.Map;
 
+import static se.iths.vimton.Language.SWEDISH;
+
 public class Main {
 
     private static final Dotenv dotenv = Dotenv.configure().ignoreIfMalformed().ignoreIfMissing().load();
@@ -23,9 +25,12 @@ public class Main {
     public static void main(String[] args) {
         EntityManager em = emf.createEntityManager();
 
+        StudyLevel diploma = new StudyLevel("Diploma");
+        StudyLevel certificate = new StudyLevel("Certificate");
 
-        ProgramType type1 = new ProgramType(400, true, DIPLOMA);
-        ProgramType type2 = new ProgramType(300, true, CERTIFICATE);
+
+        ProgramType type1 = new ProgramType(400, true, diploma);
+        ProgramType type2 = new ProgramType(300, true, certificate);
 
         Program program1 = new Program("Javautvecklare", 20, type1);
         Program program2 = new Program("Mjuvaratestare", 16, type2);
