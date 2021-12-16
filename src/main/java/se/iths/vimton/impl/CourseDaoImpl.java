@@ -33,7 +33,7 @@ public class CourseDaoImpl implements CourseDao {
 
     @Override
     public void delete(Course course) {
-        //todo: !ifExists(course) return
+        //todo: !ifExists(course) throw error
         em.getTransaction().begin();
         em.remove(course);
         em.getTransaction().commit();
@@ -62,7 +62,9 @@ public class CourseDaoImpl implements CourseDao {
 
     @Override
     public List<Student> getStudents(Course course) {
-        //note: added this as a method in course class - remove this method?
+        //note: added this as a method in Course class &
+        // updated ER diagram with many to many table
+        // Remove this method?
         return null;
     }
 
