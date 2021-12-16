@@ -3,7 +3,13 @@
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.2">
     <persistence-unit name="Lab5" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-
+        <class>se.iths.vimton.Course</class>
+        <class>se.iths.vimton.Language</class>
+        <class>se.iths.vimton.Program</class>
+        <class>se.iths.vimton.ProgramType</class>
+        <class>se.iths.vimton.Student</class>
+        <class>se.iths.vimton.StudyLevel</class>
+        <class>se.iths.vimton.Teacher</class>
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/laboration5"/>
             <property name="javax.persistence.jdbc.user" value="student"/>
