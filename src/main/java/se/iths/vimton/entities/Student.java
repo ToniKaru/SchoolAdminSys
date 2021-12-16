@@ -1,5 +1,7 @@
-package se.iths.vimton;
+package se.iths.vimton.entities;
 
+
+import se.iths.vimton.entities.Program;
 
 import javax.persistence.*;
 

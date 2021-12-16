@@ -1,4 +1,6 @@
-package se.iths.vimton;
+package se.iths.vimton.entities;
+
+import se.iths.vimton.entities.Course;
 
 import javax.persistence.*;
 import java.util.List;
