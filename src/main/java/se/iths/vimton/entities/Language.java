@@ -1,7 +1,5 @@
 package se.iths.vimton.entities;
 
-import se.iths.vimton.entities.Course;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -12,15 +10,15 @@ public class Language {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String language;
+    private String name;
 
     @OneToMany
     private List<Course> courses;
 
     public Language() {}
 
-    public Language(String language) {
-        this.language = language;
+    public Language(String name) {
+        this.name = name;
     }
 
 
@@ -28,12 +26,12 @@ public class Language {
         return id;
     }
 
-    public String getLanguage() {
-        return language;
+    public String getName() {
+        return name;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<Course> getCourses() {
@@ -52,7 +50,7 @@ public class Language {
     public String toString() {
         return "Language{" +
                 "id=" + id +
-                ", language='" + language + '\'' +
+                ", language='" + name + '\'' +
                 '}';
     }
 }
