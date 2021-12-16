@@ -21,6 +21,7 @@ public class StudyLevel {
     }
 
     public StudyLevel(String name) {
+        Guard.Against.Empty(name);
         this.name = name;
     }
 

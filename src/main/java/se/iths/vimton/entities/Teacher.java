@@ -29,6 +29,11 @@ public class Teacher {
     }
 
     public Teacher(String firstName, String lastName, String ssn, String phoneNumber, String email) {
+        Guard.Against.Empty(firstName);
+        Guard.Against.Empty(lastName);
+        Guard.Against.ssnInvalid(ssn);
+        Guard.Against.emailInvalid(email);
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.ssn = ssn;

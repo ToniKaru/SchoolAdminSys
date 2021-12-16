@@ -10,8 +10,8 @@ public class Guard {
 
     class Against {
 
-        public static void NullOrEmpty(String object){
-            if (object == null || object.isEmpty())
+        public static void Empty(String object){
+            if (object.trim().isEmpty())
                 throw new IllegalArgumentException();
         }
 

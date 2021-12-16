@@ -4,6 +4,7 @@ package se.iths.vimton.entities;
 import se.iths.vimton.entities.Program;
 
 import javax.persistence.*;
+import java.io.BufferedReader;
 
 @Entity
 public class Student {
@@ -26,6 +27,13 @@ public class Student {
 
     public Student(String firstName, String lastName, String birthDate, String email, String enrollmentDate,
                    Program program) {
+        Guard.Against.Empty(firstName);
+        Guard.Against.Empty(lastName);
+        Guard.Against.dateInvalid(birthDate);
+        Guard.Against.emailInvalid(email);
+        Guard.Against.dateInvalid(enrollmentDate);
+        Guard.Against.Null(program);
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;

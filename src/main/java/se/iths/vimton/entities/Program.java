@@ -34,6 +34,10 @@ public class Program {
     }
 
     public Program(String name, String description, int length, ProgramType programType) {
+        Guard.Against.Empty(name);
+        Guard.Against.zeroOrLess(length);
+        Guard.Against.Null(programType);
+
         this.name = name;
         this.description = description;
         this.length = length;
