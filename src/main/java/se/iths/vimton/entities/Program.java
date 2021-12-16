@@ -84,6 +84,10 @@ public class Program {
         this.students.add(student);
     }
 
+    public void removeStudent(Student student) {
+        this.students.remove(student);
+    }
+
     public ProgramType getProgramType() {
         return programType;
     }

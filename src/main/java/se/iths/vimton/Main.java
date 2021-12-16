@@ -57,9 +57,11 @@ public class Main {
         databases.addTeacher(teacher2);
 
         javaDeveloper.addCourse(databases);
-        javaDeveloper.addCourse(javaProgramming);
+
 
     }
 
 
 }
+
+
