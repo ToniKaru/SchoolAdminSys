@@ -30,7 +30,7 @@ public class Main {
 
         StudyLevel diploma = new StudyLevel("Diploma");
         StudyLevel certificate = new StudyLevel("Certificate");
-        
+
         ProgramType type1 = new ProgramType(400, true, diploma);
         ProgramType type2 = new ProgramType(300, true, certificate);
 
