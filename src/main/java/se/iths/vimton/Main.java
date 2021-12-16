@@ -2,8 +2,10 @@ package se.iths.vimton;
 
 
 import io.github.cdimascio.dotenv.Dotenv;
+import se.iths.vimton.dao.StudyLevelDao;
 import se.iths.vimton.dao.TeacherDao;
 import se.iths.vimton.entities.*;
+import se.iths.vimton.impl.StudyLevelDaoImpl;
 import se.iths.vimton.impl.TeacherDaoImpl;
 
 
@@ -79,13 +81,38 @@ public class Main {
 //        List<Teacher> allTeachers = teacherDao.getAll();
 //        printMany(allTeachers, "All teachers:");
 
+        StudyLevelDao studyLevelDao = new StudyLevelDaoImpl(emf);
+        studyLevelDao.create(diploma);
+        studyLevelDao.create(certificate);
+//
+//        certificate.setName("certificated");
+//        studyLevelDao.update(certificate);
 
+        List<StudyLevel> studyLevels = studyLevelDao.getAll();
+        printMany(studyLevels, "Study levels:");
 
+//        StudyLevel cert = studyLevelDao.getById(1);
+//        System.out.println("\n1. " + cert);
+//
+//        List<StudyLevel> withE = studyLevelDao.getByName("e");
+//        printMany(withE, "Levels with 'e'");
+
+        studyLevelDao.delete(diploma);
+        studyLevelDao.delete(diploma);
+        studyLevels = studyLevelDao.getAll();
+        printMany(studyLevels, "Study levels:");
+
+        //todo: test this when StudentDaoImpl created
+//        Map<String, Long> studentsPerStudyLevel = studyLevelDao.getStudentsPerStudyLevel();
+//        System.out.println("StudyLevel \tNo. of students");
+//        studentsPerStudyLevel.forEach((a, b) -> {
+//            System.out.println(a + "\t\t" + b);
+//        });
 
     }
 
     private static <T> void printMany(List<T> items, String heading) {
-        System.out.println(heading);
+        System.out.println("\n" + heading);
         if (items.isEmpty())
             System.out.println("No items found");
         else

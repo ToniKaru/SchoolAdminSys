@@ -1,10 +1,7 @@
 package se.iths.vimton.entities;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Entity
@@ -128,6 +125,20 @@ public class Program {
         course.getPrograms().remove(this);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Program program = (Program) o;
+        return id == program.id && length == program.length && Objects.equals(name, program.name) &&
+               Objects.equals(description, program.description) && Objects.equals(programType, program.programType) &&
+               Objects.equals(students, program.students) && Objects.equals(courses, program.courses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, length, programType, students, courses);
+    }
 
     @Override
     public String toString() {

@@ -13,7 +13,8 @@ public interface StudyLevelDao {
     StudyLevel getById(int id);
     List<StudyLevel> getByName(String name);
     List<StudyLevel> getAll();
+    Map<String, Long> getStudentsPerProgram();
 
-    Map<String, Integer> getStudentsPerStudyLevel();
+    Map<String, Long> getStudentsPerStudyLevel();
 
 }
