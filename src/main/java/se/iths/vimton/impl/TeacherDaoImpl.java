@@ -45,7 +45,8 @@ public class TeacherDaoImpl implements TeacherDao {
 
     @Override
     public List<Teacher> getByName(String name) {
-        return em.createQuery("SELECT t FROM Teacher t WHERE t.firstName LIKE :name AND t.lastName LIKE :name", Teacher.class)
+        return em.createQuery("SELECT t FROM Teacher t WHERE t.firstName LIKE :name OR t.lastName LIKE :name",
+                        Teacher.class)
                 .setParameter("name", "%" + name + "%")
                 .getResultList();
     }
