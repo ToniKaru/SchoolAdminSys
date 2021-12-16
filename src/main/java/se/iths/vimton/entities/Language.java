@@ -2,6 +2,7 @@ package se.iths.vimton.entities;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Language {
@@ -46,6 +47,19 @@ public class Language {
 
     public void addCourse(Course course) {
         this.courses.add(course);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Language language = (Language) o;
+        return id == language.id && Objects.equals(name, language.name) && Objects.equals(courses, language.courses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, courses);
     }
 
     @Override

@@ -5,6 +5,7 @@ import se.iths.vimton.entities.Program;
 
 import javax.persistence.*;
 import java.io.BufferedReader;
+import java.util.Objects;
 
 @Entity
 public class Student {
@@ -92,6 +93,22 @@ public class Student {
 
     public void setProgram(Program program) {
         this.program = program;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return id == student.id && Objects.equals(firstName, student.firstName) && Objects.equals(lastName,
+                student.lastName) && Objects.equals(birthDate, student.birthDate) && Objects.equals(email,
+                student.email) && Objects.equals(enrollmentDate, student.enrollmentDate) && Objects.equals(program,
+                student.program);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, birthDate, email, enrollmentDate, program);
     }
 
     @Override

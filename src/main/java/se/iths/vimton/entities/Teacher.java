@@ -4,6 +4,7 @@ import se.iths.vimton.entities.Course;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -90,7 +91,21 @@ public class Teacher {
         return courses;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Teacher teacher = (Teacher) o;
+        return id == teacher.id && Objects.equals(firstName, teacher.firstName) && Objects.equals(lastName,
+                teacher.lastName) && Objects.equals(ssn, teacher.ssn) && Objects.equals(phoneNumber,
+                teacher.phoneNumber) && Objects.equals(email, teacher.email) && Objects.equals(courses,
+                teacher.courses);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, ssn, phoneNumber, email, courses);
+    }
 
     @Override
     public String toString() {
