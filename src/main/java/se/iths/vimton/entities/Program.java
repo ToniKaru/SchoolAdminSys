@@ -2,6 +2,7 @@ package se.iths.vimton.entities;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -43,6 +44,7 @@ public class Program {
         this.length = length;
         this.programType = programType;
         this.students= new ArrayList<>();
+        this.courses = new HashSet<>();
     }
 
     public int getId() {

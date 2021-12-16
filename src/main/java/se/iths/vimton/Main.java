@@ -2,12 +2,15 @@ package se.iths.vimton;
 
 
 import io.github.cdimascio.dotenv.Dotenv;
+import se.iths.vimton.dao.TeacherDao;
 import se.iths.vimton.entities.*;
+import se.iths.vimton.impl.TeacherDaoImpl;
 
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.List;
 import java.util.Map;
 
 
@@ -26,6 +29,7 @@ public class Main {
     public static void main(String[] args) {
         EntityManager em = emf.createEntityManager();
 
+        //testing entities
         StudyLevel diploma = new StudyLevel("Diploma");
         StudyLevel certificate = new StudyLevel("Certificate");
 
@@ -51,12 +55,28 @@ public class Main {
         Course databases = new Course("Databases", "MySQL, JDBC & JPA", 30, swedish);
         Course javaProgramming = new Course("Java Programming", "Introduction to Java programming", 60, swedish);
 
-        databases.addTeacher(teacher1);
-        databases.addTeacher(teacher2);
+        //requires CourseDaoImpl to add courses to database first
+//        databases.addTeacher(teacher1);
+//        databases.addTeacher(teacher2);
+//        javaDeveloper.addCourse(databases);
 
-        javaDeveloper.addCourse(databases);
+
+        //testing implementations
+       TeacherDao teacherDao = new TeacherDaoImpl(emf);
+//        teacherDao.create(teacher1);
+//
+//        teacher1.setLastName("Karlsson");
+//        teacherDao.update(teacher1);
+
+        List<Teacher> allTeachers = teacherDao.getAll();
+        printMany(allTeachers, "All teachers:");
 
 
+    }
+
+    private static <T> void printMany(List<T> items, String heading) {
+        System.out.println(heading);
+        items.forEach(System.out::println);
     }
 
 
