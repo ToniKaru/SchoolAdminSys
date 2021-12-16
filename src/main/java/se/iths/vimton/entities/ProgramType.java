@@ -23,6 +23,9 @@ public class ProgramType {
     }
 
     public ProgramType(int creditsRequired, boolean accredited, StudyLevel studyLevel) {
+        Guard.Against.zeroOrLess(creditsRequired);
+        Guard.Against.Null(studyLevel);
+
         this.creditsRequired = creditsRequired;
         this.accredited = accredited;
         this.studyLevel = studyLevel;

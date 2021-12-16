@@ -18,6 +18,8 @@ public class Language {
     public Language() {}
 
     public Language(String name) {
+        Guard.Against.Empty(name);
+
         this.name = name;
     }
 

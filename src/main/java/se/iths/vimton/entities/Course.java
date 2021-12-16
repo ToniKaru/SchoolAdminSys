@@ -33,6 +33,9 @@ public class Course {
     }
 
     public Course(String name, String description, int credits, Language language) {
+        Guard.Against.zeroOrLess(credits);
+        Guard.Against.Empty(name);
+
         this.name = name;
         this.description = description;
         this.credits = credits;

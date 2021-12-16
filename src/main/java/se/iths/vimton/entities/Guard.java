@@ -1,4 +1,4 @@
-package se.iths.vimton;
+package se.iths.vimton.entities;
 
 import org.hibernate.type.LocalDateType;
 
@@ -26,13 +26,21 @@ public class Guard {
         }
 
         public static void yearOutsideValidRange(int year){
-            if (year < 1880 || year > LocalDate.now().getYear()+1)
+            if (year < 1900 || year > LocalDate.now().getYear()+1)
                 throw new IllegalArgumentException();
         }
 
         public static void ssnInvalid(String ssn) {
             if (ssn.length() != 13 && !ssn.matches("\\d{8}-\\d{4}"))
                 throw new IllegalArgumentException();
+            dateInvalid(ssn.substring(0,8));
+        }
+
+        public static void dateInvalid(String date){
+            if (date.length() != 10 && (!date.matches("\\d{4}-\\d{2}-\\d{2}") ||  !date.matches("\\d{8}")))
+                throw new IllegalArgumentException();
+            LocalDate localDate = LocalDate.parse(date);
+            yearOutsideValidRange(localDate.getYear());
         }
 
         public static void emailInvalid(String email) {
@@ -42,6 +50,8 @@ public class Guard {
                 throw new IllegalArgumentException();
 
         }
+
+
 
 
 
