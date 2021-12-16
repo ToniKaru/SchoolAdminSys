@@ -67,16 +67,29 @@ public class Main {
 //
 //        teacher1.setLastName("Karlsson");
 //        teacherDao.update(teacher1);
+//
+//        Teacher dataBaseTeacher = teacherDao.getById(1);
+//        System.out.println(dataBaseTeacher);
+//
+//        List<Teacher> ed = teacherDao.getByName("ed");
+//        printMany(ed, "Teachers called 'ed'");
+//
+//        teacherDao.delete(teacher1);
+//
+//        List<Teacher> allTeachers = teacherDao.getAll();
+//        printMany(allTeachers, "All teachers:");
 
-        List<Teacher> allTeachers = teacherDao.getAll();
-        printMany(allTeachers, "All teachers:");
+
 
 
     }
 
     private static <T> void printMany(List<T> items, String heading) {
         System.out.println(heading);
-        items.forEach(System.out::println);
+        if (items.isEmpty())
+            System.out.println("No items found");
+        else
+            items.forEach(System.out::println);
     }
 
 
