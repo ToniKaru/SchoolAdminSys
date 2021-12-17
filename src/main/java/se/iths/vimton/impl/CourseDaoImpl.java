@@ -3,7 +3,6 @@ package se.iths.vimton.impl;
 import se.iths.vimton.dao.CourseDao;
 import se.iths.vimton.entities.Course;
 import se.iths.vimton.entities.Student;
-import se.iths.vimton.entities.StudyLevel;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -60,13 +59,6 @@ public class CourseDaoImpl implements CourseDao {
                 .getResultList();
     }
 
-    @Override
-    public List<Student> getStudents(Course course) {
-        //note: added this as a method in Course class &
-        // updated ER diagram with many to many table
-        // Remove this method?
-        return null;
-    }
 
     @Override
     public List<Course> getAll() {

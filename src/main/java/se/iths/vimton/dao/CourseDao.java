@@ -13,7 +13,6 @@ public interface CourseDao {
     Course getById(int id);
     List<Course> getByName(String name);
     List<Course> getByCreditRange(int min, int max);
-    List<Student> getStudents(Course course);
     List<Course> getAll();
 
 }
