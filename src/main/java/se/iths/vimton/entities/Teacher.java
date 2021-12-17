@@ -96,15 +96,13 @@ public class Teacher {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Teacher teacher = (Teacher) o;
-        return id == teacher.id && Objects.equals(firstName, teacher.firstName) && Objects.equals(lastName,
-                teacher.lastName) && Objects.equals(ssn, teacher.ssn) && Objects.equals(phoneNumber,
-                teacher.phoneNumber) && Objects.equals(email, teacher.email) && Objects.equals(courses,
-                teacher.courses);
+        return Objects.equals(firstName, teacher.firstName) && Objects.equals(lastName, teacher.lastName) &&
+               Objects.equals(ssn, teacher.ssn);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, ssn, phoneNumber, email, courses);
+        return Objects.hash(firstName, lastName, ssn);
     }
 
     @Override

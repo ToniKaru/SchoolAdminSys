@@ -28,8 +28,8 @@ public class StudyLevelDaoImpl implements StudyLevelDao {
     }
 
     private boolean studyLevelExists(StudyLevel studyLevel) {
-        Optional<StudyLevel> studyLevel1 = getById(studyLevel.getId());
-        return studyLevel1.isPresent();
+        return getByName(studyLevel.getName()).contains(studyLevel);
+
     }
 
     @Override
