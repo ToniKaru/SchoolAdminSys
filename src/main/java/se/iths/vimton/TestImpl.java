@@ -74,6 +74,7 @@ public class TestImpl {
         StudyLevelDao studyLevelDao = new StudyLevelDaoImpl(emf);
         studyLevelDao.create(diploma);
         studyLevelDao.create(certificate);
+        studyLevelDao.create(certificate);
 //
 //        certificate.setName("certificated");
 //        studyLevelDao.update(certificate);
@@ -88,8 +89,8 @@ public class TestImpl {
 //        printMany(withE, "Levels with 'e'");
 
 //        studyLevelDao.delete(diploma);
-        studyLevels = studyLevelDao.getAll();
-        printMany(studyLevels, "Study levels:");
+//        studyLevels = studyLevelDao.getAll();
+//        printMany(studyLevels, "Study levels:");
 
         //todo: test this when StudentDaoImpl created
 //        Map<String, Long> studentsPerStudyLevel = studyLevelDao.getStudentsPerStudyLevel();

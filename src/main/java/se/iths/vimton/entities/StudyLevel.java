@@ -59,12 +59,12 @@ public class StudyLevel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StudyLevel that = (StudyLevel) o;
-        return id == that.id && Objects.equals(name, that.name) && Objects.equals(programTypes, that.programTypes);
+        return Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, programTypes);
+        return Objects.hash(name);
     }
 
     @Override
