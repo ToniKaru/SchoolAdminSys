@@ -77,13 +77,13 @@ public class ProgramType {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProgramType that = (ProgramType) o;
-        return id == that.id && creditsRequired == that.creditsRequired && accredited == that.accredited &&
-               Objects.equals(studyLevel, that.studyLevel) && Objects.equals(programs, that.programs);
+        return creditsRequired == that.creditsRequired && accredited == that.accredited &&
+               Objects.equals(studyLevel, that.studyLevel);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, creditsRequired, accredited, studyLevel, programs);
+        return Objects.hash(creditsRequired, accredited, studyLevel);
     }
 
     @Override
