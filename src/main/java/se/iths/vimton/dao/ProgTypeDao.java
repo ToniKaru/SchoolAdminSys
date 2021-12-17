@@ -1,7 +1,9 @@
 package se.iths.vimton.dao;
 
 import se.iths.vimton.entities.ProgramType;
+
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface ProgTypeDao {
@@ -10,7 +12,8 @@ public interface ProgTypeDao {
     void update(ProgramType programType);
     void delete(ProgramType programType);
     Optional<ProgramType> getById(int id);
+    List<ProgramType> getByName(String name);
     List<ProgramType> getByAccreditation(boolean accredited);
     List<ProgramType> getAll();
-
+    Map<String, Long> getStudentsPerProgram();
 }

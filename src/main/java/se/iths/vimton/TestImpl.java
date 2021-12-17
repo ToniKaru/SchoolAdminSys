@@ -1,9 +1,7 @@
 package se.iths.vimton;
 
-import se.iths.vimton.dao.StudyLevelDao;
 import se.iths.vimton.dao.TeacherDao;
 import se.iths.vimton.entities.*;
-import se.iths.vimton.impl.StudyLevelDaoImpl;
 import se.iths.vimton.impl.TeacherDaoImpl;
 
 import javax.persistence.EntityManager;

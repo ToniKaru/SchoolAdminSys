@@ -1,6 +1,7 @@
 package se.iths.vimton.impl;
 
 import se.iths.vimton.dao.ProgTypeDao;
+import se.iths.vimton.entities.Program;
 import se.iths.vimton.entities.ProgramType;
 
 import javax.persistence.EntityManager;
@@ -17,6 +18,8 @@ public class ProgTypeDaoImpl implements ProgTypeDao {
 
     @Override
     public void create(ProgramType programType) {
+        if (exists(programType))
+            throw new IllegalArgumentException("ProgramType: " + programType.getName() + " already exists.");
         em.getTransaction().begin();
         em.persist(programType);
         em.getTransaction().commit();
@@ -28,6 +31,8 @@ public class ProgTypeDaoImpl implements ProgTypeDao {
 
     @Override
     public void update(ProgramType programType) {
+        if(!exists(programType))
+            throw new IllegalArgumentException("ProgramType: " + programType.getName() + " does not exist.");
         em.getTransaction().begin();
         em.merge(programType);
         em.getTransaction().commit();
@@ -35,6 +40,8 @@ public class ProgTypeDaoImpl implements ProgTypeDao {
 
     @Override
     public void delete(ProgramType programType) {
+        if(!exists(programType))
+            return;
         em.getTransaction().begin();
         em.remove(programType);
         em.getTransaction().commit();
@@ -46,6 +53,13 @@ public class ProgTypeDaoImpl implements ProgTypeDao {
                 .setParameter("id", id)
                 .getResultStream()
                 .findFirst();
+    }
+
+    @Override
+    public List<ProgramType> getByName(String name) {
+        return em.createQuery("SELECT p FROM ProgramType p WHERE p.name LIKE :name", ProgramType.class)
+                .setParameter("name", "%" + name + "%")
+                .getResultList();
     }
 
     @Override
@@ -61,6 +75,26 @@ public class ProgTypeDaoImpl implements ProgTypeDao {
                 .getResultList();
     }
 
+    @Override
+    public Map<String, Long> getStudentsPerProgram() {
+        Map<String, Long> map = new HashMap<>();
+
+        List<Program> programs = em.createQuery("SELECT p FROM Program p", Program.class).getResultList();
+
+        programs.forEach(program -> {
+            Long count = numberOfStudentsPerProgram(program).orElse(0L);
+            map.put(program.getName(), count);
+        });
+
+        return map;
+    }
+
+    private Optional<Long> numberOfStudentsPerProgram(Program program) {
+        return em.createQuery("SELECT COUNT(*) FROM Student s WHERE s.program.id = :id", Long.class)
+                .setParameter("id", program.getId())
+                .getResultStream()
+                .findFirst();
+    }
 
 
 }

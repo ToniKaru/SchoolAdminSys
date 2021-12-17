@@ -11,11 +11,9 @@ public class ProgramType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    private String name;
     private int creditsRequired;
     private boolean accredited;
-
-    @ManyToOne
-    StudyLevel studyLevel;
 
     @OneToMany
     List<Program> programs;
@@ -23,17 +21,26 @@ public class ProgramType {
     public ProgramType() {
     }
 
-    public ProgramType(int creditsRequired, boolean accredited, StudyLevel studyLevel) {
+    public ProgramType(String name, int creditsRequired, boolean accredited) {
         Guard.Against.zeroOrLess(creditsRequired);
-        Guard.Against.Null(studyLevel);
+        Guard.Against.Empty(name);
 
+        this.name = name;
         this.creditsRequired = creditsRequired;
         this.accredited = accredited;
-        this.studyLevel = studyLevel;
+
     }
 
     public int getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getCreditsRequired() {
@@ -77,22 +84,21 @@ public class ProgramType {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProgramType that = (ProgramType) o;
-        return creditsRequired == that.creditsRequired && accredited == that.accredited &&
-               Objects.equals(studyLevel, that.studyLevel);
+        return creditsRequired == that.creditsRequired && accredited == that.accredited && Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(creditsRequired, accredited, studyLevel);
+        return Objects.hash(name, creditsRequired, accredited);
     }
 
     @Override
     public String toString() {
         return "ProgramType{" +
-               "id=" + id +
-               ", creditsRequired=" + creditsRequired +
-               ", accredited=" + accredited +
-               ", studyLevel=" + studyLevel +
-               '}';
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", creditsRequired=" + creditsRequired +
+                ", accredited=" + accredited +
+                '}';
     }
 }
