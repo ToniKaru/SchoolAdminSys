@@ -98,7 +98,6 @@ public class Main {
 //        printMany(withE, "Levels with 'e'");
 
         studyLevelDao.delete(diploma);
-        studyLevelDao.delete(diploma);
         studyLevels = studyLevelDao.getAll();
         printMany(studyLevels, "Study levels:");
 

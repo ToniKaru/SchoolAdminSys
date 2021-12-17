@@ -20,7 +20,7 @@ public class StudyLevelDaoImpl implements StudyLevelDao {
 
     @Override
     public void create(StudyLevel studyLevel) {
-        if(studyLevelExists(studyLevel))
+        if (studyLevelExists(studyLevel))
             return;
         em.getTransaction().begin();
         em.persist(studyLevel);
@@ -34,6 +34,8 @@ public class StudyLevelDaoImpl implements StudyLevelDao {
 
     @Override
     public void update(StudyLevel studyLevel) {
+        if (!studyLevelExists(studyLevel))
+            return;
         em.getTransaction().begin();
         em.merge(studyLevel);
         em.getTransaction().commit();
@@ -41,13 +43,13 @@ public class StudyLevelDaoImpl implements StudyLevelDao {
 
     @Override
     public void delete(StudyLevel studyLevel) {
-        if(!studyLevelExists(studyLevel))
+        if (!studyLevelExists(studyLevel))
             return;
         em.getTransaction().begin();
         em.remove(studyLevel);
         em.getTransaction().commit();
     }
-    
+
     @Override
     public Optional<StudyLevel> getById(int id) {
         return em.createQuery("SELECT s FROM StudyLevel s WHERE s.id = :id", StudyLevel.class)
