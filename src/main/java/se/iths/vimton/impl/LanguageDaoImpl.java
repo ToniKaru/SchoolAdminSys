@@ -7,6 +7,7 @@ import se.iths.vimton.entities.Language;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.Optional;
 
 public class LanguageDaoImpl implements LanguageDao {
 
@@ -48,8 +49,11 @@ public class LanguageDaoImpl implements LanguageDao {
     }
 
     @Override
-    public Language getById(int id) {
-        return em.find(Language.class, id);
+    public Optional<Language> getById(int id) {
+        return em.createQuery("SELECT l FROM Language l WHERE l.id = :id", Language.class)
+                .setParameter("id", id)
+                .getResultStream()
+                .findFirst();
     }
 
     @Override

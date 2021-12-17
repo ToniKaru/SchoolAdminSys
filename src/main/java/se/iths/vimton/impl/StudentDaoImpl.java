@@ -20,7 +20,7 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public void create(Student student) {
         if (studentExists(student))
-            return;
+            throw new IllegalArgumentException(student.getFirstName() + " " + student.getLastName() + " already exists.");
         em.getTransaction().begin();
         em.persist(student);
         em.getTransaction().commit();
@@ -39,7 +39,7 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public void update(Student student) {
         if (!studentExists(student))
-            return;
+            throw new IllegalArgumentException("Updated student does not exist.");
         em.getTransaction().begin();
         em.merge(student);
         em.getTransaction().commit();

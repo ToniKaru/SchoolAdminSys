@@ -7,6 +7,7 @@ import se.iths.vimton.entities.Program;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 public class ProgramDaoImpl implements ProgramDao {
     EntityManager em;
@@ -53,9 +54,11 @@ public class ProgramDaoImpl implements ProgramDao {
     }
 
     @Override
-    public Program getById(int id) {
-        //todo: return optional in case id not found
-        return em.find(Program.class, id);
+    public Optional<Program> getById(int id) {
+        return em.createQuery("SELECT p FROM Program p WHERE p.id = :id", Program.class)
+                .setParameter("id", id)
+                .getResultStream()
+                .findFirst();
     }
 
     @Override

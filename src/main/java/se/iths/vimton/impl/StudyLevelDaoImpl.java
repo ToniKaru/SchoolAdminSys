@@ -35,7 +35,7 @@ public class StudyLevelDaoImpl implements StudyLevelDao {
     @Override
     public void update(StudyLevel studyLevel) {
         if (!studyLevelExists(studyLevel))
-            return;
+            throw new IllegalArgumentException("Studylevel: " + studyLevel.getName() + " does not exist.");
         em.getTransaction().begin();
         em.merge(studyLevel);
         em.getTransaction().commit();

@@ -6,6 +6,7 @@ import se.iths.vimton.entities.Teacher;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.Optional;
 
 public class TeacherDaoImpl implements TeacherDao {
 
@@ -35,8 +36,8 @@ public class TeacherDaoImpl implements TeacherDao {
 
     @Override
     public void update(Teacher teacher) {
-        if (!teacherExists(teacher))
-            return;
+        if (!exists(teacher))
+            throw new IllegalArgumentException("Updated teacher does not exists.");;
         em.getTransaction().begin();
         em.merge(teacher);
         em.getTransaction().commit();
@@ -52,10 +53,11 @@ public class TeacherDaoImpl implements TeacherDao {
     }
 
     @Override
-    public Teacher getById(int id) {
+    public Optional<Teacher> getById(int id) {
         return em.createQuery("SELECT t FROM Teacher t WHERE t.id = :id", Teacher.class)
                 .setParameter("id", id)
-                .getSingleResult();
+                .getResultStream()
+                .findFirst();
     }
 
     @Override
