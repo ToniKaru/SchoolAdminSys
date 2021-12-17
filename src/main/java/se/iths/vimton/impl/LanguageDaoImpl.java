@@ -18,14 +18,21 @@ public class LanguageDaoImpl implements LanguageDao {
 
     @Override
     public void create(Language language) {
-        //todo: !ifExists(course) return;
+        if(exists(language))
+            throw new IllegalArgumentException("Language: " + language.getName() + " already exists.");
         em.getTransaction().begin();
         em.persist(language);
         em.getTransaction().commit();
     }
 
+    private boolean exists(Language language) {
+        return getByName(language.getName()).contains(language);
+    }
+
     @Override
     public void update(Language language) {
+        if(!exists(language))
+            throw new IllegalArgumentException("Could not update language. Language: " + language.getName() + " does not exist.");
         em.getTransaction().begin();
         em.merge(language);
         em.getTransaction().commit();
@@ -33,7 +40,8 @@ public class LanguageDaoImpl implements LanguageDao {
 
     @Override
     public void delete(Language language) {
-        //todo: !ifExists(course) throw error
+        if(!exists(language))
+            return;
         em.getTransaction().begin();
         em.remove(language);
         em.getTransaction().commit();
@@ -41,7 +49,6 @@ public class LanguageDaoImpl implements LanguageDao {
 
     @Override
     public Language getById(int id) {
-        //todo: return optional in case id not found
         return em.find(Language.class, id);
     }
 

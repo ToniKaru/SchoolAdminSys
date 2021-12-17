@@ -17,14 +17,14 @@ public class TeacherDaoImpl implements TeacherDao {
 
     @Override
     public void create(Teacher teacher) {
-        if (teacherExists(teacher))
-            return;
+        if (exists(teacher))
+            throw new IllegalArgumentException(teacher.getFirstName() + " " + teacher.getLastName() + " already exists.");
         em.getTransaction().begin();
         em.persist(teacher);
         em.getTransaction().commit();
     }
 
-    private boolean teacherExists(Teacher teacher) {
+    private boolean exists(Teacher teacher) {
         return em.createQuery("SELECT t FROM Teacher t WHERE t.firstName = :firstName AND t.lastName = :lastName",
                         Teacher.class)
                 .setParameter("firstName", teacher.getFirstName())
@@ -44,7 +44,7 @@ public class TeacherDaoImpl implements TeacherDao {
 
     @Override
     public void delete(Teacher teacher) {
-        if (!teacherExists(teacher))
+        if (!exists(teacher))
             return;
         em.getTransaction().begin();
         em.remove(teacher);

@@ -21,7 +21,7 @@ public class StudyLevelDaoImpl implements StudyLevelDao {
     @Override
     public void create(StudyLevel studyLevel) {
         if (studyLevelExists(studyLevel))
-            return;
+            throw new IllegalArgumentException("Studylevel: " + studyLevel.getName() + " already exists.");
         em.getTransaction().begin();
         em.persist(studyLevel);
         em.getTransaction().commit();

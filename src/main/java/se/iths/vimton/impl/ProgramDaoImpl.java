@@ -2,6 +2,7 @@ package se.iths.vimton.impl;
 
 import se.iths.vimton.dao.ProgramDao;
 import se.iths.vimton.entities.Course;
+import se.iths.vimton.entities.Language;
 import se.iths.vimton.entities.Program;
 
 import javax.persistence.EntityManager;
@@ -13,14 +14,22 @@ public class ProgramDaoImpl implements ProgramDao {
 
     @Override
     public void create(Program program) {
-        //todo: !ifExists(course) return;
+        if(exists(program))
+            throw new IllegalArgumentException("Program: " + program.getName() + " already exists.");
         em.getTransaction().begin();
         em.persist(program);
         em.getTransaction().commit();
     }
 
+    private boolean exists(Program program) {
+        return getByName(program.getName()).contains(program);
+    }
+
     @Override
     public void update(Program program) {
+        if(!exists(program))
+            throw new IllegalArgumentException("Could not update program. " +
+                    "Program: " + program.getName() + " does not exist.");
         em.getTransaction().begin();
         em.merge(program);
         em.getTransaction().commit();
@@ -28,7 +37,8 @@ public class ProgramDaoImpl implements ProgramDao {
 
     @Override
     public void delete(Program program) {
-        //todo: !ifExists(course) throw error
+        if(!exists(program))
+            return;
         em.getTransaction().begin();
         em.remove(program);
         em.getTransaction().commit();
@@ -71,11 +81,6 @@ public class ProgramDaoImpl implements ProgramDao {
                 .getResultList();
     }
 
-/*    @Override
-    //todo: returnera en lista av Students???
-    public List<Program> getStudents(Program program) {
-        return null;
-    }*/
 
     @Override
     public List<Program> getAll() {

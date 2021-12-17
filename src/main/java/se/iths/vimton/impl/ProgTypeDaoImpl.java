@@ -1,6 +1,7 @@
 package se.iths.vimton.impl;
 
 import se.iths.vimton.dao.ProgTypeDao;
+import se.iths.vimton.entities.Course;
 import se.iths.vimton.entities.ProgramType;
 
 import javax.persistence.EntityManager;
@@ -20,6 +21,10 @@ public class ProgTypeDaoImpl implements ProgTypeDao {
         em.persist(programType);
         em.getTransaction().commit();
     }
+
+//    private boolean exists(ProgramType programType) {
+//        return getByName(programType.getName()).contains(programType);
+//    }
 
     @Override
     public void update(ProgramType programType) {
