@@ -9,6 +9,7 @@ import javax.persistence.EntityManagerFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class StudyLevelDaoImpl implements StudyLevelDao {
     EntityManager em;
@@ -19,14 +20,22 @@ public class StudyLevelDaoImpl implements StudyLevelDao {
 
     @Override
     public void create(StudyLevel studyLevel) {
-        //todo: ifExists(studyLevel) return;    -> avoid duplication
+        if (studyLevelExists(studyLevel))
+            return;
         em.getTransaction().begin();
         em.persist(studyLevel);
         em.getTransaction().commit();
     }
 
+    private boolean studyLevelExists(StudyLevel studyLevel) {
+        Optional<StudyLevel> studyLevel1 = getById(studyLevel.getId());
+        return studyLevel1.isPresent();
+    }
+
     @Override
     public void update(StudyLevel studyLevel) {
+        if (!studyLevelExists(studyLevel))
+            return;
         em.getTransaction().begin();
         em.merge(studyLevel);
         em.getTransaction().commit();
@@ -34,18 +43,19 @@ public class StudyLevelDaoImpl implements StudyLevelDao {
 
     @Override
     public void delete(StudyLevel studyLevel) {
-        //todo: !ifExists(studyLevel) return    -> avoid IllegalArgumentException
+        if (!studyLevelExists(studyLevel))
+            return;
         em.getTransaction().begin();
         em.remove(studyLevel);
         em.getTransaction().commit();
     }
 
-    //todo: return optional - NoResultException ("no entity found for query)
     @Override
-    public StudyLevel getById(int id) {
+    public Optional<StudyLevel> getById(int id) {
         return em.createQuery("SELECT s FROM StudyLevel s WHERE s.id = :id", StudyLevel.class)
                 .setParameter("id", id)
-                .getSingleResult();
+                .getResultStream()
+                .findFirst();
     }
 
     @Override
@@ -67,13 +77,18 @@ public class StudyLevelDaoImpl implements StudyLevelDao {
         List<Program> programs = em.createQuery("SELECT p FROM Program p", Program.class).getResultList();
 
         programs.forEach(program -> {
-            Long count = em.createQuery("SELECT COUNT(*) FROM Student s WHERE s.program.id = :id", Long.class)
-                    .setParameter("id", program.getId())
-                    .getSingleResult();
+            Long count = numberOfStudentsPerProgram(program).orElse(0L);
             map.put(program.getName(), count);
         });
 
         return map;
+    }
+
+    private Optional<Long> numberOfStudentsPerProgram(Program program) {
+        return em.createQuery("SELECT COUNT(*) FROM Student s WHERE s.program.id = :id", Long.class)
+                .setParameter("id", program.getId())
+                .getResultStream()
+                .findFirst();
     }
 
     @Override
@@ -83,16 +98,21 @@ public class StudyLevelDaoImpl implements StudyLevelDao {
         List<StudyLevel> levels = em.createQuery("SELECT s FROM StudyLevel s", StudyLevel.class).getResultList();
 
         levels.forEach(level -> {
-            Long count = em.createQuery(
-                            "SELECT COUNT(*) FROM Student s WHERE s.program.programType.studyLevel.id = :id",
-                            Long.class
-                    )
-                    .setParameter("id", level.getId())
-                    .getSingleResult();
+            Long count = numberOfStudentsPerStudyLevel(level).orElse(0L);
             map.put(level.getName(), count);
         });
 
         return map;
+    }
+
+    private Optional<Long> numberOfStudentsPerStudyLevel(StudyLevel level) {
+        return em.createQuery(
+                        "SELECT COUNT(*) FROM Student s WHERE s.program.programType.studyLevel.id = :id",
+                        Long.class
+                )
+                .setParameter("id", level.getId())
+                .getResultStream()
+                .findFirst();
     }
 }
 

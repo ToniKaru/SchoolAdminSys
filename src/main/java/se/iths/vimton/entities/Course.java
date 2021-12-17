@@ -3,6 +3,7 @@ package se.iths.vimton.entities;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -112,6 +113,21 @@ public class Course {
     }
 
     public Set<Student> getStudents() { return this.students; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return id == course.id && credits == course.credits && Objects.equals(name, course.name) &&
+               Objects.equals(description, course.description) && Objects.equals(language, course.language) &&
+               Objects.equals(teachers, course.teachers) && Objects.equals(programs, course.programs);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, credits, language, teachers, programs);
+    }
 
     @Override
     public String toString() {

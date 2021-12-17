@@ -4,6 +4,7 @@ import se.iths.vimton.entities.ProgramType;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class StudyLevel {
@@ -51,6 +52,19 @@ public class StudyLevel {
 
     public void addProgramTypes(List<ProgramType> programTypes) {
         this.programTypes.addAll(programTypes);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StudyLevel that = (StudyLevel) o;
+        return id == that.id && Objects.equals(name, that.name) && Objects.equals(programTypes, that.programTypes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, programTypes);
     }
 
     @Override
