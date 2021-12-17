@@ -20,8 +20,10 @@ public class ProgTypeDaoImpl implements ProgTypeDao {
 
     @Override
     public void create(ProgramType programType) {
-        if (exists(programType))
-            throw new IllegalArgumentException("ProgramType: " + programType.getName() + " already exists.");
+        if (exists(programType)) {
+            System.out.println("ProgramType: " + programType.getName() + " already exists.");
+            return;
+        }
         em.getTransaction().begin();
         em.persist(programType);
         em.getTransaction().commit();
@@ -36,8 +38,10 @@ public class ProgTypeDaoImpl implements ProgTypeDao {
 
     @Override
     public void update(ProgramType programType) {
-        if(!exists(programType))
-            throw new IllegalArgumentException("ProgramType: " + programType.getName() + " does not exist.");
+        if(!exists(programType)) {
+            System.out.println("ProgramType: " + programType.getName() + " does not exist.");
+            return;
+        }
         em.getTransaction().begin();
         em.merge(programType);
         em.getTransaction().commit();

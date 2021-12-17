@@ -14,8 +14,10 @@ public class ProgramDaoImpl implements ProgramDao {
 
     @Override
     public void create(Program program) {
-        if(exists(program))
-            throw new IllegalArgumentException("Program: " + program.getName() + " already exists.");
+        if(exists(program))  {
+            System.out.println("Program: " + program.getName() + " already exists.");
+            return;
+        }
         em.getTransaction().begin();
         em.persist(program);
         em.getTransaction().commit();
@@ -27,9 +29,10 @@ public class ProgramDaoImpl implements ProgramDao {
 
     @Override
     public void update(Program program) {
-        if(!exists(program))
-            throw new IllegalArgumentException("Could not update program. " +
-                    "Program: " + program.getName() + " does not exist.");
+        if(!exists(program)) {
+            System.out.println("Could not update program. Program: " + program.getName() + " does not exist.");
+            return;
+        }
         em.getTransaction().begin();
         em.merge(program);
         em.getTransaction().commit();
