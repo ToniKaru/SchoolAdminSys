@@ -1,7 +1,6 @@
 package se.iths.vimton.impl;
 
 import se.iths.vimton.dao.ProgTypeDao;
-import se.iths.vimton.entities.Language;
 import se.iths.vimton.entities.ProgramType;
 
 import javax.persistence.EntityManager;
