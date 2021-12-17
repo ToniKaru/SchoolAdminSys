@@ -126,15 +126,13 @@ public class Student {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return id == student.id && Objects.equals(firstName, student.firstName) && Objects.equals(lastName,
-                student.lastName) && Objects.equals(birthDate, student.birthDate) && Objects.equals(email,
-                student.email) && Objects.equals(enrollmentDate, student.enrollmentDate) && Objects.equals(program,
-                student.program);
+        return Objects.equals(firstName, student.firstName) && Objects.equals(lastName, student.lastName) &&
+               Objects.equals(birthDate, student.birthDate) && Objects.equals(enrollmentDate, student.enrollmentDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, birthDate, email, enrollmentDate, program);
+        return Objects.hash(firstName, lastName, birthDate, enrollmentDate);
     }
 
     @Override

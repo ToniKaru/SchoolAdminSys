@@ -27,7 +27,13 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     private boolean studentExists(Student student) {
-        return getById(student.getId()).isPresent();
+        return em.createQuery(
+                        "SELECT s FROM Student s WHERE s.firstName LIKE :firstName AND s.lastName LIKE :lastName",
+                        Student.class)
+                .setParameter("firstName", student.getFirstName())
+                .setParameter("lastName", student.getLastName())
+                .getResultList()
+                .contains(student);
     }
 
     @Override
