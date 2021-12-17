@@ -17,13 +17,26 @@ public class TeacherDaoImpl implements TeacherDao {
 
     @Override
     public void create(Teacher teacher) {
+        if (teacherExists(teacher))
+            return;
         em.getTransaction().begin();
         em.persist(teacher);
         em.getTransaction().commit();
     }
 
+    private boolean teacherExists(Teacher teacher) {
+        return em.createQuery("SELECT t FROM Teacher t WHERE t.firstName = :firstName AND t.lastName = :lastName",
+                        Teacher.class)
+                .setParameter("firstName", teacher.getFirstName())
+                .setParameter("lastName", teacher.getLastName())
+                .getResultList()
+                .contains(teacher);
+    }
+
     @Override
     public void update(Teacher teacher) {
+        if (!teacherExists(teacher))
+            return;
         em.getTransaction().begin();
         em.merge(teacher);
         em.getTransaction().commit();
@@ -31,6 +44,8 @@ public class TeacherDaoImpl implements TeacherDao {
 
     @Override
     public void delete(Teacher teacher) {
+        if (!teacherExists(teacher))
+            return;
         em.getTransaction().begin();
         em.remove(teacher);
         em.getTransaction().commit();
