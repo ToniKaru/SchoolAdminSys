@@ -1,7 +1,6 @@
 package se.iths.vimton.impl;
 
 import se.iths.vimton.dao.LanguageDao;
-import se.iths.vimton.entities.Course;
 import se.iths.vimton.entities.Language;
 
 import javax.persistence.EntityManager;

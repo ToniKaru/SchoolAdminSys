@@ -2,12 +2,11 @@ package se.iths.vimton.impl;
 
 import se.iths.vimton.dao.CourseDao;
 import se.iths.vimton.entities.Course;
-import se.iths.vimton.entities.Student;
-import se.iths.vimton.entities.Teacher;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.Optional;
 
 public class CourseDaoImpl implements CourseDao {
     private EntityManager em;
@@ -48,9 +47,11 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public Course getById(int id) {
-        //todo: return optional in case id not found
-        return em.find(Course.class, id);
+    public Optional<Course> getById(int id) {
+        return em.createQuery("SELECT c FROM Course c WHERE c.id = :id", Course.class)
+                .setParameter("id", id)
+                .getResultStream()
+                .findFirst();
     }
 
     @Override

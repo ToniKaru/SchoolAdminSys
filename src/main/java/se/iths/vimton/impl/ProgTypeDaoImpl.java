@@ -1,12 +1,12 @@
 package se.iths.vimton.impl;
 
 import se.iths.vimton.dao.ProgTypeDao;
-import se.iths.vimton.entities.Course;
 import se.iths.vimton.entities.ProgramType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.Optional;
 
 public class ProgTypeDaoImpl implements ProgTypeDao {
     EntityManager em;
@@ -41,8 +41,11 @@ public class ProgTypeDaoImpl implements ProgTypeDao {
     }
 
     @Override
-    public ProgramType getById(int id) {
-        return em.find(ProgramType.class, id);
+    public Optional<ProgramType> getById(int id) {
+        return em.createQuery("SELECT p FROM ProgramType p WHERE p.id = :id", ProgramType.class)
+                .setParameter("id", id)
+                .getResultStream()
+                .findFirst();
     }
 
     @Override
