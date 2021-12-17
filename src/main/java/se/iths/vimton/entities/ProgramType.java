@@ -59,14 +59,6 @@ public class ProgramType {
         this.accredited = accredited;
     }
 
-    public StudyLevel getStudyLevel() {
-        return studyLevel;
-    }
-
-    public void setStudyLevel(StudyLevel studyLevel) {
-        this.studyLevel = studyLevel;
-    }
-
     public List<Program> getProgramList() {
         return programs;
     }

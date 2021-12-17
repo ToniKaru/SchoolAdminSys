@@ -7,6 +7,7 @@ import se.iths.vimton.impl.TeacherDaoImpl;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.Optional;
 
 public class TestImpl {
     EntityManagerFactory emf;
@@ -20,11 +21,8 @@ public class TestImpl {
     public void run() {
 
         //testing entities
-        StudyLevel diploma = new StudyLevel("Diploma");
-        StudyLevel certificate = new StudyLevel("Certificate");
-
-        ProgramType type1 = new ProgramType(400, true, diploma);
-        ProgramType type2 = new ProgramType(300, true, certificate);
+        ProgramType type1 = new ProgramType("diploma", 400, true);
+        ProgramType type2 = new ProgramType("certificate", 300, true);
 
         Program javaDeveloper = new Program("Javautvecklare", 22, type1);
         Program softwareTester = new Program("Mjukvarutestare", 17, type2);
@@ -54,48 +52,25 @@ public class TestImpl {
         //testing implementations
         TeacherDao teacherDao = new TeacherDaoImpl(emf);
 //        teacherDao.create(teacher1);
-//
+//        teacherDao.create(teacher2);
+
 //        teacher1.setLastName("Karlsson");
 //        teacherDao.update(teacher1);
-//
-//        Teacher dataBaseTeacher = teacherDao.getById(1);
-//        System.out.println(dataBaseTeacher);
-//
-//        List<Teacher> ed = teacherDao.getByName("ed");
-//        printMany(ed, "Teachers called 'ed'");
-//
-//        teacherDao.delete(teacher1);
-//
-//        List<Teacher> allTeachers = teacherDao.getAll();
-//        printMany(allTeachers, "All teachers:");
 
-        StudyLevelDao studyLevelDao = new StudyLevelDaoImpl(emf);
-        studyLevelDao.create(diploma);
-        studyLevelDao.create(certificate);
-        studyLevelDao.create(certificate);
-//
-//        certificate.setName("certificated");
-//        studyLevelDao.update(certificate);
+//        Optional<Teacher> dataBaseTeacher = teacherDao.getById(1);
+//        dataBaseTeacher.ifPresent(System.out::println);
 
-        List<StudyLevel> studyLevels = studyLevelDao.getAll();
-        printMany(studyLevels, "Study levels:");
+        List<Teacher> ed = teacherDao.getByName("ed");
+        printMany(ed, "Teachers called 'ed'");
 
-//        StudyLevel cert = studyLevelDao.getById(1);
-//        System.out.println("\n1. " + cert);
-//
-//        List<StudyLevel> withE = studyLevelDao.getByName("e");
-//        printMany(withE, "Levels with 'e'");
+        teacherDao.delete(teacher1);
 
-//        studyLevelDao.delete(diploma);
-//        studyLevels = studyLevelDao.getAll();
-//        printMany(studyLevels, "Study levels:");
+        List<Teacher> allTeachers = teacherDao.getAll();
+        printMany(allTeachers, "All teachers:");
 
-        //todo: test this when StudentDaoImpl created
-//        Map<String, Long> studentsPerStudyLevel = studyLevelDao.getStudentsPerStudyLevel();
-//        System.out.println("StudyLevel \tNo. of students");
-//        studentsPerStudyLevel.forEach((a, b) -> {
-//            System.out.println(a + "\t\t" + b);
-//        });
+
+
+
     }
 
     private static <T> void printMany(List<T> items, String heading) {

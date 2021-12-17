@@ -6,7 +6,9 @@ import se.iths.vimton.entities.ProgramType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class ProgTypeDaoImpl implements ProgTypeDao {
@@ -25,9 +27,12 @@ public class ProgTypeDaoImpl implements ProgTypeDao {
         em.getTransaction().commit();
     }
 
-//    private boolean exists(ProgramType programType) {
-//        return getByName(programType.getName()).contains(programType);
-//    }
+    private boolean exists(ProgramType programType) {
+        return em.createQuery("SELECT p FROM ProgramType p WHERE p.name = :name", ProgramType.class)
+                .setParameter("name", programType.getName())
+                .getResultList()
+                .contains(programType);
+    }
 
     @Override
     public void update(ProgramType programType) {
