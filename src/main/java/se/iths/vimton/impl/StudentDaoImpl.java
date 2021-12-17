@@ -26,6 +26,7 @@ public class StudentDaoImpl implements StudentDao {
         em.getTransaction().commit();
     }
 
+    //todo:  what happens when student name is updated? use ssn for students instead?
     private boolean studentExists(Student student) {
         return em.createQuery(
                         "SELECT s FROM Student s WHERE s.firstName LIKE :firstName AND s.lastName LIKE :lastName",

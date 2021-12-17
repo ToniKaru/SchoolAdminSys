@@ -51,22 +51,36 @@ public class TestImpl {
 
         //testing implementations
         TeacherDao teacherDao = new TeacherDaoImpl(emf);
-//        teacherDao.create(teacher1);
-//        teacherDao.create(teacher2);
+//        try {
+//            teacherDao.create(teacher1);
+//            teacherDao.create(teacher2);
+//        } catch (IllegalArgumentException e) {
+//            e.printStackTrace();
+//        }
 
+//        List<Teacher> allTeachers = teacherDao.getAll();
+//        printMany(allTeachers, "All teachers before deletion:");
+
+        //get teacher1 object again from teacherDao -> ensures that id is matching
+        // therefore avoids duplication & object.equals(object) is true
 //        teacher1.setLastName("Karlsson");
 //        teacherDao.update(teacher1);
 
 //        Optional<Teacher> dataBaseTeacher = teacherDao.getById(1);
 //        dataBaseTeacher.ifPresent(System.out::println);
 
-        List<Teacher> ed = teacherDao.getByName("ed");
-        printMany(ed, "Teachers called 'ed'");
+//        List<Teacher> ed = teacherDao.getByName("ed");
+//        printMany(ed, "Teachers called 'ed'");
 
-        teacherDao.delete(teacher1);
+        // get teacher from teacherDao before deletion / update
+//        Optional<Teacher> ed = teacherDao.getById(2);
+//        ed.ifPresent(teacherDao::delete);
+//
+//        Optional<Teacher> martin = teacherDao.getBySsn("19820301-4319");
+//        martin.ifPresent(teacherDao::delete);
 
-        List<Teacher> allTeachers = teacherDao.getAll();
-        printMany(allTeachers, "All teachers:");
+//        allTeachers = teacherDao.getAll();
+//        printMany(allTeachers, "All teachers after deletion:");
 
 
 

@@ -12,6 +12,7 @@ public interface TeacherDao {
     void update(Teacher teacher);
     void delete(Teacher teacher);
     Optional<Teacher> getById(int id);
+    Optional<Teacher> getBySsn(String ssn);
     List<Teacher> getByName(String name);
     List<Teacher> getAll();
 }

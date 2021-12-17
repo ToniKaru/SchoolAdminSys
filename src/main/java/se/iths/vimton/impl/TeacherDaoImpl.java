@@ -18,26 +18,29 @@ public class TeacherDaoImpl implements TeacherDao {
 
     @Override
     public void create(Teacher teacher) {
-        if (exists(teacher))
-            throw new IllegalArgumentException(teacher.getFirstName() + " " + teacher.getLastName() + " already exists.");
+        if (exists(teacher)) {
+            System.out.println(teacher.getFirstName() + " " + teacher.getLastName() + " already exists.");
+            return;
+        }
         em.getTransaction().begin();
         em.persist(teacher);
         em.getTransaction().commit();
     }
 
     private boolean exists(Teacher teacher) {
-        return em.createQuery("SELECT t FROM Teacher t WHERE t.firstName = :firstName AND t.lastName = :lastName",
+        return em.createQuery("SELECT t FROM Teacher t WHERE t.ssn = :ssn",
                         Teacher.class)
-                .setParameter("firstName", teacher.getFirstName())
-                .setParameter("lastName", teacher.getLastName())
+                .setParameter("ssn", teacher.getSsn())
                 .getResultList()
                 .contains(teacher);
     }
 
     @Override
     public void update(Teacher teacher) {
-        if (!exists(teacher))
-            throw new IllegalArgumentException("Updated teacher does not exists.");;
+        if (!exists(teacher)) {
+            System.out.println("Updated teacher does not exists.");
+            return;
+        }
         em.getTransaction().begin();
         em.merge(teacher);
         em.getTransaction().commit();
@@ -50,12 +53,21 @@ public class TeacherDaoImpl implements TeacherDao {
         em.getTransaction().begin();
         em.remove(teacher);
         em.getTransaction().commit();
+        System.out.println(teacher.getFirstName() + " deleted. Id: " + teacher.getId());
     }
 
     @Override
     public Optional<Teacher> getById(int id) {
         return em.createQuery("SELECT t FROM Teacher t WHERE t.id = :id", Teacher.class)
                 .setParameter("id", id)
+                .getResultStream()
+                .findFirst();
+    }
+
+    @Override
+    public Optional<Teacher> getBySsn(String ssn) {
+        return em.createQuery("SELECT t FROM Teacher t WHERE t.ssn = :ssn", Teacher.class)
+                .setParameter("ssn", ssn)
                 .getResultStream()
                 .findFirst();
     }
