@@ -1,11 +1,10 @@
 package se.iths.vimton.entities;
 
 
-import se.iths.vimton.entities.Program;
-
 import javax.persistence.*;
-import java.io.BufferedReader;
 import java.util.Objects;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Student {
@@ -22,6 +21,9 @@ public class Student {
 
     @ManyToOne
     private Program program;
+
+    @ManyToMany
+    private Set<Course> courses;
 
     public Student() {
     }
@@ -93,6 +95,30 @@ public class Student {
 
     public void setProgram(Program program) {
         this.program = program;
+    }
+
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
+        courses.forEach(course -> course.getStudents().add(this));
+    }
+
+    public void addCourse(Course course) {
+        this.courses.add(course);
+        course.getStudents().add(this);
+    }
+
+    public void addAllCourses(List<Course> courses){
+        this.courses.addAll(courses);
+        courses.forEach(course -> course.getStudents().add(this));
+    }
+
+    public void removeCourse(Course course) {
+        this.courses.remove(course);
+        course.getStudents().remove(this);
     }
 
     @Override

@@ -20,6 +20,8 @@ public class Course {
     @ManyToOne
     private Language language;
 
+    @ManyToMany (mappedBy = "courses")
+    private Set<Student> students;
 
     @ManyToMany(mappedBy = "courses")
     private Set<Teacher> teachers;
@@ -109,6 +111,8 @@ public class Course {
     public Set<Program> getPrograms() {
         return this.programs;
     }
+
+    public Set<Student> getStudents() { return this.students; }
 
     @Override
     public boolean equals(Object o) {

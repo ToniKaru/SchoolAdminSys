@@ -14,6 +14,6 @@ public interface StudentDao {
     List<Student> getByProgram(int programId);
     List<Student> getByProgram(Program program);
     List<Student> getAll();
-    int studentsByProgram(Program program);
+    int studentsByProgram(Program program);  //todo: refer to StudyLevelDaoImpl
 
 }

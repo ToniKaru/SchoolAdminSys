@@ -9,8 +9,8 @@ public interface LanguageDao {
     void create(Language language);
     void update(Language language);
     void delete(Language language);
-    List<Language> getByName(String name);
     Language getById(int id);
+    List<Language> getByName(String name);
     List<Language> getAll();
 
 }
