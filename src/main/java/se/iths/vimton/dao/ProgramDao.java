@@ -15,7 +15,7 @@ public interface ProgramDao {
     List<Program> getByName(String name);
     List<Program> getByLength(int length);
     List<Program> getByCourse(Course course);
-    List<Program> getStudents(Program program);
+    //List<Program> getStudents(Program program);
     List<Program> getAll();
 
 }
