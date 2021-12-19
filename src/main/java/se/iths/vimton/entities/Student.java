@@ -3,8 +3,6 @@ package se.iths.vimton.entities;
 
 import javax.persistence.*;
 import java.util.Objects;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 public class Student {
@@ -15,7 +13,7 @@ public class Student {
 
     private String firstName;
     private String lastName;
-    private String birthDate;
+    private String ssn;
     private String email;
     private String enrollmentDate;
 
@@ -25,18 +23,18 @@ public class Student {
     public Student() {
     }
 
-    public Student(String firstName, String lastName, String birthDate, String email, String enrollmentDate,
+    public Student(String firstName, String lastName, String ssn, String email, String enrollmentDate,
                    Program program) {
         Guard.Against.Empty(firstName);
         Guard.Against.Empty(lastName);
-        Guard.Against.dateInvalid(birthDate);
+        Guard.Against.ssnInvalid(ssn);
         Guard.Against.emailInvalid(email);
         Guard.Against.dateInvalid(enrollmentDate);
         Guard.Against.Null(program);
 
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthDate = birthDate;
+        this.ssn = ssn;
         this.email = email;
         this.enrollmentDate = enrollmentDate;
         this.program = program;
@@ -62,12 +60,12 @@ public class Student {
         this.lastName = lastName;
     }
 
-    public String getBirthDate() {
-        return birthDate;
+    public String getSsn() {
+        return ssn;
     }
 
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+    public void setSsn(String birthDate) {
+        this.ssn = birthDate;
     }
 
     public String getEmail() {
@@ -100,12 +98,12 @@ public class Student {
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
         return Objects.equals(firstName, student.firstName) && Objects.equals(lastName, student.lastName) &&
-               Objects.equals(birthDate, student.birthDate) && Objects.equals(enrollmentDate, student.enrollmentDate);
+               Objects.equals(ssn, student.ssn) && Objects.equals(enrollmentDate, student.enrollmentDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, birthDate, enrollmentDate);
+        return Objects.hash(firstName, lastName, ssn, enrollmentDate);
     }
 
     @Override
@@ -114,7 +112,7 @@ public class Student {
                "id=" + id +
                ", firstName='" + firstName + '\'' +
                ", lastName='" + lastName + '\'' +
-               ", birthDate='" + birthDate + '\'' +
+               ", ssn='" + ssn + '\'' +
                ", email='" + email + '\'' +
                ", enrollmentDate='" + enrollmentDate + '\'' +
                ", program=" + program +

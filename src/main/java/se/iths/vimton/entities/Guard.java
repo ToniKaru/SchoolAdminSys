@@ -1,14 +1,11 @@
 package se.iths.vimton.entities;
 
-import org.hibernate.type.LocalDateType;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Guard {
 
-    class Against {
+    static class Against {
 
         public static void Empty(String object){
             if (object.trim().isEmpty())
@@ -52,11 +49,6 @@ public class Guard {
 
         }
 
-
-
-
-
     }
-
 
 }

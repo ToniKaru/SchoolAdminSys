@@ -11,6 +11,7 @@ public interface StudentDao {
     void update(Student student);
     void delete(Student student);
     Optional<Student> getById(int id);
+    Optional<Student> getBySsn(String ssn);
     List<Student> getByName(String name);
     List<Student> getByProgram(int programId);
     List<Student> getByProgram(Program program);
