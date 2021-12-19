@@ -24,14 +24,14 @@ public class Main {
             Persistence.createEntityManagerFactory("Lab5", configOverrides);
 
     public static void main(String[] args) {
-        EntityManager em = emf.createEntityManager();
+        //EntityManager em = emf.createEntityManager();
 
         TestImpl test = new TestImpl(emf);
         test.run();
 
     }
 
-    private static <T> void printMany(List<T> items, String heading) {
+    public static <T> void printMany(List<T> items, String heading) {
         System.out.println("\n" + heading);
         if (items.isEmpty())
             System.out.println("No items found");

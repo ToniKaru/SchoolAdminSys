@@ -5,11 +5,17 @@ import se.iths.vimton.entities.Course;
 import se.iths.vimton.entities.Program;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.Optional;
 
 public class ProgramDaoImpl implements ProgramDao {
     EntityManager em;
+
+
+    public ProgramDaoImpl(EntityManagerFactory emf) {
+        em = emf.createEntityManager();
+    }
 
 
     @Override
@@ -24,7 +30,10 @@ public class ProgramDaoImpl implements ProgramDao {
     }
 
     private boolean exists(Program program) {
-        return getByName(program.getName()).contains(program);
+        return em.createQuery("SELECT p FROM Program p WHERE p.name = :name", Program.class)
+                .setParameter("name", program.getName())
+                .getResultList()
+                .contains(program);
     }
 
     @Override
