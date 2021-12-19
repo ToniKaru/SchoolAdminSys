@@ -2,8 +2,11 @@ package se.iths.vimton.menus;
 
 import se.iths.vimton.Menu;
 import se.iths.vimton.dao.CourseDao;
+import se.iths.vimton.dao.LanguageDao;
 import se.iths.vimton.entities.Course;
+import se.iths.vimton.entities.Language;
 import se.iths.vimton.impl.CourseDaoImpl;
+import se.iths.vimton.impl.LanguageDaoImpl;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
@@ -14,10 +17,12 @@ import static se.iths.vimton.Menu.scanner;
 public class CourseMenu {
 
     CourseDao courseDao;
+    LanguageDao languageDao;
     List<Course> courses;
 
     public CourseMenu(EntityManagerFactory emf) {
-        courseDao = new CourseDaoImpl(emf);
+        this.courseDao = new CourseDaoImpl(emf);
+        this.languageDao = new LanguageDaoImpl(emf);
        courses = courseDao.getAll();
     }
 
@@ -46,13 +51,80 @@ public class CourseMenu {
     private void executeChoice(int choice) {
         switch (choice) {
             case 0 -> Menu.cancel();
-            case 1 -> System.out.println("");
-            case 2 -> showAllCourses();
+            case 1 -> addCourse();
+            case 2 -> showAll();
             case 3 -> updateCourse();
-            case 4 -> System.out.println();
-            case 5 -> System.out.println("bb");
+            case 4 -> showCourseDetails();
+            case 5 -> deleteCourse();
             default -> System.out.println("Invalid choice");
         }
+    }
+
+    private void addCourse() {
+        List<Language> languages = languageDao.getAll();
+
+        if(languages.isEmpty()) {
+            System.out.println("Please add a new language first.");
+            System.out.println("Returning to main menu...");
+            return;
+        }
+
+        String name = getDetails("name");
+        String description = getDetails("description");
+        int credits = getUserInput("credits", 5, 500);
+
+        System.out.println("\nLanguages: ");
+        languages.forEach(System.out::println);
+        int languageId = getUserInput("language id from the list above", languages.get(0).getId(), languages.size());
+        Optional<Language> language = languageDao.getById(languageId);
+
+        Course course = new Course(name, description, credits, language.get());
+        courseDao.create(course);
+
+        refreshCourses();
+    }
+
+    private String getDetails(String property) {
+        String input;
+        while(true){
+            System.out.println("Enter new course " + property);
+            input = scanner.nextLine();
+            if(!input.trim().isEmpty())
+               break;
+
+            System.out.println("Please enter a " +  property + " for the new course.");
+        }
+        return input;
+    }
+
+    private void deleteCourse() {
+        int id = getUserInput("course id", 1, courses.size());
+        Optional<Course> course = courseDao.getById(id);
+
+        course.ifPresentOrElse(
+                this::courseDeletion,
+                () -> System.out.println("Course id " + id + " not found.")
+        );
+    }
+
+    private void courseDeletion(Course course) {
+        courseDao.delete(course);
+        System.out.println("Course id " + course.getId() + " successfully deleted.");
+        refreshCourses();
+    }
+
+    private void refreshCourses() {
+        courses = courseDao.getAll();
+    }
+
+    private void showCourseDetails() {
+        int id = getUserInput("course id", 1, courses.size());
+        Optional<Course> course = courseDao.getById(id);
+
+        course.ifPresentOrElse(
+                System.out::println,
+                () -> System.out.println("Course id " + id + " not found.")
+        );
     }
 
     private void updateCourse() {
@@ -82,6 +154,8 @@ public class CourseMenu {
 
         courseDao.update(course.get());
         //todo: verify this update method
+
+        refreshCourses();
     }
 
     public int getUserInput(String property, int min, int max) {
@@ -104,7 +178,7 @@ public class CourseMenu {
         return selection;
     }
 
-    private void showAllCourses() {
+    private void showAll() {
         List<Course> courses = courseDao.getAll();
         Menu.printMany(courses, "All courses");
     }

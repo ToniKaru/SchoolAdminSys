@@ -30,7 +30,7 @@ public class Menu {
         switch (choice) {
             case 0 -> Menu.cancel();
             case 1 -> programOptions(emf); //t
-            case 2 -> courseOptions();  // v
+            case 2 -> courseOptions();
             case 3 -> studentOptions(); // t
             case 4 -> teacherOptions(); //v
             case 5 -> statistics(); //v
@@ -68,12 +68,7 @@ public class Menu {
                 5. Statistics
                 0. Exit
                 """);
-//                
-//                6. Add a course
-//                7. Update a course
-//                8. Show course details
-//                9. List all courses
-//                10. Delete a course
+
 //                
 //                11. Add a student
 //                12. Update a student
@@ -97,8 +92,7 @@ public class Menu {
     }
 
     public static int getChoice(){
-        int c = Integer.parseInt(scanner.nextLine());
-        return c;
+        return Integer.parseInt(scanner.nextLine());
     }
 
     public static void cancel() {
