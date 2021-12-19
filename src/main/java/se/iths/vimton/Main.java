@@ -25,8 +25,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        TestImpl test = new TestImpl(emf);
-        test.run();
+//        TestImpl test = new TestImpl(emf);
+//        test.run();
 
         Menu menu = new Menu(emf);
         menu.run();

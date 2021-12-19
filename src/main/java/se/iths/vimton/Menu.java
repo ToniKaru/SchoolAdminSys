@@ -1,8 +1,10 @@
 package se.iths.vimton;
 
+import se.iths.vimton.menus.CourseMenu;
 import se.iths.vimton.menus.ProgramMenu;
 
 import javax.persistence.EntityManagerFactory;
+import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
@@ -46,7 +48,8 @@ public class Menu {
     }
 
     private void courseOptions() {
-
+        CourseMenu courseMenu = new CourseMenu(emf);
+        courseMenu.run();
     }
 
     private void programOptions(EntityManagerFactory emf) {
@@ -106,4 +109,13 @@ public class Menu {
         System.out.println("quitting...");
         System.exit(0);
     }
+
+    public static <T> void printMany(List<T> items, String heading) {
+        System.out.println("\n" + heading + ":");
+        if (items.isEmpty())
+            System.out.println("No items found");
+        else
+            items.forEach(System.out::println);
+    }
+
 }
