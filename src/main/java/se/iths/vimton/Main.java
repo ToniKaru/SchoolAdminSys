@@ -29,6 +29,9 @@ public class Main {
         TestImpl test = new TestImpl(emf);
         test.run();
 
+        Menu menu = new Menu(emf);
+        menu.run();
+
     }
 
     public static <T> void printMany(List<T> items, String heading) {
