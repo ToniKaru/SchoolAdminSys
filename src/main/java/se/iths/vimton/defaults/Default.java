@@ -5,8 +5,6 @@ import se.iths.vimton.entities.*;
 import se.iths.vimton.impl.*;
 
 import javax.persistence.EntityManagerFactory;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class Default {
@@ -89,9 +87,7 @@ public class Default {
             },
             () -> { throw new RuntimeException("Default java programming course not found in Default.addTeachersToCourses"); }
         );
-
-//        javaProgramming.get().addTeacher(martin.get());
-//        courseDao.update(javaProgramming.get());
+        
     }
 
     private void createPrograms() {
@@ -157,7 +153,7 @@ public class Default {
             },
             () -> { throw new RuntimeException("Software tester program not found in Default.students"); }
         );
-        
+
     }
 
 }
