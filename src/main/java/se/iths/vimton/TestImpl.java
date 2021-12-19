@@ -11,6 +11,7 @@ import se.iths.vimton.impl.TeacherDaoImpl;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.Optional;
 
 public class TestImpl {
     EntityManagerFactory emf;
@@ -29,20 +30,7 @@ public class TestImpl {
         ProgramType type1 = new ProgramType("diploma", 400, true);
         ProgramType type2 = new ProgramType("certificate", 300, true);
 
-        Program javaDeveloper = new Program("Javautvecklare", 22, type1);
-        Program softwareTester = new Program("Mjukvarutestare", 17, type2);
 
-        Student student1 = new Student("Toni", "Karunaratne", "19790505-0000",
-                "toni.is.amazoids@hot.com", "2021-08-21", javaDeveloper);
-        Student student2 = new Student("Vimbayi", "Mandaza", "19870415-1111",
-                "vimbayi@chips.com", "2020-05-19", softwareTester);
-        Student student3 = new Student("Patrik", "Andersson", "19820117-2222",
-                "dadjokes@homie.com", "2011-08-21", javaDeveloper);
-        Student student4 = new Student("Cheyenne", "Brown", "20010203-3333",
-                "c.b.dwarf@cool.se", "2021-08-21", softwareTester);
-        Student student5 = new Student("Charlie", "Bonner",
-                "20020405-4444", "m.b.jr@jr.jr", "2022-01-01", javaDeveloper);
-        
         Teacher teacher1 = new Teacher("Eddie", "Neumann", "19990201-5118", "0777-777777","eddie.the.teach@iths.se");
         Teacher teacher2 = new Teacher("Martin", "Svensson", "19820301-4319","0732-222222", "martin.svensson@iths.se");
 
@@ -78,8 +66,32 @@ public class TestImpl {
         progTypeDao.create(type2);
 
         ProgramDao programDao = new ProgramDaoImpl(emf);
-        programDao.create(javaDeveloper);
-        programDao.create(softwareTester);
+
+        //getting program types from JPA / database
+        Optional<ProgramType> diploma = progTypeDao.getByName("diploma").stream().findFirst();
+        Optional<ProgramType> certificate = progTypeDao.getByName("certificate").stream().findFirst();
+
+        diploma.ifPresent(programType -> programDao.create(new Program("Javautvecklare", 22, programType)));
+        certificate.ifPresent(programType -> programDao.create(new Program("Mjukvarutestare", 17, programType)));
+
+//        Program javaDeveloper = new Program("Javautvecklare", 22, type1);
+//        Program softwareTester = new Program("Mjukvarutestare", 17, type2);
+//        programDao.create(javaDeveloper);
+//        programDao.create(softwareTester);
+
+
+        //get developer from JPA
+//        Student student1 = new Student("Toni", "Karunaratne", "19790505-0000",
+//                "toni.is.amazoids@hot.com", "2021-08-21", javaDeveloper);
+//        Student student2 = new Student("Vimbayi", "Mandaza", "19870415-1111",
+//                "vimbayi@chips.com", "2020-05-19", softwareTester);
+//        Student student3 = new Student("Patrik", "Andersson", "19820117-2222",
+//                "dadjokes@homie.com", "2011-08-21", javaDeveloper);
+//        Student student4 = new Student("Cheyenne", "Brown", "20010203-3333",
+//                "c.b.dwarf@cool.se", "2021-08-21", softwareTester);
+//        Student student5 = new Student("Charlie", "Bonner",
+//                "20020405-4444", "m.b.jr@jr.jr", "2022-01-01", javaDeveloper);
+
 
         //get teacher1 object again from teacherDao -> ensures that id is matching
         // therefore avoids duplication & object.equals(object) is true

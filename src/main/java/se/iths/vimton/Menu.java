@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Menu {
 
     public static Scanner scanner = new Scanner(System.in);
-    private static EntityManagerFactory emf;
+    private EntityManagerFactory emf;
 
     public Menu(EntityManagerFactory emf) {
         this.emf = emf;
@@ -27,7 +27,7 @@ public class Menu {
     private void executeChoice(int choice) {
         switch (choice) {
             case 0 -> Menu.cancel();
-            case 1 -> programOptions(); //t
+            case 1 -> programOptions(emf); //t
             case 2 -> courseOptions();  // v
             case 3 -> studentOptions(); // t
             case 4 -> teacherOptions(); //v
@@ -49,7 +49,7 @@ public class Menu {
 
     }
 
-    private void programOptions() {
+    private void programOptions(EntityManagerFactory emf) {
         ProgramMenu programMenu = new ProgramMenu(emf);
         programMenu.run();
     }
