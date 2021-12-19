@@ -16,10 +16,6 @@ public class ProgramDaoImpl implements ProgramDao {
         this.em = emf.createEntityManager();
     }
 
-    public ProgramDaoImpl(EntityManagerFactory emf) {
-        em = emf.createEntityManager();
-    }
-
 
     @Override
     public void create(Program program) {

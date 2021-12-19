@@ -1,4 +1,4 @@
-package se.iths.vimton.defaults;
+package se.iths.vimton.utils;
 
 import se.iths.vimton.dao.*;
 import se.iths.vimton.entities.*;
@@ -7,7 +7,7 @@ import se.iths.vimton.impl.*;
 import javax.persistence.EntityManagerFactory;
 import java.util.Optional;
 
-public class Default {
+public class DefaultData {
 
     LanguageDao languageDao;
     ProgTypeDao progTypeDao;
@@ -16,7 +16,7 @@ public class Default {
     TeacherDao teacherDao;
     StudentDao studentDao;
 
-    public Default(EntityManagerFactory emf) {
+    public DefaultData(EntityManagerFactory emf) {
         this.languageDao = new LanguageDaoImpl(emf);
         this.progTypeDao = new ProgTypeDaoImpl(emf);
         this.courseDao = new CourseDaoImpl(emf);
@@ -87,7 +87,7 @@ public class Default {
             },
             () -> { throw new RuntimeException("Default java programming course not found in Default.addTeachersToCourses"); }
         );
-        
+
     }
 
     private void createPrograms() {
