@@ -28,13 +28,9 @@ public class StudentDaoImpl implements StudentDao {
         em.getTransaction().commit();
     }
 
-    //todo:  what happens when student name is updated? use ssn for students instead?
     private boolean studentExists(Student student) {
-        return em.createQuery(
-                        "SELECT s FROM Student s WHERE s.firstName LIKE :firstName AND s.lastName LIKE :lastName",
-                        Student.class)
-                .setParameter("firstName", student.getFirstName())
-                .setParameter("lastName", student.getLastName())
+        return em.createQuery("SELECT s FROM Student s WHERE s.ssn = :ssn", Student.class)
+                .setParameter("ssn", student.getSsn())
                 .getResultList()
                 .contains(student);
     }
@@ -65,6 +61,22 @@ public class StudentDaoImpl implements StudentDao {
                 .setParameter("id", id)
                 .getResultStream()
                 .findFirst();
+    }
+
+    @Override
+    public Optional<Student> getBySsn(String ssn) {
+        if (isValidSsn(ssn)) {
+            return em.createQuery("SELECT s FROM Student s where s.ssn = :ssn", Student.class)
+                    .setParameter("ssn", ssn)
+                    .getResultStream()
+                    .findFirst();
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    private boolean isValidSsn(String ssn) {
+        return ssn.length() == 13 && ssn.matches("\\d{8}-\\d{4}");
     }
 
     @Override

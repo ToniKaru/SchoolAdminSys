@@ -33,13 +33,17 @@ public class TestImpl {
         Program javaDeveloper = new Program("Javautvecklare", 22, type1);
         Program softwareTester = new Program("Mjukvarutestare", 17, type2);
 
-        Student student1 = new Student("Toni", "Karunaratne", "1979-05-05","toni.is.amazoids@hot.com", "2021-08-21", javaDeveloper);
-        Student student2 = new Student("Vimbayi", "Mandaza", "1987-04-15", "vimbayi@chips.com", "2020-05-19", softwareTester);
-        Student student3 = new Student("Patrik", "Andersson", "1982-01-17", "dadjokes@homie.com", "2011-08-21", javaDeveloper);
-        Student student4 = new Student("Cheyenne", "Brown", "2001-02-03", "c.b.dwarf@cool.se", "2021-08-21", softwareTester);
-        Student student5 = new Student("Charlie", "Bonner", "2002-04-05", "m.b.jr@jr.jr", "2022-01-01", javaDeveloper);
-
-
+        Student student1 = new Student("Toni", "Karunaratne", "19790505-0000",
+                "toni.is.amazoids@hot.com", "2021-08-21", javaDeveloper);
+        Student student2 = new Student("Vimbayi", "Mandaza", "19870415-1111",
+                "vimbayi@chips.com", "2020-05-19", softwareTester);
+        Student student3 = new Student("Patrik", "Andersson", "19820117-2222",
+                "dadjokes@homie.com", "2011-08-21", javaDeveloper);
+        Student student4 = new Student("Cheyenne", "Brown", "20010203-3333",
+                "c.b.dwarf@cool.se", "2021-08-21", softwareTester);
+        Student student5 = new Student("Charlie", "Bonner",
+                "20020405-4444", "m.b.jr@jr.jr", "2022-01-01", javaDeveloper);
+        
         Teacher teacher1 = new Teacher("Eddie", "Neumann", "19990201-5118", "0777-777777","eddie.the.teach@iths.se");
         Teacher teacher2 = new Teacher("Martin", "Svensson", "19820301-4319","0732-222222", "martin.svensson@iths.se");
 
