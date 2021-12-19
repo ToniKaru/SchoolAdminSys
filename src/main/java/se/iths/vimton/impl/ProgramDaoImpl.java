@@ -5,12 +5,16 @@ import se.iths.vimton.entities.Course;
 import se.iths.vimton.entities.Program;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.Optional;
 
 public class ProgramDaoImpl implements ProgramDao {
     EntityManager em;
 
+    public ProgramDaoImpl(EntityManagerFactory emf) {
+        this.em = emf.createEntityManager();
+    }
 
     @Override
     public void create(Program program) {
