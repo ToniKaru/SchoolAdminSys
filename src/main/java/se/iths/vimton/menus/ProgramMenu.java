@@ -50,20 +50,43 @@ public class ProgramMenu {
             case 0 -> Menu.cancel();
             case 1 -> addProgram();
             case 2 -> updateProgram();
-            //case 3 -> programDetails();
+            case 3 -> programDetails();
             case 4 -> Main.printMany(programDao.getAll(), "-- All Programs --");
-            //case 5 -> removeProgram();
+            case 5 -> removeProgram();
             default -> System.out.println("invalid choice");
         }
     }
 
+    private void removeProgram() {
+        Program program = getProgramFromUser();
+        programDao.delete(program);
+    }
+
+    private void programDetails() {
+        Program program = getProgramFromUser();
+        printOneProgram(program);
+    }
+
+    private Program getProgramFromUser() {
+        System.out.println("Enter program id: ");
+        int id = Integer.parseInt(scanner.nextLine());
+        return programDao.getById(id).get();
+    }
+
+
+    private void printOneProgram(Program program) {
+        System.out.printf("%-10s %-10s %-10s %-10s %-20s \n",
+                "Id", "Name", "Length", "Program Type", "Description");
+        System.out.printf("%-10d %-10s %-10d %-10s %-20s \n",
+                program.getId(), program.getName(), program.getLength(),
+                program.getProgramType().getName(), program.getDescription());
+    }
+
     private void updateProgram() {
         Main.printMany(programDao.getAll(),"-- All Programs --");
-        System.out.println("What is the id of the program you want to update? ");
-        int id = Integer.parseInt(scanner.nextLine());
-        Program program = programDao.getById(id).get();
+        Program program = getProgramFromUser();
 
-        System.out.println("Please enter the details.");
+        System.out.println("Please enter the updated details.");
 
         System.out.println("Program name: ");
         String name = scanner.nextLine();
@@ -87,11 +110,11 @@ public class ProgramMenu {
     }
 
     private void addProgram() {
-        Program program = getProgramFromUser();
+        Program program = getNewProgramFromUser();
         programDao.create(program);
     }
 
-    private Program getProgramFromUser() {
+    private Program getNewProgramFromUser() {
         ProgramType programType = getProgramTypeFromUser();
 
         System.out.println("Program name: ");
