@@ -57,28 +57,29 @@ public class Default {
     }
 
     private void createPrograms() {
+        addNewPrograms();
+        addCoursesToPrograms();
+    }
+
+    private void addNewPrograms() {
         Optional<ProgramType> diploma = progTypeDao.getByName("diploma").stream().findFirst();
         Optional<ProgramType> certificate = progTypeDao.getByName("certificate").stream().findFirst();
 
-        if(diploma.isEmpty() || certificate.isEmpty())
-            throw new RuntimeException("Default program types not found in Default.createPrograms");
+        diploma.ifPresentOrElse(
+                programType -> programDao.create(new Program("Javautvecklare", 22, programType)),
+                () -> { throw new RuntimeException("Default program types not found in Default.createPrograms"); }
+        );
 
-        Program javaDeveloper;
-        Program softwareTester;
-
-        javaDeveloper = new Program("Javautvecklare", 22, diploma.get());
-        softwareTester = new Program("Mjukvarutestare", 17, certificate.get());
-
-        programDao.create(javaDeveloper);
-        programDao.create(softwareTester);
-
-        addCoursesToPrograms();
+        certificate.ifPresentOrElse(
+                programType -> programDao.create(new Program("Mjukvarutestare", 17, programType)),
+                () -> { throw new RuntimeException("Default program types not found in Default.createPrograms"); }
+        );
     }
 
     private void addCoursesToPrograms() {
         Optional<Course> databases = courseDao.getByName("Databases").stream().findFirst();
         Optional<Course> javaProgramming = courseDao.getByName("Java Programming").stream().findFirst();
-
+      
         if(databases.isEmpty() || javaProgramming.isEmpty())
             throw new RuntimeException("Default courses not found in Default.addCoursesToPrograms");
 
