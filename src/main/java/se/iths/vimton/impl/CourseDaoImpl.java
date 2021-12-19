@@ -17,8 +17,10 @@ public class CourseDaoImpl implements CourseDao {
 
     @Override
     public void create(Course course) {
-        if (exists(course))
-            throw new IllegalArgumentException("Course: " + course.getName() + " already exists.");
+        if (exists(course)){
+            System.out.println("Course: " + course.getName() + " already exists.");
+            return;
+        }
         em.getTransaction().begin();
         em.persist(course);
         em.getTransaction().commit();
@@ -30,8 +32,10 @@ public class CourseDaoImpl implements CourseDao {
 
     @Override
     public void update(Course course) {
-        if(!exists(course))
-            throw new IllegalArgumentException("Could not update course. Course: " + course.getName() + " does not exist.");;
+        if(!exists(course)) {
+            System.out.println("Could not update course. Course: " + course.getName() + " does not exist.");
+            return;
+        }
         em.getTransaction().begin();
         em.merge(course);
         em.getTransaction().commit();
