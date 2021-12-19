@@ -5,6 +5,7 @@ import se.iths.vimton.entities.*;
 import se.iths.vimton.impl.*;
 
 import javax.persistence.EntityManagerFactory;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,7 @@ public class Default {
         createProgramTypes();
         createCourses();
         createPrograms();
+        createStudents();
     }
 
     private void createTeachers() {
@@ -130,17 +132,33 @@ public class Default {
         programDao.addCourse(softwareTester.get(), javaProgramming.get());
     }
 
+    private void createStudents() {
+        Optional<Program> javaDeveloper = programDao.getByName("Javautvecklare").stream().findFirst();
+        Optional<Program> softwareTester = programDao.getByName("Mjukvarutestare").stream().findFirst();
 
-    private List<Teacher> teachers() {
-        return List.of(
-
+        javaDeveloper.ifPresentOrElse(
+            program -> {
+               studentDao.create(new Student("Toni", "Karunaratne", "19790505-0000",
+                       "toni.is.amazoids@hot.com", "2021-08-21", program));
+               studentDao.create(new Student("Patrik", "Andersson", "19820117-2222",
+                       "dadjokes@homie.com", "2011-08-21", program));
+               studentDao.create(new Student("Charlie", "Bonner",  "20020405-4444",
+                       "m.b.jr@jr.jr", "2022-01-01", program));
+            },
+            () -> { throw new RuntimeException("Java program not found in Default.students"); }
         );
+
+        softwareTester.ifPresentOrElse(
+            program -> {
+               studentDao.create(new Student("Vimbayi", "Mandaza", "19870415-1111",
+                       "vimbayi@chips.com", "2020-05-19", program));
+               studentDao.create(new Student("Cheyenne", "Brown", "20010203-3333",
+                       "c.b.dwarf@cool.se", "2021-08-21", program));
+            },
+            () -> { throw new RuntimeException("Software tester program not found in Default.students"); }
+        );
+        
     }
 
-    private List<Student> students() {
-        return List.of(
-
-        );
-    }
 }
 
