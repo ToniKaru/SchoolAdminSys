@@ -1,7 +1,11 @@
 package se.iths.vimton;
 
+import se.iths.vimton.dao.ProgTypeDao;
+import se.iths.vimton.dao.ProgramDao;
 import se.iths.vimton.dao.TeacherDao;
 import se.iths.vimton.entities.*;
+import se.iths.vimton.impl.ProgTypeDaoImpl;
+import se.iths.vimton.impl.ProgramDaoImpl;
 import se.iths.vimton.impl.TeacherDaoImpl;
 
 import javax.persistence.EntityManager;
@@ -19,6 +23,8 @@ public class TestImpl {
     }
 
     public void run() {
+
+        System.out.println("Adding test data...");
 
         //testing entities
         ProgramType type1 = new ProgramType("diploma", 400, true);
@@ -47,6 +53,8 @@ public class TestImpl {
         Course databases = new Course("Databases", "MySQL, JDBC & JPA", 30, swedish);
         Course javaProgramming = new Course("Java Programming", "Introduction to Java programming", 60, swedish);
 
+        System.out.println("test data added.");
+
         //requires CourseDaoImpl to add courses to database first
 //        databases.addTeacher(teacher1);
 //        databases.addTeacher(teacher2);
@@ -64,6 +72,25 @@ public class TestImpl {
 
 //        List<Teacher> allTeachers = teacherDao.getAll();
 //        printMany(allTeachers, "All teachers before deletion:");
+
+        ProgTypeDao progTypeDao = new ProgTypeDaoImpl(emf);
+        try {
+            progTypeDao.create(type1);
+            progTypeDao.create(type2);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        printMany(progTypeDao.getAll(), "All program types in testimpl");
+
+
+        ProgramDao programDao = new ProgramDaoImpl(emf);
+        try {
+
+            programDao.create(softwareTester);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        printMany(programDao.getAll(), "All programs in testimpl");
 
         //get teacher1 object again from teacherDao -> ensures that id is matching
         // therefore avoids duplication & object.equals(object) is true
