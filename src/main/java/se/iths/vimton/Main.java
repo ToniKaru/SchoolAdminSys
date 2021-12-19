@@ -24,7 +24,6 @@ public class Main {
             Persistence.createEntityManagerFactory("Lab5", configOverrides);
 
     public static void main(String[] args) {
-        //EntityManager em = emf.createEntityManager();
 
         TestImpl test = new TestImpl(emf);
         test.run();
