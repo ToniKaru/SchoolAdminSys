@@ -14,7 +14,7 @@ public class DefaultData {
     List<Student> students;
 
     public DefaultData() {
-        this.languages = Default.languages();
+//        this.languages = Default.languages();
 //        this.programTypes = programTypes;
 //        this.courses = courses;
 //        this.programs = programs;
