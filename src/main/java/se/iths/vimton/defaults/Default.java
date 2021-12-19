@@ -27,10 +27,16 @@ public class Default {
     }
 
     private void createDefaults() {
+        createTeachers();
         createLanguages();
         createProgramTypes();
         createCourses();
         createPrograms();
+    }
+
+    private void createTeachers() {
+        teacherDao.create(new Teacher("Eddie", "Karlsson", "19990201-5118", "0777-777777","eddie.the.teacher@iths.se"));
+        teacherDao.create(new Teacher("Martin", "Svensson", "19820301-4319","0732-222222", "martin.svensson@iths.se"));
     }
 
     private void createLanguages() {
@@ -54,6 +60,36 @@ public class Default {
             },
             () -> { throw new RuntimeException("Default language not found in Default.createCourses."); }
         );
+
+        addTeachersToCourses();
+    }
+
+    private void addTeachersToCourses() {
+        Optional<Teacher> martin  = teacherDao.getByName("martin").stream().findFirst();
+        Optional<Teacher> eddie  = teacherDao.getByName("eddie").stream().findFirst();
+
+        if(martin.isEmpty() || eddie.isEmpty())
+            throw new RuntimeException("Default teachers not found in Default.addTeachersToCourses");
+
+        Optional<Course> databases = courseDao.getByName("Databases").stream().findFirst();
+        Optional<Course> javaProgramming = courseDao.getByName("Java Programming").stream().findFirst();
+
+        databases.ifPresentOrElse(course -> {
+                course.addTeacher(eddie.get());
+                courseDao.update(course);
+            },
+            () -> { throw new RuntimeException("Default database course not found in Default.addTeachersToCourses"); }
+        );
+
+        javaProgramming.ifPresentOrElse(course -> {
+                course.addTeacher(martin.get());
+                courseDao.update(course);
+            },
+            () -> { throw new RuntimeException("Default java programming course not found in Default.addTeachersToCourses"); }
+        );
+
+//        javaProgramming.get().addTeacher(martin.get());
+//        courseDao.update(javaProgramming.get());
     }
 
     private void createPrograms() {
