@@ -72,24 +72,14 @@ public class TestImpl {
 //        List<Teacher> allTeachers = teacherDao.getAll();
 //        printMany(allTeachers, "All teachers before deletion:");
 
-        ProgTypeDao progTypeDao = new ProgTypeDaoImpl(emf);
-        try {
-            progTypeDao.create(type1);
-            progTypeDao.create(type2);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        printMany(progTypeDao.getAll(), "All program types in testimpl");
 
+        ProgTypeDao progTypeDao = new ProgTypeDaoImpl(emf);
+        progTypeDao.create(type1);
+        progTypeDao.create(type2);
 
         ProgramDao programDao = new ProgramDaoImpl(emf);
-        try {
-
-            programDao.create(softwareTester);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        printMany(programDao.getAll(), "All programs in testimpl");
+        programDao.create(javaDeveloper);
+        programDao.create(softwareTester);
 
         //get teacher1 object again from teacherDao -> ensures that id is matching
         // therefore avoids duplication & object.equals(object) is true

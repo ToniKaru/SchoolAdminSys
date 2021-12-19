@@ -130,14 +130,12 @@ public class Program {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Program program = (Program) o;
-        return id == program.id && length == program.length && Objects.equals(name, program.name) &&
-               Objects.equals(description, program.description) && Objects.equals(programType, program.programType) &&
-               Objects.equals(students, program.students) && Objects.equals(courses, program.courses);
+        return length == program.length && Objects.equals(name, program.name) && Objects.equals(description, program.description) && Objects.equals(programType, program.programType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, length, programType, students, courses);
+        return Objects.hash(name, description, length, programType);
     }
 
     @Override
