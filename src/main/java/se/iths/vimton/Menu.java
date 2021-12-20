@@ -1,8 +1,11 @@
 package se.iths.vimton;
 
+import se.iths.vimton.menus.CourseMenu;
 import se.iths.vimton.menus.ProgramMenu;
+import se.iths.vimton.menus.TeacherMenu;
 
 import javax.persistence.EntityManagerFactory;
+import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
@@ -28,7 +31,7 @@ public class Menu {
         switch (choice) {
             case 0 -> Menu.cancel();
             case 1 -> programOptions(emf); //t
-            case 2 -> courseOptions();  // v
+            case 2 -> courseOptions();
             case 3 -> studentOptions(); // t
             case 4 -> teacherOptions(); //v
             case 5 -> statistics(); //v
@@ -40,13 +43,16 @@ public class Menu {
     }
 
     private void teacherOptions() {
+        TeacherMenu teacherMenu = new TeacherMenu(emf);
+        teacherMenu.run();
     }
 
     private void studentOptions() {
     }
 
     private void courseOptions() {
-
+        CourseMenu courseMenu = new CourseMenu(emf);
+        courseMenu.run();
     }
 
     private void programOptions(EntityManagerFactory emf) {
@@ -64,12 +70,7 @@ public class Menu {
                 4. Teachers
                 5. Statistics
                 0. Exit""");
-//                
-//                6. Add a course
-//                7. Update a course
-//                8. Show course details
-//                9. List all courses
-//                10. Delete a course
+
 //                
 //                11. Add a student
 //                12. Update a student
@@ -93,8 +94,16 @@ public class Menu {
     }
 
     public static int getChoice(){
-        int c = Integer.parseInt(scanner.nextLine());
-        return c;
+        int choice;
+        while (true){
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a number from the menu above.");
+            }
+        }
+        return choice;
     }
 
     public static void cancel() {
@@ -105,4 +114,33 @@ public class Menu {
         System.out.println("quitting...");
         System.exit(0);
     }
+
+    public static <T> void printMany(List<T> items, String heading) {
+        System.out.println("\n" + heading + ":");
+        if (items.isEmpty())
+            System.out.println("No items found");
+        else
+            items.forEach(System.out::println);
+    }
+
+    public  static int getUserInput(String property, int min, int max) {
+        int selection;
+        while(true) {
+            System.out.println("Enter" + property + ":");
+            try {
+                selection = Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number.");
+                continue;
+            }
+
+            if(selection < min || selection > max) {
+                System.out.println("Please enter valid " + property);
+                continue;
+            }
+            break;
+        }
+        return selection;
+    }
+
 }

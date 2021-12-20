@@ -1,12 +1,8 @@
 package se.iths.vimton;
 
-import se.iths.vimton.dao.ProgTypeDao;
-import se.iths.vimton.dao.ProgramDao;
-import se.iths.vimton.dao.TeacherDao;
+import se.iths.vimton.dao.*;
 import se.iths.vimton.entities.*;
-import se.iths.vimton.impl.ProgTypeDaoImpl;
-import se.iths.vimton.impl.ProgramDaoImpl;
-import se.iths.vimton.impl.TeacherDaoImpl;
+import se.iths.vimton.impl.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -34,13 +30,19 @@ public class TestImpl {
         Teacher teacher1 = new Teacher("Eddie", "Neumann", "19990201-5118", "0777-777777","eddie.the.teach@iths.se");
         Teacher teacher2 = new Teacher("Martin", "Svensson", "19820301-4319","0732-222222", "martin.svensson@iths.se");
 
-        Language swedish = new Language("Swedish");
-        Language english = new Language("English");
+        Language language1 = new Language("Swedish");
+        Language language2 = new Language("English");
+
+        LanguageDao languageDao = new LanguageDaoImpl(emf);
+        languageDao.create(language1);
+        Language swedish = languageDao.getByName("swedish").stream().findFirst().get();
 
         Course databases = new Course("Databases", "MySQL, JDBC & JPA", 30, swedish);
         Course javaProgramming = new Course("Java Programming", "Introduction to Java programming", 60, swedish);
 
-        System.out.println("test data added.");
+        CourseDao courseDao = new CourseDaoImpl(emf);
+        courseDao.create(javaProgramming);
+        courseDao.create(databases);
 
         //requires CourseDaoImpl to add courses to database first
 //        databases.addTeacher(teacher1);
@@ -50,17 +52,49 @@ public class TestImpl {
 
         //testing implementations
         TeacherDao teacherDao = new TeacherDaoImpl(emf);
-//        try {
-//            teacherDao.create(teacher1);
-//            teacherDao.create(teacher2);
-//        } catch (IllegalArgumentException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            teacherDao.create(teacher1);
+            teacherDao.create(teacher2);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
+        Optional<Course> db = courseDao.getByName("databases").stream().findFirst();
+        Optional<Course> jp = courseDao.getByName("java").stream().findFirst();
+
+        Optional<Teacher> ed = teacherDao.getByName("ed").stream().findFirst();
+        Optional<Teacher> martin = teacherDao.getBySsn("19820301-4319");
+
+
+        db.ifPresent(course -> course.addTeacher(ed.get()));
+        jp.ifPresent(course -> course.addTeacher(martin.get()));
+
+        courseDao.update(db.get());
+        courseDao.update(jp.get());
+
+        List<Course> courses = courseDao.getAll();
+        List<Teacher> teachers = teacherDao.getAll();
+
+        courses.forEach(course -> {
+            System.out.println();
+            System.out.println(course);
+            System.out.println(course.getTeachers());
+        });
+        teachers.forEach(teacher -> {
+            System.out.println();
+            System.out.println(teacher);
+            System.out.println(teacher.getCourses());
+        });
+
+
 
 //        List<Teacher> allTeachers = teacherDao.getAll();
-//        printMany(allTeachers, "All teachers before deletion:");
+//        printMany(allTeachers, "All teachers");
 
 
+
+
+        //
         ProgTypeDao progTypeDao = new ProgTypeDaoImpl(emf);
         progTypeDao.create(type1);
         progTypeDao.create(type2);
@@ -111,7 +145,7 @@ public class TestImpl {
 //        Optional<Teacher> martin = teacherDao.getBySsn("19820301-4319");
 //        martin.ifPresent(teacherDao::delete);
 
-//        allTeachers = teacherDao.getAll();
+//        List<Teacher> allTeachers = teacherDao.getAll();
 //        printMany(allTeachers, "All teachers after deletion:");
 
 

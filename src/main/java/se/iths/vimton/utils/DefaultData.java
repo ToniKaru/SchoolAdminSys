@@ -34,6 +34,8 @@ public class DefaultData {
         createStudents();
     }
 
+//    todo: check that updating course to database automatically updates program, same applies for teacher-course
+
     private void createTeachers() {
         teacherDao.create(new Teacher("Eddie", "Karlsson", "19990201-5118", "0777-777777","eddie.the.teacher@iths.se"));
         teacherDao.create(new Teacher("Martin", "Svensson", "19820301-4319","0732-222222", "martin.svensson@iths.se"));
