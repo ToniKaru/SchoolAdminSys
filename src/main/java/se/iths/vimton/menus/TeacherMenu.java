@@ -65,10 +65,6 @@ public class TeacherMenu {
     }
 
     private void addTeacherToCourse() {
-//        showAll();
-//        System.out.print("Select a teacher from the list above. ");
-//        int id = getUserInput("teacher id", teachers.get(0).getId(), teachers.get(teachers.size() - 1).getId());
-//        Optional<Teacher> teacher = teacherDao.getById(id);
         Optional<Teacher> teacher = getTeacher();
 
         if(teacher.isEmpty()) {
@@ -126,12 +122,11 @@ public class TeacherMenu {
     }
 
     private void delete() {
-        int id = getUserInput("teacher id", teachers.get(0).getId(), teachers.get(teachers.size() - 1).getId());
-        Optional<Teacher> teacher = teacherDao.getById(id);
+        Optional<Teacher> teacher = getTeacher();
 
         teacher.ifPresentOrElse(
                 this::teacherDeletion,
-                () -> System.out.println("Teacher id " + id + " not found.")
+                () -> System.out.println("Selected teacher id not found.")
         );
     }
 
