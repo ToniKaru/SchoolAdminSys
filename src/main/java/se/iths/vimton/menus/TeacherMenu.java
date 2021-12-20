@@ -59,9 +59,42 @@ public class TeacherMenu {
             case 4 -> showDetails();
             case 5 -> delete();
             case 6 -> addTeacherToCourse();
-//            case 7 -> removeCourseFromTeacher();
+            case 7 -> removeTeacherFromCourse();
             default -> System.out.println("Invalid choice");
         }
+    }
+
+    private void removeTeacherFromCourse() {
+        Optional<Teacher> teacher = getTeacher();
+
+        if(teacher.isEmpty()) {
+            System.out.println("Selected teacher id not found.");
+            return;
+        }
+        System.out.println(teacher.get().getFirstName() + " " + teacher.get().getLastName() + " selected.");
+
+        List<Course> courses = teacher.get().getTeacherCourses().stream().toList();
+        if(courses.isEmpty()) {
+            System.out.println(teacher.get().getFirstName() + " " + teacher.get().getLastName() + " has no courses.");
+            return;
+        }
+
+        printMany(courses, teacher.get().getFirstName() + " " + teacher.get().getLastName() + "'s courses");
+        int courseId = getUserInput("course id", courses.get(0).getId(), courses.get(courses.size() - 1).getId());
+        Optional<Course> course = courseDao.getById(courseId);
+
+        if (course.isEmpty()) {
+            System.out.println("Selected course id not found.");
+            return;
+        }
+
+        course.get().removeTeacher(teacher.get());
+        courseDao.update(course.get());
+        teacherDao.update(teacher.get());
+
+        System.out.println("Teacher successfully removed from " + course.get().getName() + " course");
+
+        refreshTeachers();
     }
 
     private void addTeacherToCourse() {
@@ -70,28 +103,32 @@ public class TeacherMenu {
         if(teacher.isEmpty()) {
             System.out.println("Selected teacher id not found.");
             return;
-        } else {
-            System.out.println(teacher.get().getFirstName() + " " + teacher.get().getLastName() + " selected.");
         }
 
-        List<Course> courses = courseDao.getAll();
-        printMany(courses, "Courses");
-        int courseId = getUserInput("course id", courses.get(0).getId(), courses.get(courses.size() - 1).getId());
-        Optional<Course> course = courseDao.getById(courseId);
+        System.out.println(teacher.get().getFirstName() + " " + teacher.get().getLastName() + " selected.");
+
+        Optional<Course> course = getCourse(courseDao.getAll());
 
         if (course.isEmpty()) {
             System.out.println("Selected course id not found.");
             return;
-        } else {
-            System.out.println(course.get().getName() + " selected.");
         }
+
+        System.out.println(course.get().getName() + " selected.");
 
         course.get().addTeacher(teacher.get());
         courseDao.update(course.get());
+        teacherDao.update(teacher.get());
 
         System.out.println("Teacher successfully added to " + course.get().getName() + " course");
 
         refreshTeachers();
+    }
+
+    private Optional<Course> getCourse(List<Course> courses) {
+        printMany(courses, "Courses");
+        int courseId = getUserInput("course id", courses.get(0).getId(), courses.get(courses.size() - 1).getId());
+        return courseDao.getById(courseId);
     }
 
     private Optional<Teacher> getTeacher() {
@@ -197,7 +234,7 @@ public class TeacherMenu {
 
     private void showAll() {
         List<Teacher> teachers = teacherDao.getAll();
-        Menu.printMany(teachers, "All teachers");
+        printMany(teachers, "All teachers");
     }
 
 }

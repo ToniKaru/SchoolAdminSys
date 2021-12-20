@@ -83,7 +83,7 @@ public class TestImpl {
         teachers.forEach(teacher -> {
             System.out.println();
             System.out.println(teacher);
-            System.out.println(teacher.getCourses());
+            System.out.println(teacher.getTeacherCourses());
         });
 
 

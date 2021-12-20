@@ -1,7 +1,5 @@
 package se.iths.vimton.entities;
 
-import se.iths.vimton.entities.Course;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
@@ -21,7 +19,7 @@ public class Teacher {
     private String email;
 
     @ManyToMany
-    private Set<Course> courses;
+    private Set<Course> teacherCourses;
 
     public Teacher(){}
 
@@ -40,7 +38,7 @@ public class Teacher {
         this.ssn = ssn;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.courses = new HashSet<>();;
+        this.teacherCourses = new HashSet<>();;
     }
 
     public int getId() {
@@ -87,8 +85,8 @@ public class Teacher {
         this.email = email;
     }
 
-    public Set<Course> getCourses() {
-        return courses;
+    public Set<Course> getTeacherCourses() {
+        return teacherCourses;
     }
 
     @Override
@@ -108,12 +106,13 @@ public class Teacher {
     @Override
     public String toString() {
         return "Teacher{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", ssn=" + ssn +
-                ", phoneNumber=" + phoneNumber +
-                ", email='" + email + '\'' +
-                '}';
+               "id=" + id +
+               ", firstName='" + firstName + '\'' +
+               ", lastName='" + lastName + '\'' +
+               ", ssn='" + ssn + '\'' +
+               ", phoneNumber='" + phoneNumber + '\'' +
+               ", email='" + email + '\'' +
+               ", courses=" + teacherCourses +
+               '}';
     }
 }
