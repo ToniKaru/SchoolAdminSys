@@ -30,7 +30,7 @@ public class Menu {
     private void executeChoice(int choice) {
         switch (choice) {
             case 0 -> Menu.cancel();
-            case 1 -> programOptions(emf); //t
+            case 1 -> programOptions(); //t
             case 2 -> courseOptions();
             case 3 -> studentOptions(); // t
             case 4 -> teacherOptions(); //v
@@ -55,7 +55,7 @@ public class Menu {
         courseMenu.run();
     }
 
-    private void programOptions(EntityManagerFactory emf) {
+    private void programOptions() {
         ProgramMenu programMenu = new ProgramMenu(emf);
         programMenu.run();
     }

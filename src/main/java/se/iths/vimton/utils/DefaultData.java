@@ -102,12 +102,12 @@ public class DefaultData {
         Optional<ProgramType> certificate = progTypeDao.getByName("certificate").stream().findFirst();
 
         diploma.ifPresentOrElse(
-                programType -> programDao.create(new Program("Javautvecklare", 22, programType)),
+                programType -> programDao.create(new Program("Javautvecklare", 100, programType)),
                 () -> { throw new RuntimeException("Default program types not found in Default.createPrograms"); }
         );
 
         certificate.ifPresentOrElse(
-                programType -> programDao.create(new Program("Mjukvarutestare", 17, programType)),
+                programType -> programDao.create(new Program("Mjukvarutestare", 100, programType)),
                 () -> { throw new RuntimeException("Default program types not found in Default.createPrograms"); }
         );
     }
