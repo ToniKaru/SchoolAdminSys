@@ -52,16 +52,16 @@ public class CourseMenu {
     private void executeChoice(int choice) {
         switch (choice) {
             case 0 -> Menu.cancel();
-            case 1 -> addCourse();
+            case 1 -> add();
             case 2 -> showAll();
-            case 3 -> updateCourse();
-            case 4 -> showCourseDetails();
-            case 5 -> deleteCourse();
+            case 3 -> update();
+            case 4 -> showDetails();
+            case 5 -> delete();
             default -> System.out.println("Invalid choice");
         }
     }
 
-    private void addCourse() {
+    private void add() {
         List<Language> languages = languageDao.getAll();
 
         if(languages.isEmpty()) {
@@ -102,7 +102,7 @@ public class CourseMenu {
         return input;
     }
 
-    private void deleteCourse() {
+    private void delete() {
         int id = getUserInput("course id", courses.get(0).getId(), courses.get(courses.size() - 1).getId());
         Optional<Course> course = courseDao.getById(id);
 
@@ -113,16 +113,23 @@ public class CourseMenu {
     }
 
     private void courseDeletion(Course course) {
-        courseDao.delete(course);
-        System.out.println("Course id " + course.getId() + " successfully deleted.");
-        refreshCourses();
+        System.out.println("Are you sure you want to delete " + course.getName() + "? Enter Y/N:");
+        String input = scanner.nextLine();
+
+        if(input.equalsIgnoreCase("x")) {
+            courseDao.delete(course);
+            System.out.println("Course id " + course.getId() + " successfully deleted.");
+            refreshCourses();
+        } else {
+            System.out.println("Cancelling...");
+        }
     }
 
     private void refreshCourses() {
         courses = courseDao.getAll();
     }
 
-    private void showCourseDetails() {
+    private void showDetails() {
         int id = getUserInput("course id", courses.get(0).getId(), courses.get(courses.size() - 1).getId());
         Optional<Course> course = courseDao.getById(id);
 
@@ -132,7 +139,7 @@ public class CourseMenu {
         );
     }
 
-    private void updateCourse() {
+    private void update() {
         int id = getUserInput("course id", 1, courses.size());
         Optional<Course> course = courseDao.getById(id);
 

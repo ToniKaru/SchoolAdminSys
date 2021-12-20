@@ -50,7 +50,7 @@ public class TeacherMenu {
     private void executeChoice(int choice) {
         switch (choice) {
             case 0 -> Menu.cancel();
-//            case 1 -> addTeacher();
+//            case 1 -> add();
             case 2 -> showAll();
             case 3 -> update();
             case 4 -> showDetails();
@@ -137,7 +137,4 @@ public class TeacherMenu {
         Menu.printMany(teachers, "All teachers");
     }
 
-    private void addTeacher() {
-
-    }
 }
