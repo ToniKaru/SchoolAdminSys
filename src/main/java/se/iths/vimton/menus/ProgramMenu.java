@@ -19,10 +19,12 @@ public class ProgramMenu {
 
     private ProgramDao programDao;
     private ProgTypeDao progTypeDao;
+    private List<Program> programs;
 
     public ProgramMenu(EntityManagerFactory emf) {
         this.programDao = new ProgramDaoImpl(emf);
         this.progTypeDao = new ProgTypeDaoImpl(emf);
+        this.programs = programDao.getAll();
     }
 
     public void run() {
@@ -38,13 +40,14 @@ public class ProgramMenu {
         System.out.println("""
                                 
                 --- Program Options ---
-                1. Add Program
+                1. Add Program                
                 2. Update Program
                 3. Delete a program
                 4. Show program details by id 
                 5. List all programs
-                6. List programs by length
+                6. List programs by pace
                 7. List programs by course
+                8. Add/Edit Program Types
                 0. Return to main menu""");
     }
 
@@ -56,8 +59,9 @@ public class ProgramMenu {
             case 3 -> removeProgram();
             case 4 -> programDetails();
             case 5 -> printSummary(programDao.getAll());
-            //case 6 -> programsByLength();
+            //case 6 -> programsByPace();
             //case 7 -> programsByCourse();
+            //case 8 -> progTypeOptions();
             default -> System.out.println("invalid choice");
         }
     }
@@ -74,6 +78,7 @@ public class ProgramMenu {
     }
 
     private Program getProgramFromUser() {
+        printSummary(programs);
         System.out.println("Enter program id: ");
         int id = Integer.parseInt(scanner.nextLine());
         return programDao.getById(id).get();
@@ -84,12 +89,12 @@ public class ProgramMenu {
         System.out.println("\n -- Program Details --");
         String detailedFormat = "%-5s %-25s %-10s %-18s %-40s \n";
         System.out.printf(detailedFormat,
-                "Id", "Name", "Length", "Program Type", "Description");
+                "Id", "Name", "Pace", "Program Type", "Description");
         System.out.printf(detailedFormat,
                 "--", "----", "------", "------------", "-----------");
         for (Program program : programs) {
             System.out.printf(detailedFormat,
-                    program.getId(), program.getName(), program.getLength(),
+                    program.getId(), program.getName(), program.getPace(),
                     program.getProgramType().getName(), program.getDescription());
         }
     }
@@ -98,36 +103,35 @@ public class ProgramMenu {
         System.out.println("\n -- Summary of Programs --");
         String summaryFormat = "%-5s %-25s %-10s %-18s \n";
         System.out.printf(summaryFormat,
-                "Id", "Name", "Length", "Program Type");
+                "Id", "Name", "Pace", "Program Type");
         System.out.printf(summaryFormat,
                 "--", "----", "------", "------------");
         for (Program program : programs) {
             System.out.printf(summaryFormat,
-                    program.getId(), program.getName(), program.getLength(),
+                    program.getId(), program.getName(), program.getPace(),
                     program.getProgramType().getName());
         }
     }
 
     private void updateProgram() {
-        printSummary(programDao.getAll());
         Program program = getProgramFromUser();
 
         System.out.println("Please enter the new details.");
 
         System.out.println("Program name: ");
         String name = scanner.nextLine();
-        if (scanner.hasNext())
+        if (!name.isEmpty() || !name.equals(program.getName()))
             program.setName(name);
 
         System.out.println("Program description: ");
         String description = scanner.nextLine();
-        if (scanner.hasNext())
+        if (!description.isEmpty() || !description.equals(program.getDescription()))
             program.setDescription(description);
 
         System.out.println("How many months is the program? ");
-        int length = Integer.parseInt(scanner.nextLine());
-        if (scanner.hasNext())
-            program.setLength(length);
+        int pace = Integer.parseInt(scanner.nextLine());
+        if (pace != program.getPace())
+            program.setPace(pace);
 
         ProgramType programType = getProgramTypeFromUser();
         program.setProgramType(programType);
@@ -150,9 +154,9 @@ public class ProgramMenu {
         String description = scanner.nextLine();
 
         System.out.println("How many months is the program? ");
-        int length = Integer.parseInt(scanner.nextLine());
+        int pace = Integer.parseInt(scanner.nextLine());
 
-        return new Program(name, description, length, programType);
+        return new Program(name, description, pace, programType);
     }
 
     private ProgramType getProgramTypeFromUser() {
@@ -176,12 +180,12 @@ public class ProgramMenu {
         String name = scanner.nextLine();
 
         System.out.println("How many credits is the program type? ");
-        int length = Integer.parseInt(scanner.nextLine());
+        int pace = Integer.parseInt(scanner.nextLine());
 
         System.out.println("Is the program type accredited? ");
         boolean accredited = scanner.nextBoolean();
 
-        ProgramType programType = new ProgramType(name, length, accredited);
+        ProgramType programType = new ProgramType(name, pace, accredited);
         progTypeDao.create(programType);
 
         return programType;

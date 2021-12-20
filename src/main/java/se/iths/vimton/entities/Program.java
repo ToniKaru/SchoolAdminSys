@@ -13,7 +13,7 @@ public class Program {
 
     private String name;
     private String description;
-    private int length;
+    private int pace;
 
     @ManyToOne
     private ProgramType programType;
@@ -27,18 +27,18 @@ public class Program {
     public Program() {
     }
 
-    public Program(String name, int length, ProgramType programType) {
-        this(name, "", length, programType);
+    public Program(String name, int pace, ProgramType programType) {
+        this(name, "", pace, programType);
     }
 
-    public Program(String name, String description, int length, ProgramType programType) {
+    public Program(String name, String description, int pace, ProgramType programType) {
         Guard.Against.Empty(name);
-        Guard.Against.zeroOrLess(length);
+        Guard.Against.zeroOrLess(pace);
         Guard.Against.Null(programType);
 
         this.name = name;
         this.description = description;
-        this.length = length;
+        this.pace = pace;
         this.programType = programType;
         this.students= new ArrayList<>();
         this.courses = new HashSet<>();
@@ -68,12 +68,12 @@ public class Program {
         this.description = description;
     }
 
-    public int getLength() {
-        return length;
+    public int getPace() {
+        return pace;
     }
 
-    public void setLength(int length) {
-        this.length = length;
+    public void setPace(int pace) {
+        this.pace = pace;
     }
 
     public List<Student> getStudents() {
@@ -130,12 +130,12 @@ public class Program {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Program program = (Program) o;
-        return length == program.length && Objects.equals(name, program.name) && Objects.equals(description, program.description) && Objects.equals(programType, program.programType);
+        return pace == program.pace && Objects.equals(name, program.name) && Objects.equals(description, program.description) && Objects.equals(programType, program.programType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, length, programType);
+        return Objects.hash(name, description, pace, programType);
     }
 
     @Override
@@ -144,7 +144,7 @@ public class Program {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", length=" + length +
+                ", pace=" + pace +
                 ", programType=" + programType +
                 '}';
     }
