@@ -116,9 +116,9 @@ public class CourseMenu {
         System.out.println("Are you sure you want to delete " + course.getName() + "? Enter Y/N:");
         String input = scanner.nextLine();
 
-        if(input.equalsIgnoreCase("x")) {
+        if(input.equalsIgnoreCase("y")) {
             courseDao.delete(course);
-            System.out.println("Course id " + course.getId() + " successfully deleted.");
+            System.out.println(course.getName() + " successfully deleted.");
             refreshCourses();
         } else {
             System.out.println("Cancelling...");
@@ -140,6 +140,7 @@ public class CourseMenu {
     }
 
     private void update() {
+        showAll();
         int id = getUserInput("course id", 1, courses.size());
         Optional<Course> course = courseDao.getById(id);
 
@@ -165,6 +166,9 @@ public class CourseMenu {
             course.get().setCredits(credits);
 
         courseDao.update(course.get());
+
+        System.out.println(course.get().getName() + " successfully updated.");
+        System.out.println(course.get());
 
         refreshCourses();
     }

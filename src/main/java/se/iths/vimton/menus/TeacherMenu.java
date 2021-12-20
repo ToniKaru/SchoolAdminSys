@@ -59,6 +59,8 @@ public class TeacherMenu {
     }
 
     private void add() {
+
+
     }
 
     private void delete() {
@@ -96,6 +98,7 @@ public class TeacherMenu {
     }
 
     private void update() {
+        showAll();
         int id = getUserInput("teacher id", teachers.get(0).getId(), teachers.get(teachers.size() - 1).getId());
         Optional<Teacher> teacher = teacherDao.getById(id);
 
@@ -121,13 +124,16 @@ public class TeacherMenu {
         if (!firstName.isEmpty() && !firstName.equalsIgnoreCase("x"))
             teacher.get().setFirstName(firstName);
         if (!lastName.isEmpty() && !lastName.equalsIgnoreCase("x"))
-            teacher.get().setLastName(firstName);
+            teacher.get().setLastName(lastName);
         if (!phoneNumber.isEmpty() && !phoneNumber.equalsIgnoreCase("x"))
-            teacher.get().setPhoneNumber(firstName);
+            teacher.get().setPhoneNumber(phoneNumber);
         if (!email.isEmpty() && !email.equalsIgnoreCase("x"))
-            teacher.get().setEmail(firstName);
+            teacher.get().setEmail(email);
 
         teacherDao.update(teacher.get());
+
+        System.out.println(teacher.get().getFirstName() + " " + teacher.get().getLastName() + " successfully updated.");
+        System.out.println(teacher.get());
 
         refreshTeachers();
     }

@@ -126,7 +126,7 @@ public class Menu {
     public  static int getUserInput(String property, int min, int max) {
         int selection;
         while(true) {
-            System.out.println("Enter" + property + ":");
+            System.out.println("Enter " + property + ":");
             try {
                 selection = Integer.parseInt(scanner.nextLine().trim());
             } catch (NumberFormatException e) {
