@@ -157,9 +157,9 @@ public class CourseMenu {
         System.out.println("Enter course's credits or 0 to skip:");
         int credits = getUserInput("new credits", 0, 500);
 
-        if (name.length() != 0 && !name.equalsIgnoreCase("x") )
+        if (propertyIsUpdated(name, name))
             course.get().setName(name);
-        if (description.length() != 0 && !description.equalsIgnoreCase("x"))
+        if (propertyIsUpdated(name, description))
             course.get().setDescription(description);
         if (credits > 0)
             course.get().setCredits(credits);
@@ -169,7 +169,9 @@ public class CourseMenu {
         refreshCourses();
     }
 
-
+    public boolean propertyIsUpdated(String name, String name1) {
+        return !name.isEmpty() && !name1.equalsIgnoreCase("x");
+    }
 
     private void showAll() {
         List<Course> courses = courseDao.getAll();

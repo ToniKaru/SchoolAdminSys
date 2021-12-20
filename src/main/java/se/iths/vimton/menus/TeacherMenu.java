@@ -22,7 +22,6 @@ public class TeacherMenu {
         teachers = teacherDao.getAll();
     }
 
-
     public void run() {
         int choice;
         do {
@@ -50,13 +49,16 @@ public class TeacherMenu {
     private void executeChoice(int choice) {
         switch (choice) {
             case 0 -> Menu.cancel();
-//            case 1 -> add();
+            case 1 -> add();
             case 2 -> showAll();
             case 3 -> update();
             case 4 -> showDetails();
             case 5 -> delete();
             default -> System.out.println("Invalid choice");
         }
+    }
+
+    private void add() {
     }
 
     private void delete() {
@@ -114,13 +116,15 @@ public class TeacherMenu {
         System.out.println("Enter teacher's new email address or 'x' to skip:");
         String email = scanner.nextLine().trim();
 
-        if (!firstName.equalsIgnoreCase("x"))
+//        if (!firstName.isEmpty() || !firstName.equalsIgnoreCase("x"))
+
+        if (!firstName.isEmpty() && !firstName.equalsIgnoreCase("x"))
             teacher.get().setFirstName(firstName);
-        if (!lastName.equalsIgnoreCase("x"))
+        if (!lastName.isEmpty() && !lastName.equalsIgnoreCase("x"))
             teacher.get().setLastName(firstName);
-        if (!phoneNumber.equalsIgnoreCase("x"))
+        if (!phoneNumber.isEmpty() && !phoneNumber.equalsIgnoreCase("x"))
             teacher.get().setPhoneNumber(firstName);
-        if (!email.equalsIgnoreCase("x"))
+        if (!email.isEmpty() && !email.equalsIgnoreCase("x"))
             teacher.get().setEmail(firstName);
 
         teacherDao.update(teacher.get());
