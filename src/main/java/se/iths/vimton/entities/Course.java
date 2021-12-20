@@ -132,8 +132,12 @@ public class Course {
                ", description='" + description + '\'' +
                ", credits=" + credits +
                ", language=" + language +
-               ", teachers=" + teachers +
+               ", teachers=" + listOfTeachersNames() +
                ", programs=" + programs +
                '}';
+    }
+
+    private List<String> listOfTeachersNames() {
+        return teachers.stream().map(teacher -> teacher.getFirstName() + " " + teacher.getLastName()).toList();
     }
 }

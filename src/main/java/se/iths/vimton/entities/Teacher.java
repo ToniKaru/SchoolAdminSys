@@ -2,6 +2,7 @@ package se.iths.vimton.entities;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -112,7 +113,11 @@ public class Teacher {
                ", ssn='" + ssn + '\'' +
                ", phoneNumber='" + phoneNumber + '\'' +
                ", email='" + email + '\'' +
-               ", courses=" + teacherCourses +
+               ", courses=" + listOfCourseNames() +
                '}';
+    }
+
+    private List<String> listOfCourseNames() {
+        return teacherCourses.stream().map(Course::getName).toList();
     }
 }
