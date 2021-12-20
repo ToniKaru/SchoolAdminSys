@@ -58,10 +58,10 @@ public class Menu {
         System.out.println("""
                 
                 -- School Admin System Options --
-                1. Edit/view programs
-                2. Edit/view courses
-                3. Edit/view students
-                4. Edit/view teachers
+                1. Programs
+                2. Courses
+                3. Students
+                4. Teachers
                 5. Statistics
                 0. Exit""");
 //                

@@ -40,9 +40,11 @@ public class ProgramMenu {
                 --- Program Options ---
                 1. Add Program
                 2. Update Program
-                3. Show program details
-                4. List all programs
-                5. Delete a program
+                3. Delete a program
+                4. Show program details by id 
+                5. List all programs
+                6. List programs by length
+                7. List programs by course
                 0. Return to main menu""");
     }
 
@@ -51,17 +53,15 @@ public class ProgramMenu {
             case 0 -> Menu.cancel();
             case 1 -> addProgram();
             case 2 -> updateProgram();
-            case 3 -> programDetails();
-            case 4 -> listAll();
-            case 5 -> removeProgram();
+            case 3 -> removeProgram();
+            case 4 -> programDetails();
+            case 5 -> printSummary(programDao.getAll());
+            //case 6 -> programsByLength();
+            //case 7 -> programsByCourse();
             default -> System.out.println("invalid choice");
         }
     }
 
-    private void listAll() {
-        List<Program> list = programDao.getAll();
-        Main.printMany(list , "-- All Programs --");
-    }
 
     private void removeProgram() {
         Program program = getProgramFromUser();
@@ -70,7 +70,7 @@ public class ProgramMenu {
 
     private void programDetails() {
         Program program = getProgramFromUser();
-        printOneProgram(program);
+        printDetails(List.of(program));
     }
 
     private Program getProgramFromUser() {
@@ -80,19 +80,39 @@ public class ProgramMenu {
     }
 
 
-    private void printOneProgram(Program program) {
-        System.out.printf("%-5s %-25s %-8s %-18s %-50s \n",
+    private void printDetails(List<Program> programs) {
+        System.out.println("\n -- Program Details --");
+        String detailedFormat = "%-5s %-25s %-10s %-18s %-40s \n";
+        System.out.printf(detailedFormat,
                 "Id", "Name", "Length", "Program Type", "Description");
-        System.out.printf("%-5d %-25s %-8d %-18s %-50s \n",
-                program.getId(), program.getName(), program.getLength(),
-                program.getProgramType().getName(), program.getDescription());
+        System.out.printf(detailedFormat,
+                "--", "----", "------", "------------", "-----------");
+        for (Program program : programs) {
+            System.out.printf(detailedFormat,
+                    program.getId(), program.getName(), program.getLength(),
+                    program.getProgramType().getName(), program.getDescription());
+        }
+    }
+
+    private void printSummary(List<Program> programs) {
+        System.out.println("\n -- Summary of Programs --");
+        String summaryFormat = "%-5s %-25s %-10s %-18s \n";
+        System.out.printf(summaryFormat,
+                "Id", "Name", "Length", "Program Type");
+        System.out.printf(summaryFormat,
+                "--", "----", "------", "------------");
+        for (Program program : programs) {
+            System.out.printf(summaryFormat,
+                    program.getId(), program.getName(), program.getLength(),
+                    program.getProgramType().getName());
+        }
     }
 
     private void updateProgram() {
-        Main.printMany(programDao.getAll(),"-- All Programs --");
+        printSummary(programDao.getAll());
         Program program = getProgramFromUser();
 
-        System.out.println("Please enter the updated details.");
+        System.out.println("Please enter the new details.");
 
         System.out.println("Program name: ");
         String name = scanner.nextLine();
