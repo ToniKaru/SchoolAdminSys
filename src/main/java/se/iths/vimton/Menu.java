@@ -149,4 +149,16 @@ public class Menu {
         return !property.isEmpty() && !property.equalsIgnoreCase("x");
     }
 
+    public static String getNewDetails(String object, String property) {
+        String input;
+        while(true){
+            System.out.println("Enter " + property + " for the new " + object + ":");
+            input = scanner.nextLine();
+            if(!input.trim().isEmpty())
+                break;
+            System.out.println("Please enter a " +  property + " for the new " + object + ".");
+        }
+        return input;
+    }
+
 }

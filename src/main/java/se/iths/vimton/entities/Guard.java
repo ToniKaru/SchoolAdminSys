@@ -45,7 +45,7 @@ public class Guard {
             String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9\\+_-]+(\\.[A-Za-z0-9\\+_-]+)*@"
                     + "[^-][A-Za-z0-9\\+-]+(\\.[A-Za-z0-9\\+-]+)*(\\.[A-Za-z]{2,})$";
             if (!email.matches(regexPattern))
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException(email + " is an invalid email address.");
 
         }
 

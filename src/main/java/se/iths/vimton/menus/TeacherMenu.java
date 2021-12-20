@@ -53,13 +53,30 @@ public class TeacherMenu {
             case 3 -> update();
             case 4 -> showDetails();
             case 5 -> delete();
+//            case 6 -> addCourseToTeacher();
+//            case 7 -> removeCourseFromTeacher();
             default -> System.out.println("Invalid choice");
         }
     }
 
     private void add() {
+        String firstName = getNewDetails("teacher", "firstname");
+        String lastName = getNewDetails("teacher", "lastname");
+        String ssn = getNewDetails("teacher", "social security number");
+        String phoneNumber = getNewDetails("teacher", "phone number");
+        String email = getNewDetails("teacher", "email address");
 
+        Teacher teacher;
+        try {
+             teacher = new Teacher(firstName, lastName, ssn, phoneNumber, email);
+        } catch (IllegalArgumentException e) {
+            System.out.print("New teacher could not be created because ");
+            e.printStackTrace();
+            return;
+        }
 
+        teacherDao.create(teacher);
+        refreshTeachers();
     }
 
     private void delete() {
@@ -106,17 +123,10 @@ public class TeacherMenu {
             return;
         }
 
-        System.out.println("Enter teacher's new firstname or 'x' to skip:");
-        String firstName = scanner.nextLine().trim();
-
-        System.out.println("Enter teacher's new lastname or 'x' to skip:");
-        String lastName = scanner.nextLine().trim();
-
-        System.out.println("Enter teacher's new phone number or 'x' to skip:");
-        String phoneNumber = scanner.nextLine().trim();
-
-        System.out.println("Enter teacher's new email address or 'x' to skip:");
-        String email = scanner.nextLine().trim();
+        String firstName = getUpdateDetails("new firstname");
+        String lastName = getUpdateDetails("new lastname");
+        String phoneNumber = getUpdateDetails("new phone number");
+        String email = getUpdateDetails("new email address");
 
         if (propertyIsUpdated(firstName))
             teacher.get().setFirstName(firstName);
@@ -133,6 +143,11 @@ public class TeacherMenu {
         System.out.println(teacher.get());
 
         refreshTeachers();
+    }
+
+    private String getUpdateDetails(String property) {
+        System.out.println("Enter teacher's " + property + " or 'x' to skip:");
+        return scanner.nextLine().trim();
     }
 
     private void refreshTeachers() {

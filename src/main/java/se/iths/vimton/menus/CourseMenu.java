@@ -69,8 +69,8 @@ public class CourseMenu {
             return;
         }
 
-        String name = getDetails("name");
-        String description = getDetails("description");
+        String name = getNewDetails("course","name");
+        String description = getNewDetails("course","description");
         int credits = getUserInput("credits", 5, 500);
 
         System.out.println("\nLanguages: ");
@@ -86,19 +86,6 @@ public class CourseMenu {
         courseDao.create(course);
 
         refreshCourses();
-    }
-
-    private String getDetails(String property) {
-        String input;
-        while(true){
-            System.out.println("Enter new course " + property);
-            input = scanner.nextLine();
-            if(!input.trim().isEmpty())
-               break;
-
-            System.out.println("Please enter a " +  property + " for the new course.");
-        }
-        return input;
     }
 
     private void delete() {
