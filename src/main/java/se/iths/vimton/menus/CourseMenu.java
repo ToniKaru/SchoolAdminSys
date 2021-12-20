@@ -12,6 +12,7 @@ import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.Optional;
 
+import static se.iths.vimton.Menu.getUserInput;
 import static se.iths.vimton.Menu.scanner;
 
 public class CourseMenu {
@@ -75,7 +76,11 @@ public class CourseMenu {
 
         System.out.println("\nLanguages: ");
         languages.forEach(System.out::println);
-        int languageId = getUserInput("language id from the list above", languages.get(0).getId(), languages.size());
+        int languageId = getUserInput(
+                "language id from the list above",
+                languages.get(0).getId(),
+                languages.get(languages.size() - 1).getId()
+        );
         Optional<Language> language = languageDao.getById(languageId);
 
         Course course = new Course(name, description, credits, language.get());
@@ -98,7 +103,7 @@ public class CourseMenu {
     }
 
     private void deleteCourse() {
-        int id = getUserInput("course id", 1, courses.size());
+        int id = getUserInput("course id", courses.get(0).getId(), courses.get(courses.size() - 1).getId());
         Optional<Course> course = courseDao.getById(id);
 
         course.ifPresentOrElse(
@@ -118,7 +123,7 @@ public class CourseMenu {
     }
 
     private void showCourseDetails() {
-        int id = getUserInput("course id", 1, courses.size());
+        int id = getUserInput("course id", courses.get(0).getId(), courses.get(courses.size() - 1).getId());
         Optional<Course> course = courseDao.getById(id);
 
         course.ifPresentOrElse(
@@ -157,25 +162,7 @@ public class CourseMenu {
         refreshCourses();
     }
 
-    public int getUserInput(String property, int min, int max) {
-        int selection;
-        while(true) {
-            System.out.println("Enter" + property + ":");
-            try {
-                selection = Integer.parseInt(scanner.nextLine().trim());
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a valid number.");
-                continue;
-            }
 
-            if(selection < min || selection > max) {
-                System.out.println("Please enter valid " + property);
-                continue;
-            }
-            break;
-        }
-        return selection;
-    }
 
     private void showAll() {
         List<Course> courses = courseDao.getAll();

@@ -124,4 +124,24 @@ public class Menu {
             items.forEach(System.out::println);
     }
 
+    public  static int getUserInput(String property, int min, int max) {
+        int selection;
+        while(true) {
+            System.out.println("Enter" + property + ":");
+            try {
+                selection = Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number.");
+                continue;
+            }
+
+            if(selection < min || selection > max) {
+                System.out.println("Please enter valid " + property);
+                continue;
+            }
+            break;
+        }
+        return selection;
+    }
+
 }
