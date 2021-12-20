@@ -9,6 +9,7 @@ import se.iths.vimton.impl.StudentDaoImpl;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static se.iths.vimton.Menu.getUserInput;
@@ -37,8 +38,8 @@ public class StatisticsMenu {
         System.out.println("""
                                 
                 --- Statistics Options ---
-                1. Get the number of students in a program
-                2. Show number of students per program
+                1. Show number of students in a selected program
+                2. Show number of students per program (all programs)
                 0. Return to main menu"""
         );
     }
@@ -47,9 +48,16 @@ public class StatisticsMenu {
         switch (choice) {
             case 0 -> Menu.cancel();
             case 1 -> showStudentsPerSelectedProgram();
-//            case 2 -> showAll();
+            case 2 -> showStudentsPerProgram();
             default -> System.out.println("Invalid choice");
         }
+    }
+
+    private void showStudentsPerProgram() {
+        Map<String, Long> studentsPerProgram = programDao.getStudentsPerProgram();
+
+        System.out.println("Program \t\t Number of students");
+        studentsPerProgram.forEach((program, amount) -> System.out.println(program + "\t\t" + amount + " students."));
     }
 
     private void showStudentsPerSelectedProgram() {

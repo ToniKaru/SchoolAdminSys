@@ -15,5 +15,5 @@ public interface ProgTypeDao {
     List<ProgramType> getByName(String name);
     List<ProgramType> getByAccreditation(boolean accredited);
     List<ProgramType> getAll();
-    Map<String, Long> getStudentsPerProgram();
+
 }

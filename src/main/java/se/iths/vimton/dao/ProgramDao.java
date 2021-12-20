@@ -4,6 +4,7 @@ import se.iths.vimton.entities.Program;
 import se.iths.vimton.entities.Course;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface ProgramDao {
@@ -17,5 +18,6 @@ public interface ProgramDao {
     List<Program> getByPace(int length);
     List<Program> getByCourse(Course course);
     List<Program> getAll();
+    Map<String, Long> getStudentsPerProgram();
 
 }
