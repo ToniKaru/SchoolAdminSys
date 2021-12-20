@@ -76,7 +76,7 @@ public class StatisticsMenu {
     private void showResults(Program program) {
         Optional<Long> amount = studentDao.studentsByProgram(program);
         amount.ifPresentOrElse(
-                number -> System.out.println(program.getName() + " has " + number + " of students"),
+                number -> System.out.println(program.getName() + " has " + number + " students."),
                 () -> System.out.println(program.getName() + " has no students.")
         );
     }
