@@ -14,7 +14,7 @@ public interface ProgramDao {
     void addCourse(Program program, Course course);
     Optional<Program> getById(int id);
     List<Program> getByName(String name);
-    List<Program> getByLength(int length);
+    List<Program> getByPace(int length);
     List<Program> getByCourse(Course course);
     List<Program> getAll();
 

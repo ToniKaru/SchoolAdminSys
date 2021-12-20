@@ -2,6 +2,7 @@ package se.iths.vimton;
 
 import se.iths.vimton.menus.CourseMenu;
 import se.iths.vimton.menus.ProgramMenu;
+import se.iths.vimton.menus.StatisticsMenu;
 import se.iths.vimton.menus.TeacherMenu;
 
 import javax.persistence.EntityManagerFactory;
@@ -33,13 +34,15 @@ public class Menu {
             case 1 -> programOptions(); //t
             case 2 -> courseOptions();
             case 3 -> studentOptions(); // t
-            case 4 -> teacherOptions(); //v
+            case 4 -> teacherOptions();
             case 5 -> statistics(); //v
             default -> System.out.println("invalid choice");
         }
     }
 
     private void statistics() {
+        StatisticsMenu statisticsMenu = new StatisticsMenu(emf);
+        statisticsMenu.run();
     }
 
     private void teacherOptions() {

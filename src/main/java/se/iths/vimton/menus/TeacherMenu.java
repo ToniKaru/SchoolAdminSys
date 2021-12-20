@@ -38,7 +38,7 @@ public class TeacherMenu {
     public void printMenu() {
         System.out.println("""
                                 
-                --- Course Options ---
+                --- Teacher Options ---
                 1. Add a teacher
                 2. List all teachers
                 3. Update a teacher
