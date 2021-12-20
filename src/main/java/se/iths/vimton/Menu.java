@@ -2,6 +2,7 @@ package se.iths.vimton;
 
 import se.iths.vimton.menus.CourseMenu;
 import se.iths.vimton.menus.ProgramMenu;
+import se.iths.vimton.menus.TeacherMenu;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
@@ -42,6 +43,8 @@ public class Menu {
     }
 
     private void teacherOptions() {
+        TeacherMenu teacherMenu = new TeacherMenu(emf);
+        teacherMenu.run();
     }
 
     private void studentOptions() {
@@ -92,7 +95,16 @@ public class Menu {
     }
 
     public static int getChoice(){
-        return Integer.parseInt(scanner.nextLine());
+        int choice;
+        while (true){
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a number from the menu above.");
+            }
+        }
+        return choice;
     }
 
     public static void cancel() {
