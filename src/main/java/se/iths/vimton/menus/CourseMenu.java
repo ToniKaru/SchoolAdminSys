@@ -153,7 +153,6 @@ public class CourseMenu {
             course.get().setCredits(credits);
 
         courseDao.update(course.get());
-        //todo: verify this update method
 
         refreshCourses();
     }
