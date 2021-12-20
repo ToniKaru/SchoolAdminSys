@@ -11,6 +11,7 @@ import se.iths.vimton.impl.ProgramDaoImpl;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.Locale;
 
 import static se.iths.vimton.Menu.scanner;
 
@@ -20,8 +21,8 @@ public class ProgramMenu {
     private ProgTypeDao progTypeDao;
 
     public ProgramMenu(EntityManagerFactory emf) {
-        ProgramDao programDao = new ProgramDaoImpl(emf);
-        ProgTypeDao progTypeDao = new ProgTypeDaoImpl(emf);
+        this.programDao = new ProgramDaoImpl(emf);
+        this.progTypeDao = new ProgTypeDaoImpl(emf);
     }
 
     public void run() {
@@ -51,10 +52,15 @@ public class ProgramMenu {
             case 1 -> addProgram();
             case 2 -> updateProgram();
             case 3 -> programDetails();
-            case 4 -> Main.printMany(programDao.getAll(), "-- All Programs --");
+            case 4 -> listAll();
             case 5 -> removeProgram();
             default -> System.out.println("invalid choice");
         }
+    }
+
+    private void listAll() {
+        List<Program> list = programDao.getAll();
+        Main.printMany(list , "-- All Programs --");
     }
 
     private void removeProgram() {
@@ -75,9 +81,9 @@ public class ProgramMenu {
 
 
     private void printOneProgram(Program program) {
-        System.out.printf("%-10s %-10s %-10s %-10s %-20s \n",
+        System.out.printf("%-5s %-25s %-8s %-18s %-50s \n",
                 "Id", "Name", "Length", "Program Type", "Description");
-        System.out.printf("%-10d %-10s %-10d %-10s %-20s \n",
+        System.out.printf("%-5d %-25s %-8d %-18s %-50s \n",
                 program.getId(), program.getName(), program.getLength(),
                 program.getProgramType().getName(), program.getDescription());
     }
@@ -133,7 +139,8 @@ public class ProgramMenu {
         ProgramType programType = new ProgramType();
         Main.printMany(progTypeDao.getAll(), "-- All Program Types --");
         System.out.println("Is the program type listed? (y/n)");
-        if ('y' == scanner.next().charAt(0)) {
+        String response = scanner.nextLine().toLowerCase(Locale.ROOT);
+        if ("y".equals(response)) {
             System.out.println("Enter id of ProgramType");
             int id = Integer.parseInt(scanner.nextLine());
             programType = progTypeDao.getById(id).get();

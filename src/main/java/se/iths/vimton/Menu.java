@@ -63,8 +63,7 @@ public class Menu {
                 3. Edit/view students
                 4. Edit/view teachers
                 5. Statistics
-                0. Exit
-                """);
+                0. Exit""");
 //                
 //                6. Add a course
 //                7. Update a course
