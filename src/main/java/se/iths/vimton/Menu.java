@@ -126,7 +126,7 @@ public class Menu {
     public  static int getUserInput(String property, int min, int max) {
         int selection;
         while(true) {
-            System.out.println("Enter " + property + ":");
+            System.out.println("Enter " + property + " or '0' to cancel:");
             try {
                 selection = Integer.parseInt(scanner.nextLine().trim());
             } catch (NumberFormatException e) {
@@ -134,7 +134,9 @@ public class Menu {
                 continue;
             }
 
-            if(selection < min || selection > max) {
+            if (selection == 0)
+                break;
+            else if(selection < min || selection > max) {
                 System.out.println("Please enter valid " + property);
                 continue;
             }
