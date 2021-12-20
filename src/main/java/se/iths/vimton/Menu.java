@@ -143,4 +143,8 @@ public class Menu {
         return selection;
     }
 
+    public static boolean propertyIsUpdated(String property) {
+        return !property.isEmpty() && !property.equalsIgnoreCase("x");
+    }
+
 }

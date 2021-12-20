@@ -12,8 +12,7 @@ import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.Optional;
 
-import static se.iths.vimton.Menu.getUserInput;
-import static se.iths.vimton.Menu.scanner;
+import static se.iths.vimton.Menu.*;
 
 public class CourseMenu {
 
@@ -158,9 +157,9 @@ public class CourseMenu {
         System.out.println("Enter course's credits or 0 to skip:");
         int credits = getUserInput("new credits", 0, 500);
 
-        if (propertyIsUpdated(name, name))
+        if (propertyIsUpdated(name))
             course.get().setName(name);
-        if (propertyIsUpdated(name, description))
+        if (propertyIsUpdated(description))
             course.get().setDescription(description);
         if (credits > 0)
             course.get().setCredits(credits);
@@ -173,9 +172,7 @@ public class CourseMenu {
         refreshCourses();
     }
 
-    public boolean propertyIsUpdated(String name, String name1) {
-        return !name.isEmpty() && !name1.equalsIgnoreCase("x");
-    }
+
 
     private void showAll() {
         List<Course> courses = courseDao.getAll();

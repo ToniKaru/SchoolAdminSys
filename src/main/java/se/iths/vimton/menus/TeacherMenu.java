@@ -9,8 +9,7 @@ import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.Optional;
 
-import static se.iths.vimton.Menu.getUserInput;
-import static se.iths.vimton.Menu.scanner;
+import static se.iths.vimton.Menu.*;
 
 public class TeacherMenu {
 
@@ -119,15 +118,13 @@ public class TeacherMenu {
         System.out.println("Enter teacher's new email address or 'x' to skip:");
         String email = scanner.nextLine().trim();
 
-//        if (!firstName.isEmpty() || !firstName.equalsIgnoreCase("x"))
-
-        if (!firstName.isEmpty() && !firstName.equalsIgnoreCase("x"))
+        if (propertyIsUpdated(firstName))
             teacher.get().setFirstName(firstName);
-        if (!lastName.isEmpty() && !lastName.equalsIgnoreCase("x"))
+        if (propertyIsUpdated(lastName))
             teacher.get().setLastName(lastName);
-        if (!phoneNumber.isEmpty() && !phoneNumber.equalsIgnoreCase("x"))
+        if (propertyIsUpdated(phoneNumber))
             teacher.get().setPhoneNumber(phoneNumber);
-        if (!email.isEmpty() && !email.equalsIgnoreCase("x"))
+        if (propertyIsUpdated(email))
             teacher.get().setEmail(email);
 
         teacherDao.update(teacher.get());
