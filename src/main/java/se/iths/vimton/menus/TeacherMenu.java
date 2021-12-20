@@ -52,14 +52,38 @@ public class TeacherMenu {
             case 0 -> Menu.cancel();
 //            case 1 -> addTeacher();
             case 2 -> showAll();
-            case 3 -> updateTeacher();
-            case 4 -> showTeacher();
-//            case 5 -> deleteCourse();
+            case 3 -> update();
+            case 4 -> showDetails();
+            case 5 -> delete();
             default -> System.out.println("Invalid choice");
         }
     }
 
-    private void showTeacher() {
+    private void delete() {
+        int id = getUserInput("teacher id", teachers.get(0).getId(), teachers.get(teachers.size() - 1).getId());
+        Optional<Teacher> teacher = teacherDao.getById(id);
+
+        teacher.ifPresentOrElse(
+                this::teacherDeletion,
+                () -> System.out.println("Teacher id " + id + " not found.")
+        );
+    }
+
+    private void teacherDeletion(Teacher teacher) {
+        System.out.println("Are you sure you want to delete " + teacher.getFirstName() + " " + teacher.getLastName()
+                           + "? Enter Y/N:");
+        String input = scanner.nextLine();
+
+        if(input.equalsIgnoreCase("y")) {
+            teacherDao.delete(teacher);
+            System.out.println(teacher.getFirstName() + " " + teacher.getLastName() + " successfully deleted.");
+            refreshTeachers();
+        } else {
+            System.out.println("Cancelling...");
+        }
+    }
+
+    private void showDetails() {
         int id = getUserInput("teacher id", teachers.get(0).getId(), teachers.get(teachers.size() - 1).getId());
         Optional<Teacher> teacher = teacherDao.getById(id);
 
@@ -69,7 +93,7 @@ public class TeacherMenu {
         );
     }
 
-    private void updateTeacher() {
+    private void update() {
         int id = getUserInput("teacher id", teachers.get(0).getId(), teachers.get(teachers.size() - 1).getId());
         Optional<Teacher> teacher = teacherDao.getById(id);
 
