@@ -9,22 +9,22 @@ public class Guard {
 
         public static void Empty(String object){
             if (object.trim().isEmpty())
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Input value is empty.");
         }
 
         public static <T> void Null(T object){
             if (object == null)
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Input value is null.");
         }
 
         public static void zeroOrLess(int number){
             if (number <= 0)
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Input value is zero or less.");
         }
 
         public static void yearOutsideValidRange(int year){
             if (year < 1900 || year > LocalDate.now().getYear()+1)
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException(year + " is outside of the valid range 1900 - current year");
         }
 
         public static void ssnInvalid(String ssn) {
