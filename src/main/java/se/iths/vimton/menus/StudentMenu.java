@@ -60,13 +60,36 @@ public class StudentMenu {
             case 2 -> showAll();
             case 3 -> update();
             case 4 -> showDetails();
-//            case 5 -> delete();
+            case 5 -> delete();
             default -> System.out.println("Invalid choice");
         }
     }
 
-    private void add() {
+    private void delete() {
+        showAll();
+        int id = getUserInput("student id", students.get(0).getId(), students.get(students.size() - 1).getId());
+        Optional<Student> student = studentDao.getById(id);
 
+        student.ifPresentOrElse(
+                this::studentDeletion,
+                () ->  System.out.println("Student id " + id + " not found")
+        );
+        refreshStudents();
+    }
+
+    private void studentDeletion(Student student) {
+        Optional<Program> program = programDao.getById(student.getProgram().getId());
+
+        program.ifPresent(program1 -> {
+            program1.getStudents().remove(student);
+            student.setProgram(new Program());
+            programDao.update(program1);
+        });
+        studentDao.delete(student);
+        System.out.println("Student successfully deleted.");
+    }
+
+    private void add() {
         List<Program> programs = programDao.getAll();
 
         if(programs.isEmpty()) {
