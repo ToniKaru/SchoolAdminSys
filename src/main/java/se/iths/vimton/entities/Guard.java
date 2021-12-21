@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 public class Guard {
 
-    static class Against {
+    public static class Against {
 
         public static void Empty(String object){
             if (object.trim().isEmpty())

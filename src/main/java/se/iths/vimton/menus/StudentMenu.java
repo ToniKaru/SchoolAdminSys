@@ -1,12 +1,17 @@
 package se.iths.vimton.menus;
 
 import se.iths.vimton.Menu;
+import se.iths.vimton.dao.ProgramDao;
 import se.iths.vimton.dao.StudentDao;
+import se.iths.vimton.entities.Course;
+import se.iths.vimton.entities.Guard;
 import se.iths.vimton.entities.Program;
 import se.iths.vimton.entities.Student;
+import se.iths.vimton.impl.ProgramDaoImpl;
 import se.iths.vimton.impl.StudentDaoImpl;
 
 import javax.persistence.EntityManagerFactory;
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,10 +20,12 @@ import static se.iths.vimton.Menu.*;
 public class StudentMenu {
 
     StudentDao studentDao;
+    ProgramDao programDao;
     List<Student> students;
 
     public StudentMenu(EntityManagerFactory emf) {
         this.studentDao = new StudentDaoImpl(emf);
+        this.programDao = new ProgramDaoImpl(emf);
         this.students = studentDao.getAll();
     }
 
@@ -61,8 +68,74 @@ public class StudentMenu {
     }
 
     private void update() {
+        showAll();
+        int id = getUserInput("student id", students.get(0).getId(), students.get(students.size() - 1).getId());
+        Optional<Student> student = studentDao.getById(id);
 
+        if(student.isEmpty()) {
+            System.out.println("Student id " + id + " not found");
+            return;
+        }
+
+        System.out.println("Updating " + student.get().getFirstName() + " " + student.get().getLastName());
+
+        System.out.println("Enter student's new first name or 'x' to skip:");
+        String firstName = scanner.nextLine().trim();
+
+        System.out.println("Enter student's new last name or 'x' to skip:");
+        String lastName = scanner.nextLine().trim();
+
+        System.out.println("Enter student's new email address or 'x' to skip:");
+        String email = scanner.nextLine().trim();
+
+        Optional<Program> program = getNewProgram();
+
+        if(propertyIsUpdated(firstName))
+            student.get().setFirstName(firstName);
+        if(propertyIsUpdated(lastName))
+            student.get().setLastName(lastName);
+        if(propertyIsUpdated(email))
+            student.get().setEmail(email);
+
+        if(program.isPresent()) {
+            Optional<Program> currentProgram = programDao.getById(student.get().getProgram().getId());
+            currentProgram.ifPresent(program1 -> {
+                program1.getStudents().remove(student.get());
+                programDao.update(program1);
+            });
+            student.get().setProgram(program.get());
+        }
+
+        studentDao.update(student.get());
+
+        System.out.println("Student successfully updated.");
+        System.out.println(student.get());
+        refreshStudents();
     }
+
+    private Optional<Program> getNewProgram() {
+        List<Program> programs = programDao.getAll();
+
+        printMany(programs, "Available programs");
+        System.out.println("Select a program id from the list above");
+
+        int id = getUserInput("program id", programs.get(0).getId(), programs.get(programs.size() - 1).getId());
+        return programDao.getById(id);
+    }
+//
+//    private String getNewSsn() {
+//        String ssn;
+//        while (true) {
+//            ssn = scanner.nextLine().trim();
+//            try {
+//                Guard.Against.ssnInvalid(ssn);
+//                break;
+//            } catch (IllegalArgumentException e) {
+//                System.out.println("Please enter a valid social security number");
+//            }
+//        }
+//        return ssn;
+//    }
 
     private void showDetails() {
         showAll();
