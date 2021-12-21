@@ -71,6 +71,7 @@ public class TeacherMenu {
             System.out.println("Selected teacher id not found.");
             return;
         }
+        
         System.out.println(teacher.get().getFirstName() + " " + teacher.get().getLastName() + " selected.");
 
         List<Course> teachersCourses = teacher.get().getTeacherCourses().stream().toList();
@@ -80,8 +81,9 @@ public class TeacherMenu {
         }
 
         List<Course> allCourses = courseDao.getAll();
-
+        
         printMany(teachersCourses, teacher.get().getFirstName() + " " + teacher.get().getLastName() + "'s courses");
+
         int courseId = getUserInput("course id", allCourses.get(0).getId(), allCourses.get(allCourses.size() - 1).getId());
         Optional<Course> course = courseDao.getById(courseId);
 
@@ -148,22 +150,26 @@ public class TeacherMenu {
         String phoneNumber = getNewDetails("teacher", "phone number");
         String email = getNewDetails("teacher", "email address");
 
-        Teacher teacher;
+        Optional<Teacher> teacher = createTeacher(firstName, lastName, ssn, phoneNumber, email);
+        teacher.ifPresent(teacher1 -> {
+            teacherDao.create(teacher1);
+            System.out.println("Teacher successfully added.");
+            refreshTeachers();
+        });
+    }
+
+    private Optional<Teacher> createTeacher(String firstName, String lastName, String ssn, String phoneNumber, String email) {
         try {
-             teacher = new Teacher(firstName, lastName, ssn, phoneNumber, email);
+             return Optional.of(new Teacher(firstName, lastName, ssn, phoneNumber, email));
         } catch (IllegalArgumentException e) {
             System.out.print("New teacher could not be created because ");
             e.printStackTrace();
-            return;
+            return Optional.empty();
         }
-
-        teacherDao.create(teacher);
-        refreshTeachers();
     }
 
     private void delete() {
         Optional<Teacher> teacher = getTeacher();
-
         teacher.ifPresentOrElse(
                 this::teacherDeletion,
                 () -> System.out.println("Selected teacher id not found.")
@@ -174,7 +180,6 @@ public class TeacherMenu {
         System.out.println("Are you sure you want to delete " + teacher.getFirstName() + " " + teacher.getLastName()
                            + "? Enter Y/N:");
         String input = scanner.nextLine();
-
         if(input.equalsIgnoreCase("y")) {
             teacherDao.delete(teacher);
             System.out.println(teacher.getFirstName() + " " + teacher.getLastName() + " successfully deleted.");
@@ -188,7 +193,6 @@ public class TeacherMenu {
         showAll();
         int id = getUserInput("teacher id", teachers.get(0).getId(), teachers.get(teachers.size() - 1).getId());
         Optional<Teacher> teacher = teacherDao.getById(id);
-
         teacher.ifPresentOrElse(
                 System.out::println,
                 () -> System.out.println("Teacher id " + id + " not found.")
