@@ -43,6 +43,7 @@ public class ProgTypeMenu {
                 3. Update program type
                 4. Show program type details by id
                 5. Delete a program type
+                6. Show program types by accreditation
                 0. Return to main menu"""
         );
     }
@@ -55,6 +56,7 @@ public class ProgTypeMenu {
             case 3 -> update();
             case 4 -> showDetails();
             case 5 -> delete();
+            case 6 -> showByAccreditation();
             default -> System.out.println("invalid choice");
         }
     }
@@ -140,6 +142,11 @@ public class ProgTypeMenu {
         } else {
             System.out.println("Cancelling...");
         }
+    }
+
+    private void showByAccreditation(){
+        boolean accredited = getUserInput("program type", "accreditation");
+        Print.allProgTypes(progTypeDao.getByAccreditation(accredited));
     }
 
     Optional<ProgramType> getTypeFromUser() {
