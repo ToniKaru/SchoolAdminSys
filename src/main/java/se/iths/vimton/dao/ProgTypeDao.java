@@ -3,7 +3,6 @@ package se.iths.vimton.dao;
 import se.iths.vimton.entities.ProgramType;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public interface ProgTypeDao {

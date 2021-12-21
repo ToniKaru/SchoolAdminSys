@@ -1,30 +1,26 @@
 package se.iths.vimton.menus;
 
-import net.bytebuddy.dynamic.DynamicType;
-import se.iths.vimton.Main;
 import se.iths.vimton.Menu;
 import se.iths.vimton.dao.ProgTypeDao;
-import se.iths.vimton.dao.ProgramDao;
-import se.iths.vimton.entities.Program;
 import se.iths.vimton.entities.ProgramType;
 import se.iths.vimton.impl.ProgTypeDaoImpl;
-import se.iths.vimton.impl.ProgramDaoImpl;
+import se.iths.vimton.utils.Print;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static se.iths.vimton.Menu.*;
 
 public class ProgTypeMenu {
 
     private ProgTypeDao progTypeDao;
-    private List<ProgramType> progTypes;
+    private List<ProgramType> types;
 
     public ProgTypeMenu(EntityManagerFactory emf) {
         this.progTypeDao = new ProgTypeDaoImpl(emf);
-        this.progTypes = progTypeDao.getAll();
+        this.types = progTypeDao.getAll();
     }
 
 
@@ -47,6 +43,7 @@ public class ProgTypeMenu {
                 3. Update program type
                 4. Show program type details by id
                 5. Delete a program type
+                6. Show program types by accreditation
                 0. Return to main menu"""
         );
     }
@@ -55,42 +52,114 @@ public class ProgTypeMenu {
         switch (choice) {
             case 0 -> Menu.cancel();
             case 1 -> add();
-            //case 2 -> showAll();
-            //case 3 -> update();
-            //case 4 -> showDetails();
-            //case 5 -> delete();
+            case 2 -> showAll();
+            case 3 -> update();
+            case 4 -> showDetails();
+            case 5 -> delete();
+            case 6 -> showByAccreditation();
             default -> System.out.println("invalid choice");
         }
     }
 
+
+
+    private Consumer<? super ProgramType> printDetails(ProgramType type) {
+        Print.progTypeDetails(type);
+        return null;
+    }
+
     private void add() {
         String name = getNewDetails("program type", "name");
-        int pace = getUserInput("credits required", 0,2000);
+        int creditsRequired = getUserInput("credits required", 0,2000);
         boolean accredited = getUserInput("program type", "accreditation");
 
-        ProgramType programType;
+        ProgramType type;
         try {
-            programType = new ProgramType(name, pace, accredited);
+            type = new ProgramType(name, creditsRequired, accredited);
         } catch (IllegalArgumentException e) {
             System.out.print("New program type could not be created because ");
             e.printStackTrace();
             return;
         }
-        progTypeDao.create(programType);
-        refreshProgramTypes();
+        progTypeDao.create(type);
+        refreshTypes();
+    }
+
+    private void showAll(){
+        Print.allProgTypes(progTypeDao.getAll());
+    }
+
+    private void update(){
+        Optional<ProgramType> type = getTypeFromUser();
+        type.ifPresentOrElse(
+                this::updateProgType,
+                () ->  System.out.println("Program type not found. Cannot update.")
+
+        );
+    }
+
+    private void updateProgType(ProgramType type) {
+        String name = getUpdateDetails("program type", "name");
+        int creditsRequired = getUserInput("credits required", 0,2000);
+        boolean accredited = getUserInput("program type", "accreditation");
+
+        if(propertyIsUpdated(name))
+            type.setName(name);
+        if(creditsRequired != type.getCreditsRequired())
+            type.setCreditsRequired(creditsRequired);
+        if(accredited != type.isAccredited())
+            type.setAccredited(accredited);
+
+        progTypeDao.update(type);
+        refreshTypes();
+        Print.progTypeDetails(type);
+    }
+
+    private void showDetails() {
+        Optional<ProgramType> type = getTypeFromUser();
+        type.ifPresentOrElse(
+                printDetails(type.get()),
+                () -> System.out.println("Program type not found.")
+        );
+    }
+
+    private void delete(){
+        Optional<ProgramType> type = getTypeFromUser();
+        type.ifPresentOrElse(
+                this::deleteType,
+                () -> System.out.println("Program type not found. No type deleted.")
+        );
+    }
+
+    private void deleteType(ProgramType type) {
+        System.out.println("Are you sure you want to delete " + type.getName() + "? Enter Y/N:");
+        String input = scanner.nextLine();
+
+        if(input.equalsIgnoreCase("y")) {
+            progTypeDao.delete(type);
+            System.out.println(type.getName() + " successfully deleted.");
+            refreshTypes();
+        } else {
+            System.out.println("Cancelling...");
+        }
+    }
+
+    private void showByAccreditation(){
+        boolean accredited = getUserInput("program type", "accreditation");
+        Print.allProgTypes(progTypeDao.getByAccreditation(accredited));
     }
 
     Optional<ProgramType> getTypeFromUser() {
-        printMany(progTypeDao.getAll(), "-- All Program Types --");
+        Print.allProgTypes(progTypeDao.getAll());
         int id = 0;
-        if(!progTypes.isEmpty())
-            id = getUserInput("id", progTypes.get(0).getId(), progTypes.get(progTypes.size() - 1).getId());
+        if(!types.isEmpty())
+            id = getUserInput("id", types.get(0).getId(), types.get(types.size() - 1).getId());
 
         return progTypeDao.getById(id);
     }
 
-    private void refreshProgramTypes() {
-        progTypes = progTypeDao.getAll();
+    private void refreshTypes() {
+        types = progTypeDao.getAll();
 
     }
 
