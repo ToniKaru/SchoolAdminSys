@@ -95,7 +95,6 @@ public class CourseMenu {
 
         Course course = new Course(name, description, credits, language.get());
         courseDao.create(course);
-
         refreshCourses();
     }
 
@@ -105,8 +104,8 @@ public class CourseMenu {
         Optional<Course> course = courseDao.getById(id);
 
         course.ifPresentOrElse(
-                this::courseDeletion,
-                () -> System.out.println("Course id " + id + " not found.")
+            this::courseDeletion,
+            () -> System.out.println("Course id " + id + " not found.")
         );
     }
 
@@ -171,8 +170,8 @@ public class CourseMenu {
         Optional<Course> course = courseDao.getById(id);
 
         course.ifPresentOrElse(
-                System.out::println,
-                () -> System.out.println("Course id " + id + " not found.")
+            System.out::println,
+            () -> System.out.println("Course id " + id + " not found.")
         );
     }
 
@@ -182,11 +181,8 @@ public class CourseMenu {
         if (course.isEmpty())
             return;
 
-        System.out.println("Enter course's new name or 'x' to skip:");
-        String name = scanner.nextLine().trim();
-
-        System.out.println("Enter course's new description or 'x' to skip:");
-        String description = scanner.nextLine().trim();
+        String name = getUpdateDetails("course", "new name");
+        String description = getUpdateDetails("course", "new description");
 
         System.out.println("Enter course's credits or 0 to skip:");
         int credits = getUserInput("new credits", 0, 500);
@@ -216,7 +212,6 @@ public class CourseMenu {
 
         return course;
     }
-
 
     private void showAll() {
         List<Course> courses = courseDao.getAll();
