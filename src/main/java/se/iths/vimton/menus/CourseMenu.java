@@ -53,7 +53,7 @@ public class CourseMenu {
                 1. Add a course
                 2. List all courses
                 3. Update a course
-                4. Show course details
+                4. Show a course's details
                 5. Delete a course
                 0. Return to main menu"""
         );
@@ -178,8 +178,9 @@ public class CourseMenu {
 
     private void update() {
 
-        Optional<Course> course = getExistingCourseFromUser();
-        if (course.isEmpty()) return;
+        Optional<Course> course = getCourse();
+        if (course.isEmpty())
+            return;
 
         System.out.println("Enter course's new name or 'x' to skip:");
         String name = scanner.nextLine().trim();
@@ -205,15 +206,14 @@ public class CourseMenu {
         refreshCourses();
     }
 
-    public Optional<Course> getExistingCourseFromUser() {
+    public Optional<Course> getCourse() {
         showAll();
         int id = getUserInput("course id", 1, courses.size());
         Optional<Course> course = courseDao.getById(id);
 
-        if (course.isEmpty()) {
+        if (course.isEmpty())
             System.out.println("Course id " + id + " not found.");
-            return null;
-        }
+
         return course;
     }
 

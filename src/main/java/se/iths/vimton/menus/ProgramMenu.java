@@ -13,15 +13,12 @@ import se.iths.vimton.impl.CourseDaoImpl;
 import se.iths.vimton.impl.ProgTypeDaoImpl;
 import se.iths.vimton.impl.ProgramDaoImpl;
 import se.iths.vimton.impl.StudentDaoImpl;
-import se.iths.vimton.menus.CourseMenu.*;
-import se.iths.vimton.utils.Print;
 
 
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import static se.iths.vimton.Menu.*;
 import static se.iths.vimton.Menu.scanner;
@@ -140,7 +137,7 @@ public class ProgramMenu {
 
     private void removeCourseFromProgram() {
         Optional<Program> program = getProgramFromUser();
-        Optional<Course> course = courseMenu.getExistingCourseFromUser();
+        Optional<Course> course = courseMenu.getCourse();
         if (course.isPresent() && program.isPresent())
             program.get().addCourse(course.get());
             programDao.update(program.get());
@@ -156,7 +153,7 @@ public class ProgramMenu {
 
     private void addCourseToProgram() {
         Optional<Program> program = getProgramFromUser();
-        Optional<Course> course = courseMenu.getExistingCourseFromUser();
+        Optional<Course> course = courseMenu.getCourse();
         if (course.isPresent() && program.isPresent())
             programDao.addCourse(program.get(), course.get());
             programDao.update(program.get());
