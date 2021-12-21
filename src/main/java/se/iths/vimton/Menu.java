@@ -143,10 +143,10 @@ public class Menu {
         while(true) {
             String input = (scanner.nextLine().trim().toLowerCase(Locale.ROOT));
 
-            if ('t' == input.charAt(0) ) {
+            if ("t".equalsIgnoreCase(input)) {
                 selection = true;
                 break;
-            } else if ('f' == input.charAt(0) ) {
+            } else if ("f".equalsIgnoreCase(input)) {
                 selection = false;
                 break;
             }
