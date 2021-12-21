@@ -10,6 +10,8 @@ import java.util.Optional;
 
 public class DefaultData {
 
+    private static boolean dataCreated;
+
     LanguageDao languageDao;
     ProgTypeDao progTypeDao;
     CourseDao courseDao;
@@ -27,6 +29,9 @@ public class DefaultData {
     }
 
     public void createData() {
+        if (dataCreated)
+            return;
+
         createTeachers();
         createLanguages();
         createProgramTypes();
@@ -35,6 +40,7 @@ public class DefaultData {
         createPrograms();
         addCoursesToPrograms();
         createStudents();
+        dataCreated = true;
     }
 
     private void createTeachers() {

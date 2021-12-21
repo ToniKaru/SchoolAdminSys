@@ -13,6 +13,7 @@ import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.Locale;
 
+import static se.iths.vimton.Menu.printMany;
 import static se.iths.vimton.Menu.scanner;
 
 public class ProgramMenu {
@@ -161,7 +162,7 @@ public class ProgramMenu {
 
     private ProgramType getProgramTypeFromUser() {
         ProgramType programType = new ProgramType();
-        Main.printMany(progTypeDao.getAll(), "-- All Program Types --");
+        printMany(progTypeDao.getAll(), "-- All Program Types --");
         System.out.println("Is the program type listed? (y/n)");
         String response = scanner.nextLine().toLowerCase(Locale.ROOT);
         if ("y".equals(response)) {

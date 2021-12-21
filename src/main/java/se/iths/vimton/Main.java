@@ -25,25 +25,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-//        TestImpl test = new TestImpl(emf);
-//        test.run();
-
-        DefaultData defaultData = new DefaultData(emf);
-        defaultData.createData();
-
         Menu menu = new Menu(emf);
         menu.run();
 
     }
-
-    public static <T> void printMany(List<T> items, String heading) {
-        System.out.println("\n" + heading);
-        if (items.isEmpty())
-            System.out.println("No items found");
-        else
-            items.forEach(System.out::println);
-    }
-
 
 }
 

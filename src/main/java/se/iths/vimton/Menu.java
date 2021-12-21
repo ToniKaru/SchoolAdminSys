@@ -4,6 +4,7 @@ import se.iths.vimton.menus.CourseMenu;
 import se.iths.vimton.menus.ProgramMenu;
 import se.iths.vimton.menus.StatisticsMenu;
 import se.iths.vimton.menus.TeacherMenu;
+import se.iths.vimton.utils.DefaultData;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
@@ -35,9 +36,16 @@ public class Menu {
             case 2 -> courseOptions();
             case 3 -> studentOptions(); // t
             case 4 -> teacherOptions();
-            case 5 -> statistics(); //v
+            case 5 -> statistics();
+            case 6 -> defaultData();
             default -> System.out.println("invalid choice");
         }
+    }
+
+    private void defaultData() {
+        DefaultData defaultData = new DefaultData(emf);
+        defaultData.createData();
+        System.out.println("Default data added.");
     }
 
     private void statistics() {
@@ -72,6 +80,7 @@ public class Menu {
                 3. Students
                 4. Teachers
                 5. Statistics
+                6. Add Default Data
                 0. Exit""");
 
 //                
@@ -87,12 +96,6 @@ public class Menu {
 //                19. Add a student to a program
 //                20. Remove a student from a program
 //                21. List all students in a program
-//                                            
-//                22. Get the number of students in a program 
-//                23. Show number of students per program
-//                            
-//                
-//                0. Exit
 
     }
 
