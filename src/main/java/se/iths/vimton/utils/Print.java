@@ -32,7 +32,7 @@ public class Print {
     public static void allStudents (List<Student> students) {
         if(!students.isEmpty()) {
             System.out.println("\n -- Summary of Students --");
-            String summaryFormat = "%-5s %-20s %-20s %16 %-30s \n";
+            String summaryFormat = "%-5s %-20s %-20s %16s %-30s \n";
             System.out.printf(summaryFormat,
                     "Id", "First Name", "Last Name", "SSN", "Program");
             System.out.printf(summaryFormat,
@@ -40,7 +40,7 @@ public class Print {
             for (Student student : students) {
                 System.out.printf(summaryFormat,
                         student.getId(), student.getFirstName(), student.getLastName(),
-                        student.getSsn(), student.getProgram());
+                        student.getSsn(), student.getProgram().getName());
             }
         }
         else
