@@ -92,6 +92,12 @@ public class Menu {
 //                15. Delete a student
 //                
 
+//                16. Add a course to a program
+//                17. List all courses in a program
+//                18. Remove a course from a program
+//                19. Add a student to a program
+//                20. Remove a student from a program
+//                21. List all students in a program
 
     }
 

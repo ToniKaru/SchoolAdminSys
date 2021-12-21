@@ -3,12 +3,19 @@ package se.iths.vimton.menus;
 import se.iths.vimton.Menu;
 import se.iths.vimton.dao.CourseDao;
 import se.iths.vimton.dao.LanguageDao;
+import se.iths.vimton.dao.ProgramDao;
+import se.iths.vimton.dao.TeacherDao;
 import se.iths.vimton.entities.Course;
 import se.iths.vimton.entities.Language;
+import se.iths.vimton.entities.Program;
+import se.iths.vimton.entities.Teacher;
 import se.iths.vimton.impl.CourseDaoImpl;
 import se.iths.vimton.impl.LanguageDaoImpl;
+import se.iths.vimton.impl.ProgramDaoImpl;
+import se.iths.vimton.impl.TeacherDaoImpl;
 
 import javax.persistence.EntityManagerFactory;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,12 +25,16 @@ public class CourseMenu {
 
     CourseDao courseDao;
     LanguageDao languageDao;
+    TeacherDao teacherDao;
+    ProgramDao programDao;
     List<Course> courses;
 
     public CourseMenu(EntityManagerFactory emf) {
         this.courseDao = new CourseDaoImpl(emf);
         this.languageDao = new LanguageDaoImpl(emf);
-       courses = courseDao.getAll();
+        this.teacherDao = new TeacherDaoImpl(emf);
+        this.programDao = new ProgramDaoImpl(emf);
+        courses = courseDao.getAll();
     }
 
     public void run() {
@@ -89,6 +100,7 @@ public class CourseMenu {
     }
 
     private void delete() {
+        showAll();
         int id = getUserInput("course id", courses.get(0).getId(), courses.get(courses.size() - 1).getId());
         Optional<Course> course = courseDao.getById(id);
 
@@ -103,12 +115,50 @@ public class CourseMenu {
         String input = scanner.nextLine();
 
         if(input.equalsIgnoreCase("y")) {
-            courseDao.delete(course);
-            System.out.println(course.getName() + " successfully deleted.");
-            refreshCourses();
+            try {
+                removeLanguage(course);
+                removeTeachers(course);
+                removePrograms(course);
+                courseDao.delete(course);
+                System.out.println(course.getName() + " successfully deleted.");
+                refreshCourses();
+            } catch (Exception e) {
+                System.out.println(course.getName() + " is connected to other entities & cannot be deleted.");
+            }
         } else {
             System.out.println("Cancelling...");
         }
+    }
+
+    private void removePrograms(Course course) {
+        List<Program> programs = new ArrayList<>();
+
+        course.getPrograms().forEach(program -> programDao.getById(program.getId()).ifPresent(programs::add));
+        programs.forEach(program -> program.getCourses().remove(course));
+        course.getPrograms().clear();
+
+        programs.forEach(program -> programDao.update(program));
+    }
+
+    private void removeTeachers(Course course) {
+        List<Teacher> teachers = new ArrayList<>();
+
+        course.getTeachers().forEach(teacher -> teacherDao.getBySsn(teacher.getSsn()).ifPresent(teachers::add));
+        teachers.forEach(teacher -> teacher.getTeacherCourses().remove(course));
+        course.getTeachers().clear();
+
+        teachers.forEach(teacher -> teacherDao.update(teacher));
+    }
+
+    private void removeLanguage(Course course) {
+        Optional<Language> language = languageDao.getById(course.getLanguage().getId());
+
+        if (language.isEmpty())
+            throw new RuntimeException();
+
+        language.get().getCourses().remove(course);
+        course.setLanguage(new Language());
+        languageDao.update(language.get());
     }
 
     private void refreshCourses() {
@@ -116,6 +166,7 @@ public class CourseMenu {
     }
 
     private void showDetails() {
+        showAll();
         int id = getUserInput("course id", courses.get(0).getId(), courses.get(courses.size() - 1).getId());
         Optional<Course> course = courseDao.getById(id);
 
