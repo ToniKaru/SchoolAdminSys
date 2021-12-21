@@ -97,7 +97,7 @@ public class Print {
             System.out.println("Credits required: " + programType.getCreditsRequired());
             System.out.println("Accredited: " + programType.isAccredited());
             System.out.println("Programs: ");
-            programType.getProgramList().stream()
+            programType.getPrograms().stream()
                     .map(Program::getName)
                     .forEach(System.out::println);
         }
