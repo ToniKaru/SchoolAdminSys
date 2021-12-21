@@ -107,7 +107,7 @@ public class DefaultData {
         );
 
         certificate.ifPresentOrElse(
-                programType -> programDao.create(new Program("Mjukvarutestare", 100, programType)),
+                programType -> programDao.create(new Program("Mjukvarutestare", 50, programType)),
                 () -> { throw new RuntimeException("Default program types not found in Default.createPrograms"); }
         );
     }

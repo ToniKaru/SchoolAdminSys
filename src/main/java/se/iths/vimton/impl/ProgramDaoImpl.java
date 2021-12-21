@@ -79,9 +79,9 @@ public class ProgramDaoImpl implements ProgramDao {
     }
 
     @Override
-    public List<Program> getByLength(int length) {
-        return em.createQuery("SELECT p FROM Program p WHERE p.length = :length", Program.class)
-                .setParameter("length", length)
+    public List<Program> getByPace(int pace) {
+        return em.createQuery("SELECT p FROM Program p WHERE p.pace = :pace", Program.class)
+                .setParameter("pace", pace)
                 .getResultList();
     }
 

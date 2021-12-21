@@ -6,6 +6,7 @@ import se.iths.vimton.menus.TeacherMenu;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Menu {
@@ -123,10 +124,10 @@ public class Menu {
             items.forEach(System.out::println);
     }
 
-    public  static int getUserInput(String property, int min, int max) {
+    public static int getUserInput(String property, int min, int max) {
         int selection;
         while(true) {
-            System.out.println("Enter " + property + " or '0' to cancel:");
+            System.out.println("Enter " + property + " or '-1' to cancel:");
             try {
                 selection = Integer.parseInt(scanner.nextLine().trim());
             } catch (NumberFormatException e) {
@@ -134,7 +135,7 @@ public class Menu {
                 continue;
             }
 
-            if (selection == 0)
+            if (selection == -1)
                 break;
             else if(selection < min || selection > max) {
                 System.out.println("Please enter valid " + property);
@@ -145,20 +146,42 @@ public class Menu {
         return selection;
     }
 
+    public static boolean getUserInput(String object, String property) {
+        boolean selection;
+        System.out.println("Enter 'T' if " + object + "'s " + property + " " +
+                "is true or 'F' for false:");
+        while(true) {
+            String input = (scanner.nextLine().trim().toLowerCase(Locale.ROOT));
+
+            if ( 't' == input.charAt(0) ) {
+                selection = true;
+                break;
+            }
+            System.out.println("Please enter T or F to indicate " + property + " status.");
+        }
+        return selection;
+    }
+
+
     public static boolean propertyIsUpdated(String property) {
         return !property.isEmpty() && !property.equalsIgnoreCase("x");
     }
 
     public static String getNewDetails(String object, String property) {
         String input;
+        System.out.println("Enter " + property + " for the new " + object + ":");
         while(true){
-            System.out.println("Enter " + property + " for the new " + object + ":");
             input = scanner.nextLine();
             if(!input.trim().isEmpty())
                 break;
             System.out.println("Please enter a " +  property + " for the new " + object + ".");
         }
         return input;
+    }
+
+    public static String getUpdateDetails(String object, String property) {
+        System.out.println("Enter " + object + "'s " + property + " or 'x' to skip:");
+        return scanner.nextLine().trim();
     }
 
 }

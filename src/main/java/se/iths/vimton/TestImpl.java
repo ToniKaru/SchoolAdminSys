@@ -105,11 +105,11 @@ public class TestImpl {
         Optional<ProgramType> diploma = progTypeDao.getByName("diploma").stream().findFirst();
         Optional<ProgramType> certificate = progTypeDao.getByName("certificate").stream().findFirst();
 
-        diploma.ifPresent(programType -> programDao.create(new Program("Javautvecklare", 22, programType)));
-        certificate.ifPresent(programType -> programDao.create(new Program("Mjukvarutestare", 17, programType)));
+        diploma.ifPresent(programType -> programDao.create(new Program("Javautvecklare", 100, programType)));
+        certificate.ifPresent(programType -> programDao.create(new Program("Mjukvarutestare", 50, programType)));
 
-//        Program javaDeveloper = new Program("Javautvecklare", 22, type1);
-//        Program softwareTester = new Program("Mjukvarutestare", 17, type2);
+//        Program javaDeveloper = new Program("Javautvecklare", 100, type1);
+//        Program softwareTester = new Program("Mjukvarutestare", 50, type2);
 //        programDao.create(javaDeveloper);
 //        programDao.create(softwareTester);
 
