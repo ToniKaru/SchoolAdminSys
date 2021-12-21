@@ -91,10 +91,10 @@ public class Menu {
 //                14. List all students
 //                15. Delete a student
 //                
+
 //                16. Add a course to a program
 //                17. List all courses in a program
 //                18. Remove a course from a program
-
 //                19. Add a student to a program
 //                20. Remove a student from a program
 //                21. List all students in a program
@@ -134,7 +134,7 @@ public class Menu {
     public static int getUserInput(String property, int min, int max) {
         int selection;
         while(true) {
-            System.out.println("Enter " + property + " or '-1' to cancel:");
+            System.out.println("Enter " + property + " or '0' to cancel:");
             try {
                 selection = Integer.parseInt(scanner.nextLine().trim());
             } catch (NumberFormatException e) {
@@ -142,7 +142,7 @@ public class Menu {
                 continue;
             }
 
-            if (selection == -1)
+            if (selection == 0)
                 break;
             else if(selection < min || selection > max) {
                 System.out.println("Please enter valid " + property);

@@ -177,14 +177,9 @@ public class CourseMenu {
     }
 
     private void update() {
-        showAll();
-        int id = getUserInput("course id", 1, courses.size());
-        Optional<Course> course = courseDao.getById(id);
 
-        if (course.isEmpty()) {
-            System.out.println("Course id " + id + " not found.");
-            return;
-        }
+        Optional<Course> course = getExistingCourseFromUser();
+        if (course.isEmpty()) return;
 
         System.out.println("Enter course's new name or 'x' to skip:");
         String name = scanner.nextLine().trim();
@@ -210,6 +205,17 @@ public class CourseMenu {
         refreshCourses();
     }
 
+    public Optional<Course> getExistingCourseFromUser() {
+        showAll();
+        int id = getUserInput("course id", 1, courses.size());
+        Optional<Course> course = courseDao.getById(id);
+
+        if (course.isEmpty()) {
+            System.out.println("Course id " + id + " not found.");
+            return null;
+        }
+        return course;
+    }
 
 
     private void showAll() {

@@ -1,17 +1,27 @@
 package se.iths.vimton.menus;
 
 import se.iths.vimton.Menu;
+import se.iths.vimton.dao.CourseDao;
 import se.iths.vimton.dao.ProgTypeDao;
 import se.iths.vimton.dao.ProgramDao;
+import se.iths.vimton.dao.StudentDao;
+import se.iths.vimton.entities.Course;
 import se.iths.vimton.entities.Program;
 import se.iths.vimton.entities.ProgramType;
+import se.iths.vimton.entities.Student;
+import se.iths.vimton.impl.CourseDaoImpl;
 import se.iths.vimton.impl.ProgTypeDaoImpl;
 import se.iths.vimton.impl.ProgramDaoImpl;
+import se.iths.vimton.impl.StudentDaoImpl;
+import se.iths.vimton.menus.CourseMenu.*;
+import se.iths.vimton.utils.Print;
+
 
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static se.iths.vimton.Menu.*;
 import static se.iths.vimton.Menu.scanner;
@@ -23,6 +33,10 @@ public class ProgramMenu {
     private List<Program> programs;
     private List<ProgramType> progTypes;
     private ProgTypeMenu progTypeMenu;
+    private CourseMenu courseMenu;
+    private StudentMenu studentMenu;
+    private StudentDao studentDao;
+    private CourseDao courseDao;
 
     public ProgramMenu(EntityManagerFactory emf) {
         this.programDao = new ProgramDaoImpl(emf);
@@ -30,6 +44,10 @@ public class ProgramMenu {
         this.programs = programDao.getAll();
         this.progTypes = progTypeDao.getAll();
         this.progTypeMenu = new ProgTypeMenu(emf);
+        this.courseMenu = new CourseMenu(emf);
+        this.studentMenu = new StudentMenu(emf);
+        this.courseDao = new CourseDaoImpl(emf);
+        this.studentDao = new StudentDaoImpl(emf);
 
     }
 
@@ -48,12 +66,20 @@ public class ProgramMenu {
                 --- Program Options ---
                 1. Add Program
                 2. List all programs
-                3. Update Program
+                3. Update a program
                 4. Show program details by id
                 5. Delete a program
                 6. List programs by pace
                 7. List programs by course
-                8. Program Type Options
+                
+                8. Add a course to a program
+                9. List all courses in a program
+                10. Remove a course from a program
+                11. Add a student to a program
+                12. Remove a student from a program
+                13. List all students in a program
+                
+                14. Program Type Options
                 0. Return to main menu"""
         );
     }
@@ -68,12 +94,77 @@ public class ProgramMenu {
             case 5 -> delete();
             case 6 -> programsByPace();
             case 7 -> programsByCourse();
-            case 8 -> progTypeOptions();
+
+            case 8 -> addCourseToProgram();
+            case 9 -> listProgramCourses();
+            case 10 -> removeCourseFromProgram();
+            case 11 -> addStudentToProgram();
+            case 12 -> removeStudentFromProgram();
+            case 13 -> listStudentsInProgram();
+
+            case 14 -> progTypeOptions();
             default -> System.out.println("invalid choice");
         }
     }
 
-    //todo: do we need to refreshPrograms? Test & see
+    private void listStudentsInProgram() {
+        Optional<Program> program = getProgramFromUser();
+        //if (program.isPresent())
+        //Print.printAll(program.get().getStudents());
+    }
+
+
+    private void removeStudentFromProgram() {
+        Optional<Program> program = getProgramFromUser();
+        Optional<Student> student = studentMenu.getExistingStudentFromUser();
+        if (student.isPresent() && program.isPresent()) {
+            program.get().removeStudent(student.get());
+            programDao.update(program.get());
+            studentDao.update(student.get());
+            refreshPrograms();
+        }
+    }
+
+
+    private void addStudentToProgram() {
+        Optional<Program> program = getProgramFromUser();
+        Optional<Student> student = studentMenu.getExistingStudentFromUser();
+        if (student.isPresent() && program.isPresent()) {
+            program.get().addStudent(student.get());
+            programDao.update(program.get());
+            studentDao.update(student.get());
+            refreshPrograms();
+        }
+    }
+
+
+    private void removeCourseFromProgram() {
+        Optional<Program> program = getProgramFromUser();
+        Optional<Course> course = courseMenu.getExistingCourseFromUser();
+        if (course.isPresent() && program.isPresent())
+            program.get().addCourse(course.get());
+            programDao.update(program.get());
+            courseDao.update(course.get());
+            refreshPrograms();
+    }
+
+    private void listProgramCourses() {
+        Optional<Program> program = getProgramFromUser();
+        //if (program.isPresent())
+            //Print.printAll(program.get().getCourses());
+    }
+
+    private void addCourseToProgram() {
+        Optional<Program> program = getProgramFromUser();
+        Optional<Course> course = courseMenu.getExistingCourseFromUser();
+        if (course.isPresent() && program.isPresent())
+            programDao.addCourse(program.get(), course.get());
+            programDao.update(program.get());
+            courseDao.update(course.get());
+            refreshPrograms();
+    }
+
+
 
 
     private void add() {
@@ -204,7 +295,7 @@ public class ProgramMenu {
     }
 
     private Optional<Program> getProgramFromUser() {
-        printAll(programs);
+        showAll();
         int id = 0;
         if(!programs.isEmpty())
             id = getUserInput("program id", programs.get(0).getId(), programs.get(programs.size() - 1).getId());
