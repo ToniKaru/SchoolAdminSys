@@ -107,8 +107,8 @@ public class ProgramMenu {
 
     private void listStudentsInProgram() {
         Optional<Program> program = getProgramFromUser();
-        //if (program.isPresent())
-        //Print.printAll(program.get().getStudents());
+        if (program.isPresent())
+            Print.allStudents(program.get().getStudents());
     }
 
 
@@ -148,8 +148,8 @@ public class ProgramMenu {
 
     private void listProgramCourses() {
         Optional<Program> program = getProgramFromUser();
-        //if (program.isPresent())
-            //Print.printAll(program.get().getCourses());
+        if (program.isPresent())
+            Print.allCourses(program.get().getCourses());
     }
 
     private void addCourseToProgram() {
