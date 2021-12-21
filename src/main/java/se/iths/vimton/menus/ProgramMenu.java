@@ -13,7 +13,6 @@ import se.iths.vimton.impl.CourseDaoImpl;
 import se.iths.vimton.impl.ProgTypeDaoImpl;
 import se.iths.vimton.impl.ProgramDaoImpl;
 import se.iths.vimton.impl.StudentDaoImpl;
-import se.iths.vimton.menus.CourseMenu.*;
 import se.iths.vimton.utils.Print;
 
 
@@ -21,7 +20,6 @@ import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import static se.iths.vimton.Menu.*;
 import static se.iths.vimton.Menu.scanner;
@@ -73,11 +71,11 @@ public class ProgramMenu {
                 7. List programs by course
                 
                 8. Add a course to a program
-                9. List all courses in a program
+                9. Show all courses in a program
                 10. Remove a course from a program
                 11. Add a student to a program
                 12. Remove a student from a program
-                13. List all students in a program
+                13. Show all students in a program
                 
                 14. Program Type Options
                 0. Return to main menu"""
@@ -194,14 +192,14 @@ public class ProgramMenu {
     }
 
     private void showAll() {
-        printAll(programs);
+        Print.allPrograms(programs);
     }
 
     private void update() {
         Optional<Program> program = getProgramFromUser();
         program.ifPresentOrElse(
                 this::updateProgram,
-                () ->  System.out.println("Program id not found. Cannot update program.")
+                () ->  System.out.println("Program not found. Cannot update.")
             );
         }
 
@@ -249,13 +247,14 @@ public class ProgramMenu {
         Optional<Program> program = getProgramFromUser();
         program.ifPresentOrElse(
                 this::printDetails,
-                () -> System.out.println("Program id not found.")
+                () -> System.out.println("Program not found.")
         );
     }
 
     private void printDetails(Program program) {
-        printDetails(List.of(program));
+        Print.programDetails(List.of(program));
     }
+
 
     private void programsByPace() {
         List<Integer> list = programs.stream()
@@ -265,7 +264,7 @@ public class ProgramMenu {
         int pace = 0;
         if(!list.isEmpty())
             pace = getPace(list);
-        printAll(programDao.getByPace(pace));
+        Print.allPrograms(programDao.getByPace(pace));
     }
 
     private int getPace(List<Integer> list) {
@@ -303,46 +302,7 @@ public class ProgramMenu {
     }
 
 
-    private void printDetails(List<Program> programs) {
-        if(!programs.isEmpty()) {
-            System.out.println("\n -- Program Details --");
 
-            String detailedFormat = "%-5s %-25s %-10s %-18s %-40s \n";
-            System.out.printf(detailedFormat,
-                    "Id", "Name", "Pace", "Program Type", "Description");
-            System.out.printf(detailedFormat,
-                    "--", "----", "------", "------------", "-----------");
-            for (Program program : programs) {
-                System.out.printf(detailedFormat,
-                        program.getId(), program.getName(), program.getPace(),
-                        program.getProgramType().getName(), program.getDescription());
-                //todo: add % to pace
-            }
-        }
-        else
-            System.out.println("No program(s) to display");
-    }
-
-    private void printAll(List<Program> programs) {
-        if(!programs.isEmpty()) {
-
-            System.out.println("\n -- Summary of Programs --");
-            String summaryFormat = "%-5s %-25s %-10s %-18s \n";
-            System.out.printf(summaryFormat,
-                    "Id", "Name", "Pace", "Program Type");
-            System.out.printf(summaryFormat,
-                    "--", "----", "------", "------------");
-            for (Program program : programs) {
-                System.out.printf(summaryFormat,
-                        program.getId(), program.getName(), program.getPace(),
-                        program.getProgramType().getName());
-            }
-        }
-        else
-            System.out.println("No programs to display");
-
-        //todo: add % to pace
-    }
 
     private void refreshPrograms() {
         programs = programDao.getAll();
