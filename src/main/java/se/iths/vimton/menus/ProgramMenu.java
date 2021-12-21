@@ -41,15 +41,17 @@ public class ProgramMenu {
         System.out.println("""
                                 
                 --- Program Options ---
-                1. Add Program                
+                1. Add Program
                 2. Update Program
                 3. Delete a program
-                4. Show program details by id 
+                4. Show program details by id
                 5. List all programs
-                6. List programs by pace
-                7. List programs by course
-                8. Add/Edit Program Types
                 0. Return to main menu""");
+
+        //todo - menu items to be added when their methods are available
+//        6. List programs by pace
+//        7. List programs by course
+//        8. Add/Edit Program Types
     }
 
     private void executeChoice(int choice) {
@@ -67,6 +69,7 @@ public class ProgramMenu {
         }
     }
 
+    //todo: do we need to refreshPrograms? Test & see
 
     private void removeProgram() {
         Program program = getProgramFromUser();
@@ -163,6 +166,8 @@ public class ProgramMenu {
     private ProgramType getProgramTypeFromUser() {
         ProgramType programType = new ProgramType();
         printMany(progTypeDao.getAll(), "-- All Program Types --");
+
+        //todo: getProgTypeDetails() not working -> fix / remove new progType option
         System.out.println("Is the program type listed? (y/n)");
         String response = scanner.nextLine().toLowerCase(Locale.ROOT);
         if ("y".equals(response)) {
