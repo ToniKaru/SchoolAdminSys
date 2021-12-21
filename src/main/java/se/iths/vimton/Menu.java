@@ -1,9 +1,6 @@
 package se.iths.vimton;
 
-import se.iths.vimton.menus.CourseMenu;
-import se.iths.vimton.menus.ProgramMenu;
-import se.iths.vimton.menus.StatisticsMenu;
-import se.iths.vimton.menus.TeacherMenu;
+import se.iths.vimton.menus.*;
 import se.iths.vimton.utils.DefaultData;
 
 import javax.persistence.EntityManagerFactory;
@@ -60,6 +57,8 @@ public class Menu {
     }
 
     private void studentOptions() {
+        StudentMenu studentMenu = new StudentMenu(emf);
+        studentMenu.run();
     }
 
     private void courseOptions() {
