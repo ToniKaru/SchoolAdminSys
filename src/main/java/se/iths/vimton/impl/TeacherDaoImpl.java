@@ -53,7 +53,6 @@ public class TeacherDaoImpl implements TeacherDao {
         em.getTransaction().begin();
         em.remove(teacher);
         em.getTransaction().commit();
-        System.out.println(teacher.getFirstName() + " deleted. Id: " + teacher.getId());
     }
 
     @Override

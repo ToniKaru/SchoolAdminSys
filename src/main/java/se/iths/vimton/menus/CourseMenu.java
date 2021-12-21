@@ -212,7 +212,7 @@ public class CourseMenu {
 
         return course;
     }
-    
+
     private void showAll() {
         List<Course> courses = courseDao.getAll();
         Menu.printMany(courses, "All courses");
