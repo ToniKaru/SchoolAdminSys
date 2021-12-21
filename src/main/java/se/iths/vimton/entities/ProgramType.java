@@ -60,7 +60,7 @@ public class ProgramType {
         this.accredited = accredited;
     }
 
-    public List<Program> getProgramList() {
+    public List<Program> getPrograms() {
         return programs;
     }
 

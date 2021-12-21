@@ -2,13 +2,16 @@ package se.iths.vimton.menus;
 
 import se.iths.vimton.Menu;
 import se.iths.vimton.dao.ProgTypeDao;
+import se.iths.vimton.dao.ProgramDao;
+import se.iths.vimton.entities.Course;
+import se.iths.vimton.entities.Program;
 import se.iths.vimton.entities.ProgramType;
 import se.iths.vimton.impl.ProgTypeDaoImpl;
+import se.iths.vimton.impl.ProgramDaoImpl;
 import se.iths.vimton.utils.Print;
 
 import javax.persistence.EntityManagerFactory;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static se.iths.vimton.Menu.*;
@@ -16,10 +19,12 @@ import static se.iths.vimton.Menu.*;
 public class ProgTypeMenu {
 
     private ProgTypeDao progTypeDao;
+    private ProgramDao programDao;
     private List<ProgramType> types;
 
     public ProgTypeMenu(EntityManagerFactory emf) {
         this.progTypeDao = new ProgTypeDaoImpl(emf);
+        this.programDao = new ProgramDaoImpl(emf);
         this.types = progTypeDao.getAll();
     }
 
@@ -118,7 +123,7 @@ public class ProgTypeMenu {
     private void showDetails() {
         Optional<ProgramType> type = getTypeFromUser();
         type.ifPresentOrElse(
-                printDetails(type.get()),
+                this::printDetails,
                 () -> System.out.println("Program type not found.")
         );
     }
@@ -136,12 +141,28 @@ public class ProgTypeMenu {
         String input = scanner.nextLine();
 
         if(input.equalsIgnoreCase("y")) {
-            progTypeDao.delete(type);
-            System.out.println(type.getName() + " successfully deleted.");
-            refreshTypes();
+            try {
+                removePrograms(type);
+                progTypeDao.delete(type);
+                System.out.println(type.getName() + " successfully deleted.");
+                refreshTypes();
+            }
+            catch (Exception e){
+                System.out.println(type.getName() + " is connected to other entities & cannot be deleted.");
+            }
         } else {
             System.out.println("Cancelling...");
         }
+    }
+
+    private void removePrograms(ProgramType type) {
+        List<Program> programs = new ArrayList<>();
+
+        type.getPrograms().forEach(program -> programDao.getById(program.getId()).ifPresent(programs::add));
+        programs.forEach(program -> program.setProgramType(new ProgramType()));
+        type.getPrograms().clear();
+
+        programs.forEach(program -> programDao.update(program));
     }
 
     private void showByAccreditation(){
