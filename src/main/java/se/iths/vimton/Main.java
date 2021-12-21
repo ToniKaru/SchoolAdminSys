@@ -2,12 +2,10 @@ package se.iths.vimton;
 
 
 import io.github.cdimascio.dotenv.Dotenv;
-import se.iths.vimton.utils.DefaultData;
 
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.util.List;
 import java.util.Map;
 
 

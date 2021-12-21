@@ -143,8 +143,11 @@ public class Menu {
         while(true) {
             String input = (scanner.nextLine().trim().toLowerCase(Locale.ROOT));
 
-            if ( 't' == input.charAt(0) ) {
+            if ('t' == input.charAt(0) ) {
                 selection = true;
+                break;
+            } else if ('f' == input.charAt(0) ) {
+                selection = false;
                 break;
             }
             System.out.println("Please enter T or F to indicate " + property + " status.");
