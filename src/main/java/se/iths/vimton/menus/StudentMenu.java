@@ -148,15 +148,9 @@ public class StudentMenu {
 
         System.out.println("Updating " + student.get().getFirstName() + " " + student.get().getLastName());
 
-        System.out.println("Enter student's new first name or 'x' to skip:");
-        String firstName = scanner.nextLine().trim();
-
-        System.out.println("Enter student's new last name or 'x' to skip:");
-        String lastName = scanner.nextLine().trim();
-
-        System.out.println("Enter student's new email address or 'x' to skip:");
-        String email = scanner.nextLine().trim();
-
+        String firstName = getUpdateDetails("student", "new first name");
+        String lastName = getUpdateDetails("student", "new lastname");
+        String email = getUpdateDetails("student", "new email address");
         Optional<Program> program = getProgram();
 
         if(propertyIsUpdated(firstName))
@@ -174,9 +168,7 @@ public class StudentMenu {
             });
             student.get().setProgram(program.get());
         }
-
         studentDao.update(student.get());
-
         System.out.println("Student successfully updated.");
         System.out.println(student.get());
         refreshStudents();
@@ -222,29 +214,17 @@ public class StudentMenu {
         printMany(students, "All students");
     }
 
-    private void printStudents(List<Student> students, String heading) {
-        System.out.println("\n -- " + heading + " --");
-
-        if(students.isEmpty())
-            System.out.println("No program(s) to display");
-
-        System.out.println("Firstname" + "\t\t" + "Lastname" + "\t\t" + "SSN" + "\t\t" + "Email" + "\t\t" + "Program");
-        students.forEach(student ->  System.out.println(student.getFirstName() + "\t\t" + student.getLastName() + "\t\t" +
-                                student.getSsn() + "\t\t" +  student.getEmail() + "\t\t" +  student.getProgram().getName()));
-    }
-
     private void refreshStudents() {
         students = studentDao.getAll();
     }
 
-        public Optional<Student> getExistingStudentFromUser() {
+    public Optional<Student> getExistingStudentFromUser() {
         int id = getUserInput("student id", 1, students.size());
         Optional<Student> student = studentDao.getById(id);
 
-        if (student.isEmpty()) {
+        if (student.isEmpty())
             System.out.println("Course id " + id + " not found.");
-            return Optional.empty();
-        }
+
         return student;
     }
 }
