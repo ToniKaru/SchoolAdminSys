@@ -88,14 +88,12 @@ public class ProgramMenu {
             case 5 -> delete();
             case 6 -> programsByPace();
             case 7 -> programsByCourse();
-
             case 8 -> addCourseToProgram();
             case 9 -> listProgramCourses();
             case 10 -> removeCourseFromProgram();
             case 11 -> addStudentToProgram();
             case 12 -> removeStudentFromProgram();
             case 13 -> listStudentsInProgram();
-
             case 14 -> progTypeOptions();
             default -> System.out.println("invalid choice");
         }
@@ -103,8 +101,7 @@ public class ProgramMenu {
 
     private void listStudentsInProgram() {
         Optional<Program> program = getProgramFromUser();
-        if (program.isPresent())
-            Print.allStudents(program.get().getStudents());
+        program.ifPresent(program1 -> Print.allStudents(program1.getStudents()));
     }
 
 
@@ -143,8 +140,7 @@ public class ProgramMenu {
 
     private void listProgramCourses() {
         Optional<Program> program = getProgramFromUser();
-        if (program.isPresent())
-            Print.allCourses(program.get().getCourses());
+        program.ifPresent(program1 -> Print.allCourses(program1.getCourses()));
     }
 
     private void addCourseToProgram() {
@@ -157,9 +153,6 @@ public class ProgramMenu {
             refreshPrograms();
         }
     }
-
-
-
 
     private void add() {
         Optional<ProgramType> progTypeOpt = progTypeMenu.getTypeFromUser();
@@ -174,17 +167,14 @@ public class ProgramMenu {
         String description = getNewDetails("program", "description");
         int pace = getUserInput("pace", 1,200);
 
-        Program program;
         try {
-            program = new Program(name, description, pace, programType);
+            Program program = new Program(name, description, pace, programType);
+            programDao.create(program);
+            refreshPrograms();
         } catch (IllegalArgumentException e) {
             System.out.print("New program could not be created because ");
             e.printStackTrace();
-            return;
         }
-
-        programDao.create(program);
-        refreshPrograms();
     }
 
     private void showAll() {
@@ -194,10 +184,10 @@ public class ProgramMenu {
     private void update() {
         Optional<Program> program = getProgramFromUser();
         program.ifPresentOrElse(
-                this::updateProgram,
-                () ->  System.out.println("Program not found. Cannot update.")
-            );
-        }
+            this::updateProgram,
+            () -> System.out.println("Program not found. Cannot update.")
+        );
+    }
 
     private void updateProgram(Program program) {
         Optional<ProgramType> progTypeOpt = progTypeMenu.getTypeFromUser();
@@ -210,7 +200,7 @@ public class ProgramMenu {
             program.setName(name);
         if (propertyIsUpdated(description))
             program.setDescription(description);
-        if (pace != program.getPace())
+        if (pace != 0 && pace != program.getPace())
             program.setPace(pace);
 
         programDao.update(program);
@@ -221,8 +211,8 @@ public class ProgramMenu {
     private void delete() {
         Optional<Program> program = getProgramFromUser();
         program.ifPresentOrElse(
-                this::deleteProgram,
-                () -> System.out.println("Program id not found. No program deleted.")
+            this::deleteProgram,
+            () -> System.out.println("Program id not found. No program deleted.")
         );
     }
 
@@ -329,14 +319,9 @@ public class ProgramMenu {
         return programDao.getById(id);
     }
 
-
-
-
     private void refreshPrograms() {
         programs = programDao.getAll();
         progTypes = progTypeDao.getAll();
     }
-
-
 
 }

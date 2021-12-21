@@ -3,7 +3,6 @@ package se.iths.vimton.menus;
 import se.iths.vimton.Menu;
 import se.iths.vimton.dao.ProgTypeDao;
 import se.iths.vimton.dao.ProgramDao;
-import se.iths.vimton.entities.Course;
 import se.iths.vimton.entities.Program;
 import se.iths.vimton.entities.ProgramType;
 import se.iths.vimton.impl.ProgTypeDaoImpl;
@@ -12,7 +11,6 @@ import se.iths.vimton.utils.Print;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.*;
-import java.util.function.Consumer;
 
 import static se.iths.vimton.Menu.*;
 
@@ -68,9 +66,8 @@ public class ProgTypeMenu {
 
 
 
-    private Consumer<? super ProgramType> printDetails(ProgramType type) {
+    private void printDetails(ProgramType type) {
         Print.progTypeDetails(type);
-        return null;
     }
 
     private void add() {
