@@ -42,7 +42,7 @@ public class StudentMenu {
                 1. Add a student
                 2. List all student
                 3. Update a student
-                4. Show one student's details
+                4. Show a student's details
                 5. Delete a student
                 0. Return to main menu"""
         );
@@ -53,11 +53,15 @@ public class StudentMenu {
             case 0 -> cancel();
 //            case 1 -> add();
             case 2 -> showAll();
-//            case 3 -> update();
+            case 3 -> update();
             case 4 -> showDetails();
 //            case 5 -> delete();
             default -> System.out.println("Invalid choice");
         }
+    }
+
+    private void update() {
+
     }
 
     private void showDetails() {
