@@ -45,7 +45,7 @@ public class StudentMenu {
                                 
                 --- Student Options ---
                 1. Add a student
-                2. List all student
+                2. List all students
                 3. Update a student
                 4. Show a student's details
                 5. Delete a student

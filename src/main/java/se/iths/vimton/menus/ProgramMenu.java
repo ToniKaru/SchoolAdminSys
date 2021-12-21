@@ -15,8 +15,6 @@ import se.iths.vimton.impl.ProgramDaoImpl;
 import se.iths.vimton.impl.StudentDaoImpl;
 import se.iths.vimton.utils.Print;
 
-
-
 import javax.persistence.EntityManagerFactory;
 import java.util.*;
 
@@ -64,10 +62,10 @@ public class ProgramMenu {
                 1. Add Program
                 2. List all programs
                 3. Update a program
-                4. Show program details by id
+                4. Show a program's details
                 5. Delete a program
-                6. List programs by pace
-                7. List programs by course
+                6. Show programs by pace
+                7. Show programs by course
                 
                 8. Add a course to a program
                 9. Show all courses in a program
@@ -75,7 +73,6 @@ public class ProgramMenu {
                 11. Add a student to a program
                 12. Remove a student from a program
                 13. Show all students in a program
-                
                 14. Program Type Options
                 0. Return to main menu"""
         );
@@ -122,7 +119,6 @@ public class ProgramMenu {
         }
     }
 
-
     private void addStudentToProgram() {
         Optional<Program> program = getProgramFromUser();
         Optional<Student> student = studentMenu.getExistingStudentFromUser();
@@ -133,7 +129,6 @@ public class ProgramMenu {
             refreshPrograms();
         }
     }
-
 
     private void removeCourseFromProgram() {
         Optional<Program> program = getProgramFromUser();
