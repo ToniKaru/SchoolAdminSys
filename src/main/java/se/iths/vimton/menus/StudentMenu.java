@@ -54,10 +54,21 @@ public class StudentMenu {
 //            case 1 -> add();
             case 2 -> showAll();
 //            case 3 -> update();
-//            case 4 -> showDetails();
+            case 4 -> showDetails();
 //            case 5 -> delete();
             default -> System.out.println("Invalid choice");
         }
+    }
+
+    private void showDetails() {
+        showAll();
+        int id = getUserInput("student id", students.get(0).getId(), students.get(students.size() - 1).getId());
+        Optional<Student> student = studentDao.getById(id);
+
+        student.ifPresentOrElse(
+            System.out::println,
+            () -> System.out.println("Student not found.")
+        );
     }
 
     private void showAll() {
