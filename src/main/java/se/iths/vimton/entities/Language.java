@@ -1,9 +1,7 @@
 package se.iths.vimton.entities;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 public class Language {
@@ -15,7 +13,7 @@ public class Language {
     private String name;
 
     @OneToMany
-    private List<Course> courses;
+    private Set<Course> courses;
 
     public Language() {}
 
@@ -23,7 +21,7 @@ public class Language {
         Guard.Against.Empty(name);
 
         this.name = name;
-        this.courses = new ArrayList<>();
+        this.courses = new HashSet<>();
     }
 
 
@@ -39,7 +37,7 @@ public class Language {
         this.name = name;
     }
 
-    public List<Course> getCourses() {
+    public Set<Course> getCourses() {
         return courses;
     }
 
@@ -56,19 +54,24 @@ public class Language {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Language language = (Language) o;
-        return id == language.id && Objects.equals(name, language.name) && Objects.equals(courses, language.courses);
+        return Objects.equals(name, language.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, courses);
+        return Objects.hash(name);
     }
 
     @Override
     public String toString() {
         return "Language{" +
-                "id=" + id +
-                ", language='" + name + '\'' +
-                '}';
+               "id=" + id +
+               ", name='" + name + '\'' +
+               ", courses=" + courseNames() +
+               '}';
+    }
+
+    private List<String> courseNames() {
+        return courses.stream().map(Course::getName).toList();
     }
 }

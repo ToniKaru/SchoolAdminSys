@@ -89,6 +89,7 @@ public class CourseMenu {
     }
 
     private void delete() {
+        showAll();
         int id = getUserInput("course id", courses.get(0).getId(), courses.get(courses.size() - 1).getId());
         Optional<Course> course = courseDao.getById(id);
 
@@ -103,9 +104,28 @@ public class CourseMenu {
         String input = scanner.nextLine();
 
         if(input.equalsIgnoreCase("y")) {
-            courseDao.delete(course);
-            System.out.println(course.getName() + " successfully deleted.");
-            refreshCourses();
+            try {
+                Optional<Language> language = languageDao.getById(course.getLanguage().getId());
+                language.ifPresent(language1 -> {
+                    boolean removed = language1.getCourses().remove(course);
+                    System.out.println("Course removed from language: " + removed);
+                });
+
+                course.setLanguage(new Language());
+                System.out.println("All languages");
+                language.ifPresent(System.out::println);
+                System.out.println("Course's language: " + course.getLanguage().getName());
+
+                languageDao.update(language.get());
+                courseDao.update(course);
+
+                courseDao.delete(course);
+                System.out.println(course.getName() + " successfully deleted.");
+
+                refreshCourses();
+            } catch (Exception e) {
+                System.out.println(course.getName() + " is connected to program & cannot be deleted.");
+            }
         } else {
             System.out.println("Cancelling...");
         }
@@ -116,6 +136,7 @@ public class CourseMenu {
     }
 
     private void showDetails() {
+        showAll();
         int id = getUserInput("course id", courses.get(0).getId(), courses.get(courses.size() - 1).getId());
         Optional<Course> course = courseDao.getById(id);
 

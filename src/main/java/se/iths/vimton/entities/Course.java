@@ -129,7 +129,7 @@ public class Course {
                ", name='" + name + '\'' +
                ", description='" + description + '\'' +
                ", credits=" + credits +
-               ", language=" + language +
+               ", language=" + language.getName() +
                ", teachers=" + listOfTeachersNames() +
                ", programs=" + programs +
                '}';
