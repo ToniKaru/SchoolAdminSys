@@ -3,7 +3,6 @@ package se.iths.vimton.menus;
 import se.iths.vimton.Menu;
 import se.iths.vimton.dao.ProgramDao;
 import se.iths.vimton.dao.StudentDao;
-import se.iths.vimton.entities.Course;
 import se.iths.vimton.entities.Guard;
 import se.iths.vimton.entities.Program;
 import se.iths.vimton.entities.Student;
@@ -11,7 +10,6 @@ import se.iths.vimton.impl.ProgramDaoImpl;
 import se.iths.vimton.impl.StudentDaoImpl;
 
 import javax.persistence.EntityManagerFactory;
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,13 +56,61 @@ public class StudentMenu {
     private void executeChoice(int choice) {
         switch (choice) {
             case 0 -> cancel();
-//            case 1 -> add();
+            case 1 -> add();
             case 2 -> showAll();
             case 3 -> update();
             case 4 -> showDetails();
 //            case 5 -> delete();
             default -> System.out.println("Invalid choice");
         }
+    }
+
+    private void add() {
+
+        List<Program> programs = programDao.getAll();
+
+        if(programs.isEmpty()) {
+            System.out.println("Please add a program first. \nReturning to main menu...");
+            return;
+        }
+
+        String firstName = getNewDetails("student", "first name");
+        String lastName = getNewDetails("student", "last name");
+        String ssn = getNewSsn();
+        String email = getNewDetails("student", "email address");
+        String enrolmentDate = getEnrolmentDate();
+        Program program = getNewProgram();
+
+        Student student = new Student(firstName, lastName, ssn, email, enrolmentDate, program);
+        studentDao.create(student);
+        System.out.println(firstName + " " + lastName + " successfully created.");
+        refreshStudents();
+    }
+
+    private Program getNewProgram() {
+        Optional<Program> program;
+        while (true) {
+            program = getProgram();
+            if(program.isPresent())
+                break;
+            System.out.println("Invalid program id selected.");
+        }
+        return program.get();
+    }
+
+    private String getEnrolmentDate() {
+        System.out.println("Please enter student's enrolment date (YYYY-MM-DD)");
+        String input;
+        while (true) {
+            input = scanner.nextLine().trim();
+            try {
+                Guard.Against.dateInvalid(input);
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Please enter a valid date.");
+            }
+        }
+        return input;
     }
 
     private void update() {
@@ -88,7 +134,7 @@ public class StudentMenu {
         System.out.println("Enter student's new email address or 'x' to skip:");
         String email = scanner.nextLine().trim();
 
-        Optional<Program> program = getNewProgram();
+        Optional<Program> program = getProgram();
 
         if(propertyIsUpdated(firstName))
             student.get().setFirstName(firstName);
@@ -113,7 +159,7 @@ public class StudentMenu {
         refreshStudents();
     }
 
-    private Optional<Program> getNewProgram() {
+    private Optional<Program> getProgram() {
         List<Program> programs = programDao.getAll();
 
         printMany(programs, "Available programs");
@@ -122,20 +168,21 @@ public class StudentMenu {
         int id = getUserInput("program id", programs.get(0).getId(), programs.get(programs.size() - 1).getId());
         return programDao.getById(id);
     }
-//
-//    private String getNewSsn() {
-//        String ssn;
-//        while (true) {
-//            ssn = scanner.nextLine().trim();
-//            try {
-//                Guard.Against.ssnInvalid(ssn);
-//                break;
-//            } catch (IllegalArgumentException e) {
-//                System.out.println("Please enter a valid social security number");
-//            }
-//        }
-//        return ssn;
-//    }
+
+    private String getNewSsn() {
+        System.out.println("Please enter student's social security number:");
+        String ssn;
+        while (true) {
+            ssn = scanner.nextLine().trim();
+            try {
+                Guard.Against.ssnInvalid(ssn);
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Please enter a valid social security number");
+            }
+        }
+        return ssn;
+    }
 
     private void showDetails() {
         showAll();
