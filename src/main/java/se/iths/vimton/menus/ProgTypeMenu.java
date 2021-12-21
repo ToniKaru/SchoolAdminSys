@@ -153,7 +153,7 @@ public class ProgTypeMenu {
         Print.allProgTypes(progTypeDao.getAll());
         int id = 0;
         if(!types.isEmpty())
-            id = getUserInput("id", types.get(0).getId(), types.get(types.size() - 1).getId());
+            id = getUserInput("program type id", types.get(0).getId(), types.get(types.size() - 1).getId());
 
         return progTypeDao.getById(id);
     }

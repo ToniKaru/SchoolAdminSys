@@ -75,7 +75,7 @@ public class Print {
             System.out.printf(summaryFormat,
                     "Id", "Name", "Pace", "Program Type");
             System.out.printf(summaryFormat,
-                    "--", "----", "------", "------------");
+                    "--", "----", "----", "------------");
             for (Program program : programs) {
                 System.out.printf(summaryFormat,
                         program.getId(), program.getName(), program.getPace(),

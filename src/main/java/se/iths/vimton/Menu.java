@@ -30,7 +30,7 @@ public class Menu {
     private void executeChoice(int choice) {
         switch (choice) {
             case 0 -> Menu.cancel();
-            case 1 -> programOptions(); //t
+            case 1 -> programOptions();
             case 2 -> courseOptions();
             case 3 -> studentOptions(); // t
             case 4 -> teacherOptions();
@@ -89,15 +89,7 @@ public class Menu {
 //                13. Show student details
 //                14. List all students
 //                15. Delete a student
-//                
-
-//                16. Add a course to a program
-//                17. List all courses in a program
-//                18. Remove a course from a program
-//                19. Add a student to a program
-//                20. Remove a student from a program
-//                21. List all students in a program
-
+//
     }
 
     public static int getChoice(){

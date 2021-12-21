@@ -18,9 +18,7 @@ import se.iths.vimton.utils.Print;
 
 
 import javax.persistence.EntityManagerFactory;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 import static se.iths.vimton.Menu.*;
 import static se.iths.vimton.Menu.scanner;
@@ -236,12 +234,39 @@ public class ProgramMenu {
         String input = scanner.nextLine();
 
         if(input.equalsIgnoreCase("y")) {
-            programDao.delete(program);
-            System.out.println(program.getName() + " successfully deleted.");
-            refreshPrograms();
+            try {
+                removeStudents(program);
+                removeCourses(program);
+                programDao.delete(program);
+                System.out.println(program.getName() + " successfully deleted.");
+                refreshPrograms();
+            }
+            catch (Exception e){
+                System.out.println(program.getName() + " is connected to other entities & cannot be deleted.");
+            }
         } else {
             System.out.println("Cancelling...");
         }
+    }
+
+    private void removeCourses(Program program) {
+        Set<Course> courses = new HashSet<>();
+
+        program.getCourses().forEach(course -> courseDao.getById(course.getId()).ifPresent(courses::add));
+        courses.forEach(course -> course.getPrograms().remove(course));
+        program.getCourses().clear();
+
+        courses.forEach(course -> courseDao.update(course));
+    }
+
+    private void removeStudents(Program program) {
+        List<Student> students = new ArrayList<>();
+
+        program.getStudents().forEach(student -> studentDao.getById(student.getId()).ifPresent(students::add));
+        students.forEach(student -> student.getProgram().removeStudent(student));
+        program.getStudents().clear();
+
+        students.forEach(student -> studentDao.update(student));
     }
 
     private void showDetails() {
@@ -284,10 +309,15 @@ public class ProgramMenu {
     }
 
     private void programsByCourse() {
-        //Optional<Course> optCourse = getCourseFromUser();
-        //optCourse.ifPresentOrElse(
-            //printAll(programDao.getByCourse(course)
-            //() -> System.out.println("Course not found.") );
+        Optional<Course> course = courseMenu.getCourse();
+        course.ifPresentOrElse(
+            this::printList,
+            () -> System.out.println("No courses found.")
+        );
+    }
+
+    private void printList(Course course) {
+        Print.allPrograms(programDao.getByCourse(course));
     }
 
     private void progTypeOptions() {
