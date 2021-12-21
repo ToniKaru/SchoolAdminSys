@@ -65,6 +65,14 @@ public class ProgramDaoImpl implements ProgramDao {
     }
 
     @Override
+    public void removeCourse(Program program, Course course) {
+        program.removeCourse(course);
+        em.getTransaction().begin();
+        em.merge(program);
+        em.getTransaction().commit();
+    }
+
+    @Override
     public Optional<Program> getById(int id) {
         return em.createQuery("SELECT p FROM Program p WHERE p.id = :id", Program.class)
                 .setParameter("id", id)

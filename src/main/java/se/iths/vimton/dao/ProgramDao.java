@@ -13,6 +13,7 @@ public interface ProgramDao {
     void update(Program program);
     void delete(Program program);
     void addCourse(Program program, Course course);
+    void removeCourse(Program program, Course course);
     Optional<Program> getById(int id);
     List<Program> getByName(String name);
     List<Program> getByPace(int length);
