@@ -32,7 +32,7 @@ public class Menu {
             case 0 -> Menu.cancel();
             case 1 -> programOptions();
             case 2 -> courseOptions();
-            case 3 -> studentOptions(); // t
+            case 3 -> studentOptions();
             case 4 -> teacherOptions();
             case 5 -> statistics();
             case 6 -> defaultData();
