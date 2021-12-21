@@ -133,11 +133,12 @@ public class ProgramMenu {
     private void removeCourseFromProgram() {
         Optional<Program> program = getProgramFromUser();
         Optional<Course> course = courseMenu.getCourse();
-        if (course.isPresent() && program.isPresent())
+        if (course.isPresent() && program.isPresent()) {
             program.get().addCourse(course.get());
             programDao.update(program.get());
             courseDao.update(course.get());
             refreshPrograms();
+        }
     }
 
     private void listProgramCourses() {
@@ -149,11 +150,12 @@ public class ProgramMenu {
     private void addCourseToProgram() {
         Optional<Program> program = getProgramFromUser();
         Optional<Course> course = courseMenu.getCourse();
-        if (course.isPresent() && program.isPresent())
+        if (course.isPresent() && program.isPresent()) {
             programDao.addCourse(program.get(), course.get());
             programDao.update(program.get());
             courseDao.update(course.get());
             refreshPrograms();
+        }
     }
 
 
