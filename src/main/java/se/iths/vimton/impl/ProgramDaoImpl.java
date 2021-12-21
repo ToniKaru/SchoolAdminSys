@@ -64,13 +64,6 @@ public class ProgramDaoImpl implements ProgramDao {
         em.getTransaction().commit();
     }
 
-    @Override
-    public void removeCourse(Program program, Course course) {
-        program.removeCourse(course);
-        em.getTransaction().begin();
-        em.merge(program);
-        em.getTransaction().commit();
-    }
 
     @Override
     public Optional<Program> getById(int id) {

@@ -1,8 +1,6 @@
 package se.iths.vimton.menus;
 
-import se.iths.vimton.Menu;
 import se.iths.vimton.dao.StudentDao;
-import se.iths.vimton.entities.Course;
 import se.iths.vimton.entities.Student;
 import se.iths.vimton.impl.StudentDaoImpl;
 

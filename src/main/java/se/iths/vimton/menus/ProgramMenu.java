@@ -1,13 +1,18 @@
 package se.iths.vimton.menus;
 
 import se.iths.vimton.Menu;
+import se.iths.vimton.dao.CourseDao;
 import se.iths.vimton.dao.ProgTypeDao;
 import se.iths.vimton.dao.ProgramDao;
+import se.iths.vimton.dao.StudentDao;
 import se.iths.vimton.entities.Course;
 import se.iths.vimton.entities.Program;
 import se.iths.vimton.entities.ProgramType;
+import se.iths.vimton.entities.Student;
+import se.iths.vimton.impl.CourseDaoImpl;
 import se.iths.vimton.impl.ProgTypeDaoImpl;
 import se.iths.vimton.impl.ProgramDaoImpl;
+import se.iths.vimton.impl.StudentDaoImpl;
 import se.iths.vimton.menus.CourseMenu.*;
 import se.iths.vimton.utils.Print;
 
@@ -29,6 +34,9 @@ public class ProgramMenu {
     private List<ProgramType> progTypes;
     private ProgTypeMenu progTypeMenu;
     private CourseMenu courseMenu;
+    private StudentMenu studentMenu;
+    private StudentDao studentDao;
+    private CourseDao courseDao;
 
     public ProgramMenu(EntityManagerFactory emf) {
         this.programDao = new ProgramDaoImpl(emf);
@@ -37,6 +45,9 @@ public class ProgramMenu {
         this.progTypes = progTypeDao.getAll();
         this.progTypeMenu = new ProgTypeMenu(emf);
         this.courseMenu = new CourseMenu(emf);
+        this.studentMenu = new StudentMenu(emf);
+        this.courseDao = new CourseDaoImpl(emf);
+        this.studentDao = new StudentDaoImpl(emf);
 
     }
 
@@ -87,20 +98,54 @@ public class ProgramMenu {
             case 8 -> addCourseToProgram();
             case 9 -> listProgramCourses();
             case 10 -> removeCourseFromProgram();
-            //case 11 -> addStudentToProgram();
-            //case 12 -> removeStudentFromProgram();
-            //case 13 -> listStudentsInProgram();
+            case 11 -> addStudentToProgram();
+            case 12 -> removeStudentFromProgram();
+            case 13 -> listStudentsInProgram();
 
             case 14 -> progTypeOptions();
             default -> System.out.println("invalid choice");
         }
     }
 
+    private void listStudentsInProgram() {
+        Optional<Program> program = getProgramFromUser();
+        //if (program.isPresent())
+        //Print.printAll(program.get().getStudents());
+    }
+
+
+    private void removeStudentFromProgram() {
+        Optional<Program> program = getProgramFromUser();
+        Optional<Student> student = studentMenu.getExistingStudentFromUser();
+        if (student.isPresent() && program.isPresent()) {
+            program.get().removeStudent(student.get());
+            programDao.update(program.get());
+            studentDao.update(student.get());
+            refreshPrograms();
+        }
+    }
+
+
+    private void addStudentToProgram() {
+        Optional<Program> program = getProgramFromUser();
+        Optional<Student> student = studentMenu.getExistingStudentFromUser();
+        if (student.isPresent() && program.isPresent()) {
+            program.get().addStudent(student.get());
+            programDao.update(program.get());
+            studentDao.update(student.get());
+            refreshPrograms();
+        }
+    }
+
+
     private void removeCourseFromProgram() {
         Optional<Program> program = getProgramFromUser();
         Optional<Course> course = courseMenu.getExistingCourseFromUser();
         if (course.isPresent() && program.isPresent())
-            programDao.removeCourse(program.get(), course.get());
+            program.get().addCourse(course.get());
+            programDao.update(program.get());
+            courseDao.update(course.get());
+            refreshPrograms();
     }
 
     private void listProgramCourses() {
@@ -114,9 +159,12 @@ public class ProgramMenu {
         Optional<Course> course = courseMenu.getExistingCourseFromUser();
         if (course.isPresent() && program.isPresent())
             programDao.addCourse(program.get(), course.get());
+            programDao.update(program.get());
+            courseDao.update(course.get());
+            refreshPrograms();
     }
 
-    //todo: do we need to refreshPrograms? Test & see
+
 
 
     private void add() {
