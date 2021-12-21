@@ -82,14 +82,6 @@ public class Menu {
                 5. Statistics
                 6. Add Default Data
                 0. Exit""");
-
-//                
-//                11. Add a student
-//                12. Update a student
-//                13. Show student details
-//                14. List all students
-//                15. Delete a student
-//
     }
 
     public static int getChoice(){
