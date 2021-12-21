@@ -81,7 +81,7 @@ public class ProgTypeMenu {
     }
 
     Optional<ProgramType> getTypeFromUser() {
-        Main.printMany(progTypeDao.getAll(), "-- All Program Types --");
+        printMany(progTypeDao.getAll(), "-- All Program Types --");
         int id = 0;
         if(!progTypes.isEmpty())
             id = getUserInput("id", progTypes.get(0).getId(), progTypes.get(progTypes.size() - 1).getId());
