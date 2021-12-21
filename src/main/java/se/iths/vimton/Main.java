@@ -2,9 +2,9 @@ package se.iths.vimton;
 
 
 import io.github.cdimascio.dotenv.Dotenv;
+import se.iths.vimton.utils.DefaultData;
 
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.List;
@@ -25,8 +25,11 @@ public class Main {
 
     public static void main(String[] args) {
 
-        TestImpl test = new TestImpl(emf);
-        test.run();
+//        TestImpl test = new TestImpl(emf);
+//        test.run();
+
+        DefaultData defaultData = new DefaultData(emf);
+        defaultData.createData();
 
         Menu menu = new Menu(emf);
         menu.run();

@@ -5,6 +5,7 @@ import se.iths.vimton.entities.*;
 import se.iths.vimton.impl.*;
 
 import javax.persistence.EntityManagerFactory;
+import java.util.List;
 import java.util.Optional;
 
 public class DefaultData {
@@ -25,16 +26,16 @@ public class DefaultData {
         this.studentDao = new StudentDaoImpl(emf);
     }
 
-    private void createDefaults() {
+    public void createData() {
         createTeachers();
         createLanguages();
         createProgramTypes();
         createCourses();
+        addTeachersToCourses();
         createPrograms();
+        addCoursesToPrograms();
         createStudents();
     }
-
-//    todo: check that updating course to database automatically updates program, same applies for teacher-course
 
     private void createTeachers() {
         teacherDao.create(new Teacher("Eddie", "Karlsson", "19990201-5118", "0777-777777","eddie.the.teacher@iths.se"));
@@ -56,14 +57,21 @@ public class DefaultData {
         Optional<Language> swedish = languageDao.getByName("Swedish").stream().findFirst();
 
         swedish.ifPresentOrElse(
-            language -> {
-                courseDao.create(new Course("Databases", "MySQL, JDBC & JPA", 30, language));
-                courseDao.create(new Course("Java Programming", "Introduction to Java programming", 60, language));
-            },
+            this::updateLanguageAndCourse,
             () -> { throw new RuntimeException("Default language not found in Default.createCourses."); }
         );
+    }
 
-        addTeachersToCourses();
+    private void updateLanguageAndCourse(Language language) {
+        Course database = new Course("Databases", "MySQL, JDBC & JPA", 30, language);
+        Course javaProgramming = new Course("Java Programming",
+                "Introduction to Java programming", 60, language);
+
+        courseDao.create(database);
+        courseDao.create(javaProgramming);
+
+        language.addCourses(List.of(database, javaProgramming));
+        languageDao.update(language);
     }
 
     private void addTeachersToCourses() {
@@ -76,40 +84,50 @@ public class DefaultData {
         Optional<Course> databases = courseDao.getByName("Databases").stream().findFirst();
         Optional<Course> javaProgramming = courseDao.getByName("Java Programming").stream().findFirst();
 
-        databases.ifPresentOrElse(course -> {
-                course.addTeacher(eddie.get());
-                courseDao.update(course);
-            },
+        databases.ifPresentOrElse(
+            course -> update(course, eddie.get()),
             () -> { throw new RuntimeException("Default database course not found in Default.addTeachersToCourses"); }
         );
 
-        javaProgramming.ifPresentOrElse(course -> {
-                course.addTeacher(martin.get());
-                courseDao.update(course);
-            },
+        javaProgramming.ifPresentOrElse(
+            course ->  update(course, martin.get()),
             () -> { throw new RuntimeException("Default java programming course not found in Default.addTeachersToCourses"); }
         );
+    }
 
+    private void update(Course course, Teacher teacher) {
+        course.addTeacher(teacher);
+        courseDao.update(course);
+        teacherDao.update(teacher);
     }
 
     private void createPrograms() {
-        addNewPrograms();
-        addCoursesToPrograms();
-    }
-
-    private void addNewPrograms() {
         Optional<ProgramType> diploma = progTypeDao.getByName("diploma").stream().findFirst();
         Optional<ProgramType> certificate = progTypeDao.getByName("certificate").stream().findFirst();
 
         diploma.ifPresentOrElse(
-                programType -> programDao.create(new Program("Javautvecklare", 100, programType)),
-                () -> { throw new RuntimeException("Default program types not found in Default.createPrograms"); }
+            this::createJava,
+            () -> { throw new RuntimeException("Default program types not found in Default.createPrograms"); }
         );
 
         certificate.ifPresentOrElse(
-                programType -> programDao.create(new Program("Mjukvarutestare", 100, programType)),
-                () -> { throw new RuntimeException("Default program types not found in Default.createPrograms"); }
+            this::createTesterProgram,
+            () -> { throw new RuntimeException("Default program types not found in Default.createPrograms"); }
         );
+    }
+
+    private void createTesterProgram(ProgramType programType) {
+        Program tester = new Program("Mjukvarutestare", 100, programType);
+        programDao.create(tester);
+        programType.addProgram(tester);
+        progTypeDao.update(programType);
+    }
+
+    private void createJava(ProgramType programType) {
+        Program java = new Program("Javautvecklare", 100, programType);
+        programDao.create(java);
+        programType.addProgram(java);
+        progTypeDao.update(programType);
     }
 
     private void addCoursesToPrograms() {
@@ -122,12 +140,25 @@ public class DefaultData {
         Optional<Program> javaDeveloper = programDao.getByName("Javautvecklare").stream().findFirst();
         Optional<Program> softwareTester = programDao.getByName("Mjukvarutestare").stream().findFirst();
 
-        if(javaDeveloper.isEmpty() || softwareTester.isEmpty())
-            throw new RuntimeException("Default programs not found in Default.addCoursesToPrograms");
+        javaDeveloper.ifPresentOrElse(
+            program -> {
+                program.addCourse(databases.get());
+                program.addCourse(javaProgramming.get());
+                programDao.update(program);
+            },
+            () -> { throw new RuntimeException("Default programs not found in Default.addCoursesToPrograms"); }
+        );
 
-        programDao.addCourse(javaDeveloper.get(), databases.get());
-        programDao.addCourse(javaDeveloper.get(), javaProgramming.get());
-        programDao.addCourse(softwareTester.get(), javaProgramming.get());
+        softwareTester.ifPresentOrElse(
+            program ->  {
+                program.addCourse(javaProgramming.get());
+                programDao.update(program);
+            },
+            () -> { throw new RuntimeException("Default programs not found in Default.addCoursesToPrograms"); }
+        );
+
+        courseDao.update(databases.get());
+        courseDao.update(javaProgramming.get());
     }
 
     private void createStudents() {
@@ -135,28 +166,44 @@ public class DefaultData {
         Optional<Program> softwareTester = programDao.getByName("Mjukvarutestare").stream().findFirst();
 
         javaDeveloper.ifPresentOrElse(
-            program -> {
-               studentDao.create(new Student("Toni", "Karunaratne", "19790505-0000",
-                       "toni.is.amazoids@hot.com", "2021-08-21", program));
-               studentDao.create(new Student("Patrik", "Andersson", "19820117-2222",
-                       "dadjokes@homie.com", "2011-08-21", program));
-               studentDao.create(new Student("Charlie", "Bonner",  "20020405-4444",
-                       "m.b.jr@jr.jr", "2022-01-01", program));
-            },
+            this::createJavaDevelopers,
             () -> { throw new RuntimeException("Java program not found in Default.students"); }
         );
 
         softwareTester.ifPresentOrElse(
-            program -> {
-               studentDao.create(new Student("Vimbayi", "Mandaza", "19870415-1111",
-                       "vimbayi@chips.com", "2020-05-19", program));
-               studentDao.create(new Student("Cheyenne", "Brown", "20010203-3333",
-                       "c.b.dwarf@cool.se", "2021-08-21", program));
-            },
+                this::createSoftwareTesters,
             () -> { throw new RuntimeException("Software tester program not found in Default.students"); }
         );
 
     }
 
+    private void createJavaDevelopers(Program program) {
+
+        List<Student> students = List.of(
+                new Student("Toni", "Karunaratne", "19790505-0000",
+                        "toni.is.amazoids@hot.com", "2021-08-21", program),
+                new Student("Patrik", "Andersson", "19820117-2222",
+                        "dadjokes@homie.com", "2011-08-21", program),
+                new Student("Charlie", "Bonner", "20020405-4444",
+                        "m.b.jr@jr.jr", "2022-01-01", program)
+        );
+
+        students.forEach(student ->  studentDao.create(student));
+        program.addStudents(students);
+        programDao.update(program);
+    }
+
+    private void createSoftwareTesters(Program program) {
+        List<Student> students = List.of(
+                new Student("Vimbayi", "Mandaza", "19870415-1111",
+                        "vimbayi@chips.com", "2020-05-19", program),
+                new Student("Cheyenne", "Brown", "20010203-3333",
+                        "c.b.dwarf@cool.se", "2021-08-21", program)
+        );
+
+        students.forEach(student ->  studentDao.create(student));
+        program.addStudents(students);
+        programDao.update(program);
+    }
 }
 
