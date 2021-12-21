@@ -102,7 +102,7 @@ public class Course {
 
     public void removeTeacher(Teacher teacher){
         this.teachers.remove(teacher);
-        teacher.getTeacherCourses().remove(teacher);
+        teacher.getTeacherCourses().remove(this);
     }
 
     public Set<Program> getPrograms() {
@@ -114,14 +114,12 @@ public class Course {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Course course = (Course) o;
-        return id == course.id && credits == course.credits && Objects.equals(name, course.name) &&
-               Objects.equals(description, course.description) && Objects.equals(language, course.language) &&
-               Objects.equals(teachers, course.teachers) && Objects.equals(programs, course.programs);
+        return credits == course.credits && Objects.equals(name, course.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, credits, language, teachers, programs);
+        return Objects.hash(name, credits);
     }
 
     @Override

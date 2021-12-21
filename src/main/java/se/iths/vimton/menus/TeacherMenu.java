@@ -73,14 +73,16 @@ public class TeacherMenu {
         }
         System.out.println(teacher.get().getFirstName() + " " + teacher.get().getLastName() + " selected.");
 
-        List<Course> courses = teacher.get().getTeacherCourses().stream().toList();
-        if(courses.isEmpty()) {
+        List<Course> teachersCourses = teacher.get().getTeacherCourses().stream().toList();
+        if(teachersCourses.isEmpty()) {
             System.out.println(teacher.get().getFirstName() + " " + teacher.get().getLastName() + " has no courses.");
             return;
         }
 
-        printMany(courses, teacher.get().getFirstName() + " " + teacher.get().getLastName() + "'s courses");
-        int courseId = getUserInput("course id", courses.get(0).getId(), courses.get(courses.size() - 1).getId());
+        List<Course> allCourses = courseDao.getAll();
+
+        printMany(teachersCourses, teacher.get().getFirstName() + " " + teacher.get().getLastName() + "'s courses");
+        int courseId = getUserInput("course id", allCourses.get(0).getId(), allCourses.get(allCourses.size() - 1).getId());
         Optional<Course> course = courseDao.getById(courseId);
 
         if (course.isEmpty()) {
@@ -89,6 +91,7 @@ public class TeacherMenu {
         }
 
         course.get().removeTeacher(teacher.get());
+
         courseDao.update(course.get());
         teacherDao.update(teacher.get());
 
@@ -182,6 +185,7 @@ public class TeacherMenu {
     }
 
     private void showDetails() {
+        showAll();
         int id = getUserInput("teacher id", teachers.get(0).getId(), teachers.get(teachers.size() - 1).getId());
         Optional<Teacher> teacher = teacherDao.getById(id);
 
@@ -217,7 +221,8 @@ public class TeacherMenu {
 
         teacherDao.update(teacher.get());
 
-        System.out.println(teacher.get().getFirstName() + " " + teacher.get().getLastName() + " successfully updated.");
+        System.out.println("\n" +  teacher.get().getFirstName() + " " + teacher.get().getLastName() +
+                           " successfully " + "updated.");
         System.out.println(teacher.get());
 
         refreshTeachers();
