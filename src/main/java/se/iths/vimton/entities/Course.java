@@ -20,7 +20,7 @@ public class Course {
     @ManyToOne
     private Language language;
 
-    @ManyToMany(mappedBy = "courses")
+    @ManyToMany(mappedBy = "teacherCourses")
     private Set<Teacher> teachers;
 
     @ManyToMany(mappedBy = "courses")
@@ -87,22 +87,22 @@ public class Course {
 
     public void setTeachers(Set<Teacher> teachers) {
         this.teachers = teachers;
-        teachers.forEach(teacher -> teacher.getCourses().add(this));
+        teachers.forEach(teacher -> teacher.getTeacherCourses().add(this));
     }
 
     public void addTeacher(Teacher teacher) {
         this.teachers.add(teacher);
-        teacher.getCourses().add(this);
+        teacher.getTeacherCourses().add(this);
     }
 
     public void addTeachers(List<Teacher> teachers) {
         this.teachers.addAll(teachers);
-        teachers.forEach(teacher -> teacher.getCourses().add(this));
+        teachers.forEach(teacher -> teacher.getTeacherCourses().add(this));
     }
 
     public void removeTeacher(Teacher teacher){
         this.teachers.remove(teacher);
-        teacher.getCourses().remove(teacher);
+        teacher.getTeacherCourses().remove(teacher);
     }
 
     public Set<Program> getPrograms() {
@@ -127,11 +127,17 @@ public class Course {
     @Override
     public String toString() {
         return "Course{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", credits=" + credits +
-                ", language='" + language + '\'' +
-                '}';
+               "id=" + id +
+               ", name='" + name + '\'' +
+               ", description='" + description + '\'' +
+               ", credits=" + credits +
+               ", language=" + language +
+               ", teachers=" + listOfTeachersNames() +
+               ", programs=" + programs +
+               '}';
+    }
+
+    private List<String> listOfTeachersNames() {
+        return teachers.stream().map(teacher -> teacher.getFirstName() + " " + teacher.getLastName()).toList();
     }
 }

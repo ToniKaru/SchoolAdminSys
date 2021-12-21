@@ -3,7 +3,6 @@ package se.iths.vimton.menus;
 import se.iths.vimton.Menu;
 import se.iths.vimton.dao.ProgTypeDao;
 import se.iths.vimton.dao.ProgramDao;
-import se.iths.vimton.entities.Course;
 import se.iths.vimton.entities.Program;
 import se.iths.vimton.entities.ProgramType;
 import se.iths.vimton.impl.ProgTypeDaoImpl;
@@ -74,6 +73,7 @@ public class ProgramMenu {
         }
     }
 
+    //todo: do we need to refreshPrograms? Test & see
 
 
     private void add() {

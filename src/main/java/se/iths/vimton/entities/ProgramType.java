@@ -1,6 +1,7 @@
 package se.iths.vimton.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,7 +29,7 @@ public class ProgramType {
         this.name = name;
         this.creditsRequired = creditsRequired;
         this.accredited = accredited;
-
+        this.programs = new ArrayList<>();
     }
 
     public int getId() {

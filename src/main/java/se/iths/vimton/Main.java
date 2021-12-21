@@ -2,9 +2,9 @@ package se.iths.vimton;
 
 
 import io.github.cdimascio.dotenv.Dotenv;
+import se.iths.vimton.utils.DefaultData;
 
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.List;
@@ -25,22 +25,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-//        TestImpl test = new TestImpl(emf);
-//        test.run();
-
         Menu menu = new Menu(emf);
         menu.run();
 
     }
-
-    public static <T> void printMany(List<T> items, String heading) {
-        System.out.println("\n" + heading);
-        if (items.isEmpty())
-            System.out.println("No items found");
-        else
-            items.forEach(System.out::println);
-    }
-
 
 }
 

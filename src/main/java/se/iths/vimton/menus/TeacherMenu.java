@@ -1,8 +1,11 @@
 package se.iths.vimton.menus;
 
 import se.iths.vimton.Menu;
+import se.iths.vimton.dao.CourseDao;
 import se.iths.vimton.dao.TeacherDao;
+import se.iths.vimton.entities.Course;
 import se.iths.vimton.entities.Teacher;
+import se.iths.vimton.impl.CourseDaoImpl;
 import se.iths.vimton.impl.TeacherDaoImpl;
 
 import javax.persistence.EntityManagerFactory;
@@ -14,10 +17,12 @@ import static se.iths.vimton.Menu.*;
 public class TeacherMenu {
 
     TeacherDao teacherDao;
+    CourseDao courseDao;
     List<Teacher> teachers;
 
     public TeacherMenu(EntityManagerFactory emf) {
         this.teacherDao = new TeacherDaoImpl(emf);
+        this.courseDao = new CourseDaoImpl(emf);
         teachers = teacherDao.getAll();
     }
 
@@ -33,13 +38,13 @@ public class TeacherMenu {
     public void printMenu() {
         System.out.println("""
                                 
-                --- Course Options ---
+                --- Teacher Options ---
                 1. Add a teacher
                 2. List all teachers
                 3. Update a teacher
                 4. Show a teacher's details
                 5. Delete a teacher
-                6. Add a course to a teacher
+                6. Add a teacher to a course
                 7. Remove a course from a teacher
                 0. Return to main menu"""
         );
@@ -53,10 +58,84 @@ public class TeacherMenu {
             case 3 -> update();
             case 4 -> showDetails();
             case 5 -> delete();
-//            case 6 -> addCourseToTeacher();
-//            case 7 -> removeCourseFromTeacher();
+            case 6 -> addTeacherToCourse();
+            case 7 -> removeTeacherFromCourse();
             default -> System.out.println("Invalid choice");
         }
+    }
+
+    private void removeTeacherFromCourse() {
+        Optional<Teacher> teacher = getTeacher();
+
+        if(teacher.isEmpty()) {
+            System.out.println("Selected teacher id not found.");
+            return;
+        }
+        System.out.println(teacher.get().getFirstName() + " " + teacher.get().getLastName() + " selected.");
+
+        List<Course> courses = teacher.get().getTeacherCourses().stream().toList();
+        if(courses.isEmpty()) {
+            System.out.println(teacher.get().getFirstName() + " " + teacher.get().getLastName() + " has no courses.");
+            return;
+        }
+
+        printMany(courses, teacher.get().getFirstName() + " " + teacher.get().getLastName() + "'s courses");
+        int courseId = getUserInput("course id", courses.get(0).getId(), courses.get(courses.size() - 1).getId());
+        Optional<Course> course = courseDao.getById(courseId);
+
+        if (course.isEmpty()) {
+            System.out.println("Selected course id not found.");
+            return;
+        }
+
+        course.get().removeTeacher(teacher.get());
+        courseDao.update(course.get());
+        teacherDao.update(teacher.get());
+
+        System.out.println("Teacher successfully removed from " + course.get().getName() + " course");
+
+        refreshTeachers();
+    }
+
+    private void addTeacherToCourse() {
+        Optional<Teacher> teacher = getTeacher();
+
+        if(teacher.isEmpty()) {
+            System.out.println("Selected teacher id not found.");
+            return;
+        }
+
+        System.out.println(teacher.get().getFirstName() + " " + teacher.get().getLastName() + " selected.");
+
+        Optional<Course> course = getCourse(courseDao.getAll());
+
+        if (course.isEmpty()) {
+            System.out.println("Selected course id not found.");
+            return;
+        }
+
+        System.out.println(course.get().getName() + " selected.");
+
+        course.get().addTeacher(teacher.get());
+        courseDao.update(course.get());
+        teacherDao.update(teacher.get());
+
+        System.out.println("Teacher successfully added to " + course.get().getName() + " course");
+
+        refreshTeachers();
+    }
+
+    private Optional<Course> getCourse(List<Course> courses) {
+        printMany(courses, "Courses");
+        int courseId = getUserInput("course id", courses.get(0).getId(), courses.get(courses.size() - 1).getId());
+        return courseDao.getById(courseId);
+    }
+
+    private Optional<Teacher> getTeacher() {
+        showAll();
+        System.out.print("Select a teacher from the list above. ");
+        int id = getUserInput("teacher id", teachers.get(0).getId(), teachers.get(teachers.size() - 1).getId());
+        return teacherDao.getById(id);
     }
 
     private void add() {
@@ -80,12 +159,11 @@ public class TeacherMenu {
     }
 
     private void delete() {
-        int id = getUserInput("teacher id", teachers.get(0).getId(), teachers.get(teachers.size() - 1).getId());
-        Optional<Teacher> teacher = teacherDao.getById(id);
+        Optional<Teacher> teacher = getTeacher();
 
         teacher.ifPresentOrElse(
                 this::teacherDeletion,
-                () -> System.out.println("Teacher id " + id + " not found.")
+                () -> System.out.println("Selected teacher id not found.")
         );
     }
 
@@ -156,7 +234,7 @@ public class TeacherMenu {
 
     private void showAll() {
         List<Teacher> teachers = teacherDao.getAll();
-        Menu.printMany(teachers, "All teachers");
+        printMany(teachers, "All teachers");
     }
 
 }

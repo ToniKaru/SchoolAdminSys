@@ -84,26 +84,4 @@ public class ProgTypeDaoImpl implements ProgTypeDao {
                 .getResultList();
     }
 
-    @Override
-    public Map<String, Long> getStudentsPerProgram() {
-        Map<String, Long> map = new HashMap<>();
-
-        List<Program> programs = em.createQuery("SELECT p FROM Program p", Program.class).getResultList();
-
-        programs.forEach(program -> {
-            Long count = numberOfStudentsPerProgram(program).orElse(0L);
-            map.put(program.getName(), count);
-        });
-
-        return map;
-    }
-
-    private Optional<Long> numberOfStudentsPerProgram(Program program) {
-        return em.createQuery("SELECT COUNT(*) FROM Student s WHERE s.program.id = :id", Long.class)
-                .setParameter("id", program.getId())
-                .getResultStream()
-                .findFirst();
-    }
-
-
 }

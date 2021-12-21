@@ -1,6 +1,7 @@
 package se.iths.vimton.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,6 +23,7 @@ public class Language {
         Guard.Against.Empty(name);
 
         this.name = name;
+        this.courses = new ArrayList<>();
     }
 
 
