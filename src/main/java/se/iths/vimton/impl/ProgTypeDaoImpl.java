@@ -75,6 +75,7 @@ public class ProgTypeDaoImpl implements ProgTypeDao {
     public List<ProgramType> getByAccreditation(boolean accredited) {
         return em.createQuery("SELECT p FROM ProgramType p " +
                         "WHERE p.accredited = :accredited", ProgramType.class)
+                .setParameter("accredited", accredited)
                 .getResultList();
     }
 
